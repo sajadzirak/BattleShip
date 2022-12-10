@@ -20,7 +20,7 @@ int main()
 
     for (i = n; i > 0; i--)
     {
-
+        // p1 map
         for (j = 0; j <= n; j++)
         {
             switch (map[i][j])
@@ -43,8 +43,10 @@ int main()
                 break;
             }
         }
+        // space between p1 and p2
         for (j = 2; j < n; j++)
             printf(" ");
+        // p2 map
         for (j = 0; j <= n; j++)
         {
             switch (map[i][j])
@@ -70,10 +72,12 @@ int main()
         printf("\n");
     }
     printf(" ");
+    // numbers at the bottom of the graph p1
     for (i = 0, j = 0; j < n; j++)
     {
         printf(" %d", map[i][j]);
     }
+    // space between p1 and p2
     if (n > 9)
     {
         for (i = 1; i < n; i++)
@@ -84,6 +88,7 @@ int main()
         for (i = 0; i < n; i++)
             printf(" ");
     }
+    // numbers at the bottom of the graph p2
     for (i = 0, j = 0; j < n; j++)
     {
         printf(" %d", map[i][j]);
