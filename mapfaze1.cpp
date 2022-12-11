@@ -12,15 +12,19 @@ int main()
     scanf("%d", &n);
     int mapPlayer1[100][100];
     int mapPlayer2[100][100];
+    
     initializeMap(mapPlayer1, n);
     initializeMap(mapPlayer2, n);
+    
     printf("how many ships are there?: \n");
     scanf("%d", &nship);
+    
     printf("Locations for player1: \n");
     for(int k = 0; k < 3; ++k){
     	scanf("%d %d", &i, &j);
     	mapPlayer1[i][j] = -1;
 	}
+	
 	printf("Locations for player2: \n");
 	for(int k = 0; k < 3; ++k){
 		scanf("%d %d", &i, &j);
