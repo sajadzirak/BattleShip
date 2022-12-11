@@ -22,13 +22,13 @@ int main()
     printf("Locations for player1: \n");
     for(int k = 0; k < 3; ++k){
     	scanf("%d %d", &i, &j);
-    	mapPlayer1[i][j] = -1;
+    	mapPlayer1[j][i] = -1;
 	}
 	
 	printf("Locations for player2: \n");
 	for(int k = 0; k < 3; ++k){
 		scanf("%d %d", &i, &j);
-		mapPlayer2[i][j] = -1;
+		mapPlayer2[j][i] = -1;
 	}
     printMaps(mapPlayer1, mapPlayer2, n);
 }
