@@ -10,35 +10,25 @@ int mapPlayer2[100][100];
 int initializeMap(int[][100], int);
 int printMaps(int[][100], int[][100], int);
 int printdetails(int, int);
-int scan(void);
+int scan(int*);
+
 int main()
 {
-    int i, j;
+	int scanSwitch = 1;
     printf("Give the map's size: ");
     scanf("%d", &n);
 
     initializeMap(mapPlayer1, n);
     initializeMap(mapPlayer2, n);
-    scan();
-
-//    printf("how many ships are there?: \n");
-//    scanf("%d", &nship);
-
-//    printf("Locations for player1: \n");
-//    for (int k = 0; k < 3; ++k)
-//    {
-//        scanf("%d %d", &i, &j);
-//        mapPlayer1[j][i] = -1;
-//    }
-//
-//    printf("Locations for player2: \n");
-//    for (int k = 0; k < 3; ++k)
-//    {
-//        scanf("%d %d", &i, &j);
-//        mapPlayer2[j][i] = -1;
-//    }
+    scan(&scanSwitch);
+	if(scanSwitch == 0)
+	{
+		printf("You can not put your ships in this way!!\n");	
+		return 0;
+	}
     printdetails(nship, n);
     printMaps(mapPlayer1, mapPlayer2, n);
+    return 0;
 }
 
 int initializeMap(int map[][100], int n)
@@ -179,14 +169,14 @@ int printdetails(int ships, int n)
     printf(" remaining ships: %d\n\n", ships);
 }
 
-int scan(void)
+int scan(int *scanSwitch)
 {
 	int i, j;
 	char name[15], direction;
 	printf("How many ships are there?: ");
 	scanf("%d", &nship);
 	
-	printf("Name and locations for player1: ");
+	printf("Name and locations for player1: \n");
 	scanf("%s", name);
 	for(int k = 0; k < nship; ++k)
 	{
@@ -195,6 +185,7 @@ int scan(void)
 		{
 			for(int p = 0; p < 3; ++p, ++j)
 			{
+				if(mapPlayer2[j][i] == -2) *scanSwitch =  0;
 				mapPlayer1[j][i] = -2;
 			}
 		}
@@ -202,6 +193,7 @@ int scan(void)
 		{
 			for(int p = 0; p < 3; ++p, ++i)
 			{
+				if(mapPlayer2[j][i] == -2) *scanSwitch =  0;
 				mapPlayer1[j][i] = -2;
 			}
 		}
@@ -209,7 +201,7 @@ int scan(void)
 	
 	scanf("%s", name);   // scanf for '---'
 	
-	printf("Name and locations for player1: ");
+	printf("Name and locations for player2: \n");
 	scanf("%s", name);
 	for(int k = 0; k < nship; ++k)
 	{
@@ -218,6 +210,7 @@ int scan(void)
 		{
 			for(int p = 0; p < 3; ++p, ++j)
 			{
+				if(mapPlayer2[j][i] == -2) *scanSwitch =  0;
 				mapPlayer2[j][i] = -2;
 			}
 		}
@@ -225,8 +218,10 @@ int scan(void)
 		{
 			for(int p = 0; p < 3; ++p, ++i)
 			{
+				if(mapPlayer2[j][i] == -2) *scanSwitch =  0;
 				mapPlayer2[j][i] = -2;
 			}
 		}
 	}
+	return 0;
 }
