@@ -1,35 +1,46 @@
 #include <stdio.h>
 
-#define namePlayer1 "FOCP1"
-#define namePlayer2 "FOCP2"
-
 int n, nship;
 int mapPlayer1[100][100];
 int mapPlayer2[100][100];
+char namePlayer1[20];
+char namePlayer2[20];
 
+int scanBasicInf();
 int initializeMap(int[][100], int);
+int scanPlayerInf(int[][100], char[],int);
+int checkOverlap(int, int, char, int[][100]);
+int putShips(int[][100], int, int, char);
+int scanSign();
+int printInf(int, int);
 int printMaps(int[][100], int[][100], int);
-int printdetails(int, int);
-int scan(int*);
 
 int main()
 {
-	int scanSwitch = 1;
-    printf("Give the map's size: ");
-    scanf("%d", &n);
 
+    scanBasicInf();
     initializeMap(mapPlayer1, n);
     initializeMap(mapPlayer2, n);
-    scan(&scanSwitch);
-	if(scanSwitch == 0)
-	{
-		printf("You can not put your ships in this way!!\n");	
-		return 0;
-	}
-    printdetails(nship, n);
+    scanPlayerInf(mapPlayer1, namePlayer1,1);
+    scanSign();
+    scanPlayerInf(mapPlayer2, namePlayer2,2);
+    printInf(nship, n);
     printMaps(mapPlayer1, mapPlayer2, n);
     return 0;
 }
+
+//-------------------------------------------------------------------
+
+int scanBasicInf()
+{
+    printf("Give the map's size: ");
+    scanf("%d", &n);
+    printf("How many ships are there?: ");
+    scanf("%d", &nship);
+    return 0;
+}
+
+//-------------------------------------------------------------------
 
 int initializeMap(int map[][100], int n)
 {
@@ -48,6 +59,121 @@ int initializeMap(int map[][100], int n)
     }
     return 0;
 }
+
+//-------------------------------------------------------------------
+
+int scanPlayerInf(int map[][100], char name[],int playerNum)
+{
+    int i, j, k;
+    char direction;
+    printf("Name and locations for player %d: \n",playerNum);
+    scanf("%s", name);
+    for (k = 0; k < nship; k++)
+    {
+        scanf("%d %d %c", &i, &j, &direction);
+        if (checkOverlap(i, j, direction, map) == 1)
+        {
+            putShips(map, i, j, direction);
+        }
+        else
+            k--;
+    }
+    return 0;
+}
+
+//-------------------------------------------------------------------
+
+int checkOverlap(int i, int j, char direction, int map[][100])
+{
+    int sw = 1, p;
+    if (direction == 'v')
+    {
+        for (p = 0; p < 3 && sw == 1; p++, i++)
+        {
+            if (map[j][i] == -2)
+            {
+                printf("Ships overlap with each other. Please input another location\n");
+                sw = 0;
+            }
+        }
+    }
+    else if (direction == 'h')
+    {
+        for (int p = 0; p < 3 && sw == 1; ++p, j++)
+        {
+            if (map[j][i] == -2)
+            {
+                printf("Ships overlap with each other. Please input another location\n");
+                sw = 0;
+            }
+        }
+    }
+    else
+    {
+        printf("Direction is not valid. Please input the correct direction (v/h)\n");
+        sw = 0;
+    }
+    return sw;
+}
+
+//-------------------------------------------------------------------
+
+int putShips(int map[][100], int i, int j, char direction)
+{
+    int k = 0;
+    for (k = 0; k < 3; k++)
+    {
+        map[j][i] = -2;
+        if (direction == 'v')
+            i++;
+        else
+            j++;
+    }
+    return 0;
+}
+
+//-------------------------------------------------------------------
+
+int scanSign()
+{
+    int i;
+    char sign[5];
+    scanf("%s", sign); // scanf for '---'
+    for (i = 0; i < 3 && sign[i] == '-'; i++)
+        ;
+    if (i == 3)
+    {
+        return 1;
+    }
+    // May be used for phase 6
+    // for ( i = 0; i < 3 && sign[i]=='$'; i++)
+    // {
+    //     return 2;
+    // }
+    return 0;
+}
+
+//-------------------------------------------------------------------
+
+int printInf(int ships, int n)
+{
+    int i;
+    printf(" FOCP1");
+    for (i = 0; i < 2 * n + 14; i++)
+    {
+        printf(" ");
+    }
+    printf(" FOCP2\n\n");
+    printf(" remaining ships: %d", ships);
+    for (i = 0; i <= 2 * n; i++)
+    {
+        printf(" ");
+    }
+    printf(" remaining ships: %d\n\n", ships);
+    return 0;
+}
+
+//-------------------------------------------------------------------
 
 int printMaps(int map1[][100], int map2[][100], int n)
 {
@@ -151,77 +277,4 @@ int printMaps(int map1[][100], int map2[][100], int n)
         printf(" %d", map2[i][j]);
     }
     return 0;
-}
-int printdetails(int ships, int n)
-{
-    int i;
-    printf(" FOCP1");
-    for (i = 0; i < 2 * n + 14; i++)
-    {
-        printf(" ");
-    }
-    printf(" FOCP2\n\n");
-    printf(" remaining ships: %d", ships);
-    for (i = 0; i <= 2*n; i++)
-    {
-        printf(" ");
-    }
-    printf(" remaining ships: %d\n\n", ships);
-}
-
-int scan(int *scanSwitch)
-{
-	int i, j;
-	char name[15], direction;
-	printf("How many ships are there?: ");
-	scanf("%d", &nship);
-	
-	printf("Name and locations for player1: \n");
-	scanf("%s", name);
-	for(int k = 0; k < nship; ++k)
-	{
-		scanf("%d %d %c", &i, &j, &direction);
-		if(direction == 'v')
-		{
-			for(int p = 0; p < 3; ++p, ++j)
-			{
-				if(mapPlayer2[j][i] == -2) *scanSwitch =  0;
-				mapPlayer1[j][i] = -2;
-			}
-		}
-		else
-		{
-			for(int p = 0; p < 3; ++p, ++i)
-			{
-				if(mapPlayer2[j][i] == -2) *scanSwitch =  0;
-				mapPlayer1[j][i] = -2;
-			}
-		}
-	}
-	
-	scanf("%s", name);   // scanf for '---'
-	
-	printf("Name and locations for player2: \n");
-	scanf("%s", name);
-	for(int k = 0; k < nship; ++k)
-	{
-		scanf("%d %d %c", &i, &j, &direction);
-		if(direction == 'v')
-		{
-			for(int p = 0; p < 3; ++p, ++j)
-			{
-				if(mapPlayer2[j][i] == -2) *scanSwitch =  0;
-				mapPlayer2[j][i] = -2;
-			}
-		}
-		else
-		{
-			for(int p = 0; p < 3; ++p, ++i)
-			{
-				if(mapPlayer2[j][i] == -2) *scanSwitch =  0;
-				mapPlayer2[j][i] = -2;
-			}
-		}
-	}
-	return 0;
 }
