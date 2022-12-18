@@ -125,9 +125,9 @@ int putShips(int map[][100], int i, int j, char direction)
     {
         map[j][i] = -2;
         if (direction == 'v')
-            i++;
-        else
             j++;
+        else
+            i++;
     }
     return 0;
 }
