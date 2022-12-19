@@ -32,10 +32,16 @@ void Reset();
 void WhiteBack();
 void sleep(unsigned int mseconds);
 void intro();
+void printShip();
+void wave1();
+void wave2();
+void wave3();
+void animate();
 
 int main()
 {
     intro();
+    animate();
     clearScreen();
     scanBasicInf();
     initializeMap(mapPlayer1, n);
@@ -429,8 +435,8 @@ void WhiteBack(){
 }
 //----------------------------------------------------------------
 void sleep(unsigned int mseconds){
-  clock_t goal = mseconds + clock();
-  while(goal > clock());
+    clock_t goal = mseconds + clock();
+    while(goal > clock());
 }
 //----------------------------------------------------------------
 void intro(){
@@ -445,4 +451,64 @@ void intro(){
     printf("\n");
     printf("Developed by Reza Mansouri && Sajad Zirak");
     sleep(5000);
+}
+//----------------------------------------------------------------
+void printShip(){
+    printf("         ,|                                          \n");
+    printf("     -#=(  )=#-                                      \n");
+    printf("       _:||_                                         \n");
+    printf("     /       \\                                      \n");
+    printf("     \\=======/                                      \n");
+    printf("      |     |                                        \n");
+    printf("      |     |                                        \n");
+    printf("      |_____|__________________________________      \n");
+    printf("     |__                                     __|     \n");
+    printf("        \\                                   /       \n");
+    printf("         \\                                 /        \n");
+    printf("          \\__                           __/         \n");
+    printf("             \\                         /            \n");
+}
+//-------------------------------------------------------------------
+void wave1(){
+    system("cls");
+    printf("Press any key to start the game.\n\n");
+    printShip();
+    printf("     .~  .~~._                    __  \n");
+    printf("   .'  .'     '~.              .-'  '-.    \n");
+    printf("                 __                     \n");
+    printf("            ..-~'  '~-..         _.-~'~-._             \n");
+    printf("                              .-'         '-.           \n");
+}
+//-------------------------------------------------------------------
+void wave2(){
+    system("cls");
+    printf("Press any key to start the game.\n\n");
+    printShip();
+    printf("                    __                 .~  .~~._                \n");
+    printf("                 .-'  '-.            .'  .'     '~.                     \n");
+    printf("                                              __           \n");
+    printf("                   _.-~'~-._             ..-~'  '~-..               \n");
+    printf("                .-'         '-.                         \n");
+}
+//-------------------------------------------------------------------
+void wave3(){
+    system("cls");
+    printf("Press any key to start the game.\n\n");
+    printShip();
+    printf("     __                    .~  .~~._                            \n");
+    printf("  .-'  '-.               .'  .'     '~.                                 \n");
+    printf("                                  __                       \n");
+    printf("     _.-~'~-._               ..-~'  '~-..                           \n");
+    printf("  .-'         '-.                                       \n");
+}
+//-------------------------------------------------------------------
+void animate(){
+    while(_kbhit() == 0){
+        wave1();
+        sleep(500);
+        wave2();
+        sleep(500);
+        wave3();
+        sleep(500);
+  }
 }
