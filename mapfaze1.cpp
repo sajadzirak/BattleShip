@@ -30,7 +30,7 @@ void Reset();
 void WhiteBack();
 int main()
 {
-    
+    clearScreen();
     scanBasicInf();
     initializeMap(mapPlayer1, n);
     initializeMap(mapPlayer2, n);
@@ -93,7 +93,7 @@ int scanPlayerInf(int map[][100], char name[], int playerNum)
     scanf("%s", name);
     for (k = 0; k < nship; k++)
     {
-        Green(1);
+        Red(1);
         scanf("%d %d %c", &j, &i,&direction);
         if (checkOverlap(i, j, direction, map) == 1 && checkRange(i, j, direction) == 1)
         {
