@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <string.h>
 #include<stdlib.h>
+#include <time.h>
+#include <conio.h>
 
 int n, nship;
 int mapPlayer1[100][100];
@@ -28,8 +30,12 @@ void Cyan(int);
 void White(int);
 void Reset();
 void WhiteBack();
+void sleep(unsigned int mseconds);
+void intro();
+
 int main()
 {
+    intro();
     clearScreen();
     scanBasicInf();
     initializeMap(mapPlayer1, n);
@@ -369,49 +375,49 @@ int printMaps(int map1[][100], int map2[][100], int n)
 void Black(int x){
     if (x == 0)
         printf("\033[0;30m");
-    else 
+    else
         printf("\033[1;30m");
 }
 void Red(int x){
     if (x == 0)
         printf("\033[0;31m");
-    else 
+    else
         printf("\033[1;31m");
 }
 void Green(int x){
     if (x == 0)
         printf("\033[0;32m");
-    else 
+    else
         printf("\033[1;32m");
 }
 void Yellow(int x){
     if (x == 0)
         printf("\033[0;33m");
-    else 
+    else
         printf("\033[1;33m");
 }
 void Blue(int x){
     if (x == 0)
         printf("\033[0;34m");
-    else 
+    else
         printf("\033[1;34m");
 }
 void Purple(int x){
     if (x == 0)
         printf("\033[0;35m");
-    else 
+    else
         printf("\033[1;35m");
 }
 void Cyan(int x){
     if (x == 0)
         printf("\033[0;36m");
-    else 
+    else
         printf("\033[1;36m");
 }
 void White(int x){
     if (x == 0)
         printf("\033[0;37m");
-    else 
+    else
         printf("\033[1;37m");
 }
 void Reset(){
@@ -420,4 +426,23 @@ void Reset(){
 //----------------------------------------------------------------
 void WhiteBack(){
     printf("\e[47m");
+}
+//----------------------------------------------------------------
+void sleep(unsigned int mseconds){
+  clock_t goal = mseconds + clock();
+  while(goal > clock());
+}
+//----------------------------------------------------------------
+void intro(){
+    printf("______       _   _   _        _____ _     _  \n");
+    printf("| ___ \\     | | | | | |      /  ___| |   (_) \n");
+    printf("| |_/ / __ _| |_| |_| | ___  \\ `--.| |__  _ _ __  \n");
+    printf("| ___ \\/ _` | __| __| |/ _ \\  `--. \\ '_ \\| | '_ \\ \n");
+    printf("| |_/ / (_| | |_| |_| |  __/ /\\__/ / | | | | |_) | \n");
+    printf("\\____/ \\__,_|\\__|\\__|_|\\___| \\____/|_| |_|_| .__/ \n");
+    printf("                                           | | \n");
+    printf("                                           |_| \n");
+    printf("\n");
+    printf("Developed by Reza Mansouri && Sajad Zirak");
+    sleep(5000);
 }
