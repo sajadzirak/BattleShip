@@ -440,16 +440,17 @@ void sleep(unsigned int mseconds){
 }
 //----------------------------------------------------------------
 void intro(){
-    printf("______       _   _   _        _____ _     _  \n");
-    printf("| ___ \\     | | | | | |      /  ___| |   (_) \n");
-    printf("| |_/ / __ _| |_| |_| | ___  \\ `--.| |__  _ _ __  \n");
-    printf("| ___ \\/ _` | __| __| |/ _ \\  `--. \\ '_ \\| | '_ \\ \n");
-    printf("| |_/ / (_| | |_| |_| |  __/ /\\__/ / | | | | |_) | \n");
-    printf("\\____/ \\__,_|\\__|\\__|_|\\___| \\____/|_| |_|_| .__/ \n");
+    printf("\n");
+    printf("  ______       _   _   _        _____ _     _  \n");
+    printf("  | ___ \\     | | | | | |      /  ___| |   (_) \n");
+    printf("  | |_/ / __ _| |_| |_| | ___  \\ `--.| |__  _ _ __  \n");
+    printf("  | ___ \\/ _` | __| __| |/ _ \\  `--. \\ '_ \\| | '_ \\ \n");
+    printf("  | |_/ / (_| | |_| |_| |  __/ /\\__/ / | | | | |_) | \n");
+    printf("  \\____/ \\__,_|\\__|\\__|_|\\___| \\____/|_| |_|_| .__/ \n");
     printf("                                           | | \n");
     printf("                                           |_| \n");
     printf("\n");
-    printf("Developed by Reza Mansouri && Sajad Zirak");
+    printf("  Developed by Reza Mansouri && Sajad Zirak");
     sleep(5000);
 }
 //----------------------------------------------------------------
@@ -471,35 +472,38 @@ void printShip(){
 //-------------------------------------------------------------------
 void wave1(){
     system("cls");
-    printf("Press any key to start the game.\n\n");
+    printf("\n");
     printShip();
-    printf("     .~  .~~._                    __  \n");
-    printf("   .'  .'     '~.              .-'  '-.    \n");
-    printf("                 __                     \n");
-    printf("            ..-~'  '~-..         _.-~'~-._             \n");
-    printf("                              .-'         '-.           \n");
+    printf("     .~  .~~._                    __                           \n");
+    printf("   .'  .'     '~.              .-'  '-.                        \n");
+    printf("                 __                                            \n");
+    printf("            ..-~'  '~-..         _.-~'~-._                     \n");
+    printf("                              .-'         '-.                  \n");
+    printf("\n\nPress any key to start the game");
 }
 //-------------------------------------------------------------------
 void wave2(){
     system("cls");
-    printf("Press any key to start the game.\n\n");
+    printf("\n");
     printShip();
-    printf("                    __                 .~  .~~._                \n");
-    printf("                 .-'  '-.            .'  .'     '~.                     \n");
-    printf("                                              __           \n");
-    printf("                   _.-~'~-._             ..-~'  '~-..               \n");
-    printf("                .-'         '-.                         \n");
+    printf("                    __                 .~  .~~._               \n");
+    printf("                 .-'  '-.            .'  .'     '~.            \n");
+    printf("                                              __               \n");
+    printf("                   _.-~'~-._             ..-~'  '~-..          \n");
+    printf("                .-'         '-.                                \n");
+    printf("\n\nPress any key to start the game");
 }
 //-------------------------------------------------------------------
 void wave3(){
     system("cls");
-    printf("Press any key to start the game.\n\n");
+    printf("\n");
     printShip();
-    printf("     __                    .~  .~~._                            \n");
-    printf("  .-'  '-.               .'  .'     '~.                                 \n");
-    printf("                                  __                       \n");
-    printf("     _.-~'~-._               ..-~'  '~-..                           \n");
-    printf("  .-'         '-.                                       \n");
+    printf("     __                    .~  .~~._                           \n");
+    printf("  .-'  '-.               .'  .'     '~.                        \n");
+    printf("                                  __                           \n");
+    printf("     _.-~'~-._               ..-~'  '~-..                      \n");
+    printf("  .-'         '-.                                              \n");
+    printf("\n\nPress any key to start the game");
 }
 //-------------------------------------------------------------------
 void animate(){
