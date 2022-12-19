@@ -70,7 +70,7 @@ int scanPlayerInf(int map[][100], char name[],int playerNum)
     scanf("%s", name);
     for (k = 0; k < nship; k++)
     {
-        scanf("%d %d %c", &i, &j, &direction);
+        scanf("%d %d %c", &j, &i, &direction);
         if (checkOverlap(i, j, direction, map) == 1)
         {
             putShips(map, i, j, direction);
@@ -90,7 +90,7 @@ int checkOverlap(int i, int j, char direction, int map[][100])
     {
         for (p = 0; p < 3 && sw == 1; p++, i++)
         {
-            if (map[j][i] == -2)
+            if (map[i][j] == -2)
             {
                 printf("Ships overlap with each other. Please input another location\n");
                 sw = 0;
@@ -101,7 +101,7 @@ int checkOverlap(int i, int j, char direction, int map[][100])
     {
         for (int p = 0; p < 3 && sw == 1; ++p, j++)
         {
-            if (map[j][i] == -2)
+            if (map[i][j] == -2)
             {
                 printf("Ships overlap with each other. Please input another location\n");
                 sw = 0;
@@ -123,7 +123,7 @@ int putShips(int map[][100], int i, int j, char direction)
     int k = 0;
     for (k = 0; k < 3; k++)
     {
-        map[j][i] = -2;
+        map[i][j] = -2;
         if (direction == 'v')
             j++;
         else
