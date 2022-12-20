@@ -40,6 +40,7 @@ void animate();
 
 int main()
 {
+    clearScreen();
     intro();
     animate();
     clearScreen();
@@ -441,6 +442,7 @@ void sleep(unsigned int mseconds){
 //----------------------------------------------------------------
 void intro(){
     printf("\n");
+    Green(0);
     printf("  ______       _   _   _        _____ _     _  \n");
     printf("  | ___ \\     | | | | | |      /  ___| |   (_) \n");
     printf("  | |_/ / __ _| |_| |_| | ___  \\ `--.| |__  _ _ __  \n");
@@ -449,12 +451,16 @@ void intro(){
     printf("  \\____/ \\__,_|\\__|\\__|_|\\___| \\____/|_| |_|_| .__/ \n");
     printf("                                           | | \n");
     printf("                                           |_| \n");
+    Reset();
     printf("\n");
-    printf("  Developed by Reza Mansouri && Sajad Zirak");
+    Red(0);
+    printf("    Developed by Reza Mansouri && Sajad Zirak");
+    Reset();
     sleep(5000);
 }
 //----------------------------------------------------------------
 void printShip(){
+    Black(1);
     printf("         ,|                                          \n");
     printf("     -#=(  )=#-                                      \n");
     printf("       _:||_                                         \n");
@@ -468,48 +474,61 @@ void printShip(){
     printf("         \\                                /        \n");
     printf("          \\__                          __/         \n");
     printf("             \\                        /            \n");
+    Reset();
 }
 //-------------------------------------------------------------------
 void wave1(){
     system("cls");
     printf("\n");
     printShip();
+    Cyan(0);
     printf("     .~  .~~._                    __                           \n");
     printf("   .'  .'     '~.              .-'  '-.                        \n");
     printf("                 __                                            \n");
     printf("            ..-~'  '~-..         _.-~'~-._                     \n");
     printf("                              .-'         '-.                  \n");
-    printf("\n\n    +-+-+-+-+-+ +-+-+-+ +-+-+-+ +-+-+ +-+-+-+-+-+\n");
+    Yellow(0);
+    printf("\n\n");
+    printf("    +-+-+-+-+-+ +-+-+-+ +-+-+-+ +-+-+ +-+-+-+-+-+\n");
     printf("    |p|r|e|s|s| |a|n|y| |k|e|y| |t|o| |s|t|a|r|t|\n");
     printf("    +-+-+-+-+-+ +-+-+-+ +-+-+-+ +-+-+ +-+-+-+-+-+\n");
+    Reset();
 }
 //-------------------------------------------------------------------
 void wave2(){
     system("cls");
     printf("\n");
     printShip();
+    Cyan(0);
     printf("                    __                 .~  .~~._               \n");
     printf("                 .-'  '-.            .'  .'     '~.            \n");
     printf("                                              __               \n");
     printf("                   _.-~'~-._             ..-~'  '~-..          \n");
     printf("                .-'         '-.                                \n");
-    printf("\n\n    +-+-+-+-+-+ +-+-+-+ +-+-+-+ +-+-+ +-+-+-+-+-+\n");
+    Yellow(0);
+    printf("\n\n");
+    printf("    +-+-+-+-+-+ +-+-+-+ +-+-+-+ +-+-+ +-+-+-+-+-+\n");
     printf("    |p|r|e|s|s| |a|n|y| |k|e|y| |t|o| |s|t|a|r|t|\n");
     printf("    +-+-+-+-+-+ +-+-+-+ +-+-+-+ +-+-+ +-+-+-+-+-+\n");
+    Reset();
 }
 //-------------------------------------------------------------------
 void wave3(){
     system("cls");
     printf("\n");
     printShip();
+    Cyan(0);
     printf("     __                    .~  .~~._                           \n");
     printf("  .-'  '-.               .'  .'     '~.                        \n");
     printf("                                  __                           \n");
     printf("     _.-~'~-._               ..-~'  '~-..                      \n");
     printf("  .-'         '-.                                              \n");
-    printf("\n\n    +-+-+-+-+-+ +-+-+-+ +-+-+-+ +-+-+ +-+-+-+-+-+\n");
+    Yellow(0);
+    printf("\n\n");
+    printf("    +-+-+-+-+-+ +-+-+-+ +-+-+-+ +-+-+ +-+-+-+-+-+\n");
     printf("    |p|r|e|s|s| |a|n|y| |k|e|y| |t|o| |s|t|a|r|t|\n");
     printf("    +-+-+-+-+-+ +-+-+-+ +-+-+-+ +-+-+ +-+-+-+-+-+\n");
+    Reset();
 }
 //-------------------------------------------------------------------
 void animate(){
