@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <string.h>
-#include<stdlib.h>
-#include <time.h>
+#include <stdlib.h>
 #include <conio.h>
+#include <time.h>
 
 int n, nship;
 int mapPlayer1[100][100];
@@ -10,16 +10,21 @@ int mapPlayer2[100][100];
 char namePlayer1[20];
 char namePlayer2[20];
 
-int scanBasicInf();
+int scanBasicInfo();
 int initializeMap(int[][100], int);
-int scanPlayerInf(int[][100], char[], int);
+int scanPlayerInfo(int[][100], char[], int);
 int checkOverlap(int, int, char, int[][100]);
 int checkRange(int, int, char);
 int putShips(int[][100], int, int, char);
 int scanSign();
 void clearScreen();
-int printInf(int, int);
-int printMaps(int[][100], int[][100], int);
+int printInfo(int, int, char[], char[]);
+int printMaps(int[][100], int);
+void bombing(int[][100], char[], char[], int *);
+void printEnd1();
+void printEnd2();
+void sleep(unsigned int mseconds);
+
 void Black(int);
 void Red(int);
 void Green(int);
@@ -30,37 +35,52 @@ void Cyan(int);
 void White(int);
 void Reset();
 void WhiteBack();
-void sleep(unsigned int mseconds);
-void intro();
-void printShip();
-void wave1();
-void wave2();
-void wave3();
-void animate();
 
 int main()
 {
+    int shipPlayer1, shipPlayer2;
     clearScreen();
-    intro();
-    animate();
-    clearScreen();
-    scanBasicInf();
+    scanBasicInfo();
     initializeMap(mapPlayer1, n);
     initializeMap(mapPlayer2, n);
-    scanPlayerInf(mapPlayer1, namePlayer1, 1);
-    if (scanSign()==1){
+    scanPlayerInfo(mapPlayer1, namePlayer1, 1);
+    if (scanSign() == 1)
+    {
         clearScreen();
     }
-    scanPlayerInf(mapPlayer2, namePlayer2, 2);
+    scanPlayerInfo(mapPlayer2, namePlayer2, 2);
+    shipPlayer1 = nship * 3;
+    shipPlayer2 = nship * 3;
+    while (1)
+    {
+        bombing(mapPlayer2, namePlayer2, namePlayer1, &shipPlayer2);
+        if (shipPlayer2 == 0)
+        {
+            break;
+        }
+        bombing(mapPlayer1, namePlayer1, namePlayer2, &shipPlayer1);
+        if (shipPlayer1 == 0)
+        {
+            break;
+        }
+    }
     clearScreen();
-    printInf(nship, n);
-    printMaps(mapPlayer1, mapPlayer2, n);
+
+    if (shipPlayer1 == 0)
+    {
+        printEnd2();
+    }
+    else
+    {
+        printEnd1();
+    }
+
     return 0;
 }
 
 //-------------------------------------------------------------------
 
-int scanBasicInf()
+int scanBasicInfo()
 {
     White(1);
     printf("Give the map's size: ");
@@ -96,7 +116,7 @@ int initializeMap(int map[][100], int n)
 
 //-------------------------------------------------------------------
 
-int scanPlayerInf(int map[][100], char name[], int playerNum)
+int scanPlayerInfo(int map[][100], char name[], int playerNum)
 {
     int i, j, k;
     char direction;
@@ -107,7 +127,7 @@ int scanPlayerInf(int map[][100], char name[], int playerNum)
     for (k = 0; k < nship; k++)
     {
         Red(1);
-        scanf("%d %d %c", &j, &i,&direction);
+        scanf("%d %d %c", &j, &i, &direction);
         if (checkOverlap(i, j, direction, map) == 1 && checkRange(i, j, direction) == 1)
         {
             putShips(map, i, j, direction);
@@ -116,7 +136,7 @@ int scanPlayerInf(int map[][100], char name[], int playerNum)
             k--;
     }
     White(1);
-    printf("Name and locations received for player %d.\n",playerNum);
+    printf("Name and locations received for player %d.\n", playerNum);
     Reset();
     return 0;
 }
@@ -200,11 +220,14 @@ int scanSign()
     printf("input the sign( < --- > for pass to player 2)\n");
     scanf("%s", sign); // scanf for '---'
     Reset();
-    for (i = 0; i < 3 && sign[i] == '-'; i++);
+    for (i = 0; i < 3 && sign[i] == '-'; i++)
+        ;
     if (i == 3)
     {
         return 1;
-    }else scanSign();
+    }
+    else
+        return scanSign();
     // May be used for phase 6
     // for ( i = 0; i < 3 && sign[i]=='$'; i++)
     // {
@@ -214,34 +237,39 @@ int scanSign()
 }
 
 //-------------------------------------------------------------------
-void clearScreen(){
+void clearScreen()
+{
     system("cls");
 }
 //-------------------------------------------------------------------
-int printInf(int ships, int n)
+int printInfo(int ships, int n, char namePlayer[], char namePlayer2[])
 {
     int i;
+    printf(" %s's turn", namePlayer2);
+    printf("\n\n");
     Blue(1);
-    printf(" %s",namePlayer1);
-    for (i = 0; i < 2 * n + 19-strlen(namePlayer1); i++)
-    {
-        printf(" ");
-    }
-    printf(" %s\n\n",namePlayer2);
+    printf(" %s's map", namePlayer);
+    // for (i = 0; i < 2 * n + 19-strlen(namePlayer); i++)
+    // {
+    //     printf(" ");
+    // }
+    // printf(" %s\n\n",namePlayer2);
+    printf("\n\n");
     White(1);
     printf(" remaining ships: %d", ships);
-    for (i = 0; i <= 2 * n; i++)
-    {
-        printf(" ");
-    }
-    printf(" remaining ships: %d\n\n", ships);
+    // for (i = 0; i <= 2 * n; i++)
+    // {
+    //     printf(" ");
+    // }
+    // printf(" remaining ships: %d\n\n", ships);
+    printf("\n\n");
     Reset();
     return 0;
 }
 
 //-------------------------------------------------------------------
 
-int printMaps(int map1[][100], int map2[][100], int n)
+int printMaps(int map[][100], int n)
 {
     int i, j;
     for (i = n; i > 0; i--)
@@ -249,7 +277,7 @@ int printMaps(int map1[][100], int map2[][100], int n)
         // p1 map
         for (j = 0; j <= n; j++)
         {
-            switch (map1[i][j])
+            switch (map[i][j])
             {
             case 0:
                 Cyan(1);
@@ -258,12 +286,15 @@ int printMaps(int map1[][100], int map2[][100], int n)
                 Reset();
                 break;
             case -1:
-                printf("* ");
+                printf("*");
+                WhiteBack();
+                printf(" ");
+                Reset();
                 break;
             case -2:
-                Red(1);
+                Cyan(1);
                 WhiteBack();
-                printf("> ");
+                printf("~ ");
                 Reset();
                 break;
             default:
@@ -272,74 +303,74 @@ int printMaps(int map1[][100], int map2[][100], int n)
                     if (i > 9)
                     {
                         Yellow(1);
-                        printf("%d ", map1[i][j]);
+                        printf("%d ", map[i][j]);
                         Reset();
                     }
                     else
                     {
                         Yellow(1);
-                        printf("%d  ", map1[i][j]);
+                        printf("%d  ", map[i][j]);
                         Reset();
                     }
                 }
                 else
                 {
                     Yellow(1);
-                    printf("%d ", map1[i][j]);
+                    printf("%d ", map[i][j]);
                     Reset();
                 }
 
                 break;
             }
         }
-        // space between p1 and p2
-        for (j = 0; j < 18; j++)
-            printf(" ");
-        // p2 map
-        for (j = 0; j <= n; j++)
-        {
-            switch (map2[i][j])
-            {
-            case 0:
-                Cyan(1);
-                WhiteBack();
-                printf("~ ");
-                Reset();
-                break;
-            case -1:
-                printf("* ");
-                break;
-            case -2:
-                Red(1);
-                WhiteBack();
-                printf("> ");
-                Reset();
-                break;
-            default:
-                if (n > 9)
-                {
-                    if (i > 9)
-                    {
-                        Yellow(1);
-                        printf("%d ", map2[i][j]);
-                        Reset();
-                    }
-                    else
-                    {
-                        Yellow(1);
-                        printf("%d  ", map2[i][j]);
-                        Reset();
-                    }
-                }
-                else
-                {
-                    Yellow(1);
-                    printf("%d ", map2[i][j]);
-                    Reset();
-                }
-                break;
-            }
-        }
+        // // space between p1 and p2
+        // for (j = 0; j < 18; j++)
+        //     printf(" ");
+        // // p2 map
+        // for (j = 0; j <= n; j++)
+        // {
+        //     switch (map2[i][j])
+        //     {
+        //     case 0:
+        //         Cyan(1);
+        //         WhiteBack();
+        //         printf("~ ");
+        //         Reset();
+        //         break;
+        //     case -1:
+        //         printf("* ");
+        //         break;
+        //     case -2:
+        //         Red(1);
+        //         WhiteBack();
+        //         printf("> ");
+        //         Reset();
+        //         break;
+        //     default:
+        //         if (n > 9)
+        //         {
+        //             if (i > 9)
+        //             {
+        //                 Yellow(1);
+        //                 printf("%d ", map2[i][j]);
+        //                 Reset();
+        //             }
+        //             else
+        //             {
+        //                 Yellow(1);
+        //                 printf("%d  ", map2[i][j]);
+        //                 Reset();
+        //             }
+        //         }
+        //         else
+        //         {
+        //             Yellow(1);
+        //             printf("%d ", map2[i][j]);
+        //             Reset();
+        //         }
+        //         break;
+        //     }
+        // }
         printf("\n");
     }
     if (n > 9)
@@ -355,189 +386,181 @@ int printMaps(int map1[][100], int map2[][100], int n)
     for (i = 0, j = 0; j < n; j++)
     {
         Yellow(1);
-        printf(" %d", map1[i][j]);
+        printf(" %d", map[i][j]);
         Reset();
     }
-    // space between p1 and p2
-    if (n > 9)
-    {
-        for (i = 0; i < 20; i++)
-            printf(" ");
-    }
-    else
-    {
-        for (i = 0; i < 20; i++)
-            printf(" ");
-    }
-    // numbers at the bottom of the graph p2
-    for (i = 0, j = 0; j < n; j++)
-    {
-        Yellow(1);
-        printf(" %d", map2[i][j]);
-        Reset();
-    }
+    printf("\n");
+    // // space between p1 and p2
+    // if (n > 9)
+    // {
+    //     for (i = 0; i < 20; i++)
+    //         printf(" ");
+    // }
+    // else
+    // {
+    //     for (i = 0; i < 20; i++)
+    //         printf(" ");
+    // }
+    // // numbers at the bottom of the graph p2
+    // for (i = 0, j = 0; j < n; j++)
+    // {
+    //     Yellow(1);
+    //     printf(" %d", map2[i][j]);
+    //     Reset();
+    // }
     return 0;
 }
 //-----------------------------------------------------
-void Black(int x){
+void bombing(int map[][100], char name[], char name2[], int *ship)
+{
+    int x, i = 1, j = 1, save;
+    clearScreen();
+    save = map[i][j];
+    map[i][j] = -1;
+    printInfo(*ship, n, name, name2);
+    printMaps(map, n);
+    x = getch();
+    while (x != 13)
+    {
+        while (x != 224 && x!= 13)
+        {
+            x = getch();
+        }
+        if (x == 224)
+        {
+            x = getch();
+        }
+        
+        map[i][j] = save;
+        if (x == 77)
+        {
+            if (j < n)
+                j++;
+        }
+        else if (x == 75)
+        {
+            if (j > 1)
+                j--;
+        }
+        else if (x == 72)
+        {
+            if (i < n)
+                i++;
+        }
+        else if (x == 80)
+        {
+            if (i > 1)
+                i--;
+        }
+        save = map[i][j];
+        map[i][j] = -1;
+        clearScreen();
+        printInfo(*ship, n, name, name2);
+        printMaps(map, n);
+    }
+    if (save == -2)
+    {
+        *ship -= 1;
+    }
+    else
+    {
+        map[i][j] = save;
+    }
+    // sleep(3000);
+}
+//-----------------------------------------------------------------
+void printEnd1()
+{
+    printf("  _____  _                         __            _           \n");
+    printf(" |  __ \\| |                       /_ |          (_)          \n");
+    printf(" | |__) | | __ _ _   _  ___ _ __   | | __      ___ _ __  ___ \n");
+    printf(" |  ___/| |/ _` | | | |/ _ \\ '__|  | | \\ \\ /\\ / / | '_ \\/ __|\n");
+    printf(" | |    | | (_| | |_| |  __/ |     | |  \\ V  V /| | | | \\__ \\ \n");
+    printf(" |_|    |_|\\__,_|\\__, |\\___|_|     |_|   \\_/\\_/ |_|_| |_|___/\n");
+    printf("                  __/ |                                      \n");
+    printf("                 |___/                                       \n");
+}
+void printEnd2()
+{
+    printf("  _____  _                         ___             _           \n");
+    printf(" |  __ \\| |                       |__ \\           (_)          \n");
+    printf(" | |__) | | __ _ _   _  ___ _ __     ) | __      ___ _ __  ___ \n");
+    printf(" |  ___/| |/ _` | | | |/ _ \\ '__|   / /  \\ \\ /\\ / / | '_ \\/ __|\n");
+    printf(" | |    | | (_| | |_| |  __/ |     / /_   \\ V  V /| | | | \\__ \\\n");
+    printf(" |_|    |_|\\__,_|\\__, |\\___|_|    |____|   \\_/\\_/ |_|_| |_|___/\n");
+    printf("                  __/ |                                        \n");
+    printf("                 |___/                                         \n");
+}
+
+//-----------------------------------------------------------------
+void sleep(unsigned int mseconds)
+{
+    clock_t goal = mseconds + clock();
+    while (goal > clock())
+        ;
+}
+void Black(int x)
+{
     if (x == 0)
         printf("\033[0;30m");
     else
         printf("\033[1;30m");
 }
-void Red(int x){
+void Red(int x)
+{
     if (x == 0)
         printf("\033[0;31m");
     else
         printf("\033[1;31m");
 }
-void Green(int x){
+void Green(int x)
+{
     if (x == 0)
         printf("\033[0;32m");
     else
         printf("\033[1;32m");
 }
-void Yellow(int x){
+void Yellow(int x)
+{
     if (x == 0)
         printf("\033[0;33m");
     else
         printf("\033[1;33m");
 }
-void Blue(int x){
+void Blue(int x)
+{
     if (x == 0)
         printf("\033[0;34m");
     else
         printf("\033[1;34m");
 }
-void Purple(int x){
+void Purple(int x)
+{
     if (x == 0)
         printf("\033[0;35m");
     else
         printf("\033[1;35m");
 }
-void Cyan(int x){
+void Cyan(int x)
+{
     if (x == 0)
         printf("\033[0;36m");
     else
         printf("\033[1;36m");
 }
-void White(int x){
+void White(int x)
+{
     if (x == 0)
         printf("\033[0;37m");
     else
         printf("\033[1;37m");
 }
-void Reset(){
+void Reset()
+{
     printf("\033[0m");
 }
 //----------------------------------------------------------------
-void WhiteBack(){
+void WhiteBack()
+{
     printf("\e[47m");
-}
-//----------------------------------------------------------------
-void sleep(unsigned int mseconds){
-    clock_t goal = mseconds + clock();
-    while(goal > clock());
-}
-//----------------------------------------------------------------
-void intro(){
-    printf("\n");
-    Green(0);
-    printf("  ______       _   _   _        _____ _     _  \n");
-    printf("  | ___ \\     | | | | | |      /  ___| |   (_) \n");
-    printf("  | |_/ / __ _| |_| |_| | ___  \\ `--.| |__  _ _ __  \n");
-    printf("  | ___ \\/ _` | __| __| |/ _ \\  `--. \\ '_ \\| | '_ \\ \n");
-    printf("  | |_/ / (_| | |_| |_| |  __/ /\\__/ / | | | | |_) | \n");
-    printf("  \\____/ \\__,_|\\__|\\__|_|\\___| \\____/|_| |_|_| .__/ \n");
-    printf("                                           | | \n");
-    printf("                                           |_| \n");
-    Reset();
-    printf("\n");
-    Red(0);
-    printf("    Developed by Reza Mansouri && Sajad Zirak");
-    Reset();
-    sleep(5000);
-}
-//----------------------------------------------------------------
-void printShip(){
-    Black(1);
-    printf("         ,|                                          \n");
-    printf("     -#=(  )=#-                                      \n");
-    printf("       _:||_                                         \n");
-    printf("     /       \\                                      \n");
-    printf("     \\=======/                                      \n");
-    printf("      |     |                                        \n");
-    printf("      |     |                                        \n");
-    printf("      |_____|_________________________________      \n");
-    printf("     |__                                    __|     \n");
-    printf("        \\                                  /       \n");
-    printf("         \\                                /        \n");
-    printf("          \\__                          __/         \n");
-    printf("             \\                        /            \n");
-    Reset();
-}
-//-------------------------------------------------------------------
-void wave1(){
-    system("cls");
-    printf("\n");
-    printShip();
-    Cyan(0);
-    printf("     .~  .~~._                    __                           \n");
-    printf("   .'  .'     '~.              .-'  '-.                        \n");
-    printf("                 __                                            \n");
-    printf("            ..-~'  '~-..         _.-~'~-._                     \n");
-    printf("                              .-'         '-.                  \n");
-    Yellow(0);
-    printf("\n\n");
-    printf("    +-+-+-+-+-+ +-+-+-+ +-+-+-+ +-+-+ +-+-+-+-+-+\n");
-    printf("    |p|r|e|s|s| |a|n|y| |k|e|y| |t|o| |s|t|a|r|t|\n");
-    printf("    +-+-+-+-+-+ +-+-+-+ +-+-+-+ +-+-+ +-+-+-+-+-+\n");
-    Reset();
-}
-//-------------------------------------------------------------------
-void wave2(){
-    system("cls");
-    printf("\n");
-    printShip();
-    Cyan(0);
-    printf("                    __                 .~  .~~._               \n");
-    printf("                 .-'  '-.            .'  .'     '~.            \n");
-    printf("                                              __               \n");
-    printf("                   _.-~'~-._             ..-~'  '~-..          \n");
-    printf("                .-'         '-.                                \n");
-    Yellow(0);
-    printf("\n\n");
-    printf("    +-+-+-+-+-+ +-+-+-+ +-+-+-+ +-+-+ +-+-+-+-+-+\n");
-    printf("    |p|r|e|s|s| |a|n|y| |k|e|y| |t|o| |s|t|a|r|t|\n");
-    printf("    +-+-+-+-+-+ +-+-+-+ +-+-+-+ +-+-+ +-+-+-+-+-+\n");
-    Reset();
-}
-//-------------------------------------------------------------------
-void wave3(){
-    system("cls");
-    printf("\n");
-    printShip();
-    Cyan(0);
-    printf("     __                    .~  .~~._                           \n");
-    printf("  .-'  '-.               .'  .'     '~.                        \n");
-    printf("                                  __                           \n");
-    printf("     _.-~'~-._               ..-~'  '~-..                      \n");
-    printf("  .-'         '-.                                              \n");
-    Yellow(0);
-    printf("\n\n");
-    printf("    +-+-+-+-+-+ +-+-+-+ +-+-+-+ +-+-+ +-+-+-+-+-+\n");
-    printf("    |p|r|e|s|s| |a|n|y| |k|e|y| |t|o| |s|t|a|r|t|\n");
-    printf("    +-+-+-+-+-+ +-+-+-+ +-+-+-+ +-+-+ +-+-+-+-+-+\n");
-    Reset();
-}
-//-------------------------------------------------------------------
-void animate(){
-    while(_kbhit() == 0){
-        wave1();
-        sleep(500);
-        wave2();
-        sleep(500);
-        wave3();
-        sleep(500);
-  }
 }
