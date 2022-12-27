@@ -4,7 +4,7 @@
 #include <conio.h>
 #include <time.h>
 
-int n, nship;
+int n, nship, mode;  // for singleplayer mode = 0 && for multiplayer mode = 1
 int mapPlayer1[100][100];
 int mapPlayer2[100][100];
 char namePlayer1[20];
@@ -43,37 +43,43 @@ int main()
     scanBasicInfo();
     initializeMap(mapPlayer1, n);
     initializeMap(mapPlayer2, n);
-    scanPlayerInfo(mapPlayer1, namePlayer1, 1);
-    if (scanSign() == 1)
+    if(mode == 1)
     {
-        clearScreen();
-    }
-    scanPlayerInfo(mapPlayer2, namePlayer2, 2);
-    shipPlayer1 = nship * 3;
-    shipPlayer2 = nship * 3;
-    while (1)
-    {
-        bombing(mapPlayer2, namePlayer2, namePlayer1, &shipPlayer2);
-        if (shipPlayer2 == 0)
-        {
-            break;
-        }
-        bombing(mapPlayer1, namePlayer1, namePlayer2, &shipPlayer1);
-        if (shipPlayer1 == 0)
-        {
-            break;
-        }
-    }
-    clearScreen();
+    	scanPlayerInfo(mapPlayer1, namePlayer1, 1);
+    	if (scanSign() == 1)
+    	{
+        	clearScreen();
+    	}
+    	scanPlayerInfo(mapPlayer2, namePlayer2, 2);
+    	shipPlayer1 = nship * 3;
+    	shipPlayer2 = nship * 3;
+    	while (1)
+    	{
+        	bombing(mapPlayer2, namePlayer2, namePlayer1, &shipPlayer2);
+        	if (shipPlayer2 == 0)
+        	{
+            	break;
+        	}
+        	bombing(mapPlayer1, namePlayer1, namePlayer2, &shipPlayer1);
+        	if (shipPlayer1 == 0)
+        	{
+            	break;
+        	}
+    	}
+    	clearScreen();
 
-    if (shipPlayer1 == 0)
-    {
-        printEnd2();
-    }
-    else
-    {
-        printEnd1();
-    }
+    	if (shipPlayer1 == 0)
+    	{
+        	printEnd2();
+    	}
+    	else
+    	{
+        	printEnd1();
+    	}	
+	}
+	else
+	{
+	}
 
     return 0;
 }
@@ -82,6 +88,13 @@ int main()
 
 int scanBasicInfo()
 {
+	char m;
+	White(1);
+	printf("Press 's' for singleplayer or press 'm' for multiplayer: ");
+	Green(0);
+	scanf("%c", &m);
+	if(m == 's' || m == 'S') mode = 0;
+	else if(m == 'm' || m == 'M') mode = 1;
     White(1);
     printf("Give the map's size: ");
     Green(0);
