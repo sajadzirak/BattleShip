@@ -9,12 +9,17 @@
 #include "match.h"
 #include "gamesetting.h"
 
-int n, nship;
-int mapPlayer1[100][100];
-int mapPlayer2[100][100];
-char namePlayer1[20];
-char namePlayer2[20];
-int shipPlayer1, shipPlayer2;
+// int n, nship;
+// int mapPlayer1[100][100];
+// int mapPlayer2[100][100];
+// char namePlayer1[20];
+// char namePlayer2[20];
+// int shipPlayer1, shipPlayer2;
+// struct shipPosition
+// {
+//     int shipPosition[3][2];
+// }shipPos[15];
+
 
 // int startNewGame();
 
@@ -52,7 +57,7 @@ int main()
     switch (animate())
     {
     case 1:
-        if(startNewGame(n,nship,mapPlayer1,mapPlayer2,namePlayer1,namePlayer2,shipPlayer1,shipPlayer2)==0)
+        if(startNewGame()==0)
             main();
         break;
     case 2:

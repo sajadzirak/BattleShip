@@ -1,9 +1,8 @@
 #ifndef check
 #define check
 
-
-#include"color.h"
-
+#include "color.h"
+#include "data.h"
 
 int checkOverlap(int i, int j, char direction, int map[][100])
 {
@@ -46,7 +45,7 @@ int checkOverlap(int i, int j, char direction, int map[][100])
 
 //---------------------------------------------------------
 
-int checkRange(int i, int j, char direction , int n)
+int checkRange(int i, int j, char direction)
 {
     int sw = 1;
     if ((i + 2 > n && direction == 'v') || (j + 2 > n && direction == 'h'))
@@ -57,6 +56,38 @@ int checkRange(int i, int j, char direction , int n)
         sw = 0;
     }
     return sw;
+}
+//---------------------------------------------------------------
+
+void hitShip(struct shipPosition shipPos[], int x, int y)
+{
+    int i, j, k;
+    for (k = 0; k < nship; k++)
+    {
+        for (i = 0; i < 3; i++)
+        {
+            if (shipPos[k].shipPosition[i][0] == x && shipPos[k].shipPosition[i][1] == y)
+                shipPos[k].sw[i] = 0;
+        }
+    }
+}
+
+//---------------------------------------------------------------
+int checkShip(struct shipPosition shipPos[])
+{
+    int i, j, k;
+    for (k = 0; k < nship; k++)
+    {
+        for (i = 0; i < 3 && shipPos[k].sw[i] == 0; i++)
+            ;
+        if (i==3)
+        {
+        for (i = 0; i < 3; i++)
+            shipPos[k].sw[i] = -1;
+        return 1;
+        }
+    }
+    return 0;
 }
 
 #endif

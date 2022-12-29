@@ -1,26 +1,26 @@
 #ifndef scan
 #define scan
 
+#include "color.h"
+#include "check.h"
+#include "initializing.h"
+#include "data.h"
 
-#include"color.h"
-#include"check.h"
-#include"initializing.h"
-
-int scanBasicInfo(int *n , int *nship)
+int scanBasicInfo()
 {
     White(1);
     printf("Give the map's size: ");
     Green(0);
-    scanf("%d", n);
+    scanf("%d", &n);
     White(1);
     printf("How many ships are there?: ");
     Green(0);
-    scanf("%d", nship);
+    scanf("%d", &nship);
     Reset();
     return 0;
 }
 
-int scanPlayerInfo(int map[][100], char name[], int playerNum,int n,int nship)
+int scanPlayerInfo(int map[][100], char name[], int playerNum, struct shipPosition shipPos[])
 {
     int i, j, k;
     char direction;
@@ -32,9 +32,31 @@ int scanPlayerInfo(int map[][100], char name[], int playerNum,int n,int nship)
     {
         Red(1);
         scanf("%d %d %c", &j, &i, &direction);
-        if (checkOverlap(i, j, direction, map) == 1 && checkRange(i, j, direction,n) == 1)
+        if (checkOverlap(i, j, direction, map) == 1 && checkRange(i, j, direction) == 1)
         {
             putShips(map, i, j, direction);
+            if (direction == 'v')
+            {
+                shipPos[k].shipPosition[0][0] = j;
+                shipPos[k].shipPosition[0][1] = i;
+
+                shipPos[k].shipPosition[1][0] = j;
+                shipPos[k].shipPosition[1][1] = i + 1;
+
+                shipPos[k].shipPosition[2][0] = j;
+                shipPos[k].shipPosition[2][1] = i + 2;
+            }
+            else
+            {
+                shipPos[k].shipPosition[0][0] = j;
+                shipPos[k].shipPosition[0][1] = i;
+
+                shipPos[k].shipPosition[1][0] = j + 1;
+                shipPos[k].shipPosition[1][1] = i;
+
+                shipPos[k].shipPosition[2][0] = j + 2;
+                shipPos[k].shipPosition[2][1] = i;
+            }
         }
         else
             k--;
@@ -42,6 +64,7 @@ int scanPlayerInfo(int map[][100], char name[], int playerNum,int n,int nship)
     White(1);
     printf("Name and locations received for player %d.\n", playerNum);
     Reset();
+    sleep(1500);
     return 0;
 }
 

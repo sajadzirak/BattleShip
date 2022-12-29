@@ -2,8 +2,8 @@
 #define printing
 
 #include"color.h"
-
-int printInfo(int ships, int n, char namePlayer[], char namePlayer2[])
+#include"data.h"
+int printInfo(int ships, char namePlayer[], char namePlayer2[])
 {
     int i;
     printf(" %s's turn", namePlayer2);
@@ -14,12 +14,11 @@ int printInfo(int ships, int n, char namePlayer[], char namePlayer2[])
     printf("\n\n");
     White(1);
     printf(" remaining ships: %d", ships);
-
-    printf("\n\n");
     Reset();
+    printf("\n\n");
     return 0;
 }
-int printMaps(int map[][100], int n)
+int printMaps(int map[][100])
 {
     int i, j;
     for (i = n; i > 0; i--)

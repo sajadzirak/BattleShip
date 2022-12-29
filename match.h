@@ -1,23 +1,28 @@
 #ifndef match
 #define match
-#include"printing.h"
-#include"general.h"
-#include"conio.h"
-#include"scan.h"
-#include"initializing.h"
-
-
+#include "printing.h"
+#include "general.h"
+#include "conio.h"
+#include "scan.h"
+#include "initializing.h"
+#include "introduction.h"
+#include "data.h"
 //-------------------------------------------------------------------
 
-
-void bombing(int map[][100], char name[], char name2[], int *ship,int n)
+void bombing(int map[][100], int *ship, int playerTurn)
 {
     int x, i = 1, j = 1, save;
     clearScreen();
     save = map[i][j];
     map[i][j] = -1;
-    printInfo(*ship, n, name, name2);
-    printMaps(map, n);
+    if (playerTurn == 1)
+    {
+        printInfo(*ship, namePlayer2, namePlayer1);
+    }
+    else
+        printInfo(*ship, namePlayer1, namePlayer2);
+
+    printMaps(map);
     x = getch();
     while (x != 13)
     {
@@ -54,12 +59,30 @@ void bombing(int map[][100], char name[], char name2[], int *ship,int n)
         save = map[i][j];
         map[i][j] = -1;
         clearScreen();
-        printInfo(*ship, n, name, name2);
-        printMaps(map, n);
+        if (playerTurn == 1)
+        {
+            printInfo(*ship, namePlayer2, namePlayer1);
+        }
+        else
+            printInfo(*ship, namePlayer1, namePlayer2);
+
+        printMaps(map);
     }
     if (save == -2)
     {
-        *ship -= 1;
+        if (playerTurn == 1)
+        {
+            hitShip(shipPosP2, j, i);
+            if (checkShip(shipPosP2) == 1)
+                shipPlayer2--;
+        }
+        else
+        {
+            hitShip(shipPosP1, j, i);
+            if (checkShip(shipPosP1) == 1)
+                shipPlayer1--;
+        }
+
         Green(1);
         printf("\n  You hit the ship!");
         Reset();
@@ -139,30 +162,30 @@ int rematch(int winner)
     }
     return i;
 }
-//----------------------------------------------------------------
-int startNewGame(int n,int nship,int mapPlayer1[][100],int mapPlayer2[][100],char namePlayer1[],char namePlayer2[],int shipPlayer1,int shipPlayer2)
-{
 
+//--------------------------------------------------------------------
+int multiPlayer()
+{
     clearScreen();
-    scanBasicInfo(&n, &nship);
-    initializeMap(mapPlayer1, n);
-    initializeMap(mapPlayer2, n);
-    scanPlayerInfo(mapPlayer1, namePlayer1, 1, n, nship);
+    scanBasicInfo();
+    initializeMap(mapPlayer1);
+    initializeMap(mapPlayer2);
+    scanPlayerInfo(mapPlayer1, namePlayer1, 1, shipPosP1);
     if (scanSign() == 1)
     {
         clearScreen();
     }
-    scanPlayerInfo(mapPlayer2, namePlayer2, 2, n, nship);
-    shipPlayer1 = nship * 3;
-    shipPlayer2 = nship * 3;
+    scanPlayerInfo(mapPlayer2, namePlayer2, 2, shipPosP2);
+    shipPlayer1 = nship;
+    shipPlayer2 = nship;
     while (1)
     {
-        bombing(mapPlayer2, namePlayer2, namePlayer1, &shipPlayer2, n);
+        bombing(mapPlayer2, &shipPlayer2, 1);
         if (shipPlayer2 == 0)
         {
             break;
         }
-        bombing(mapPlayer1, namePlayer1, namePlayer2, &shipPlayer1, n);
+        bombing(mapPlayer1, &shipPlayer1, 2);
         if (shipPlayer1 == 0)
         {
             break;
@@ -173,7 +196,7 @@ int startNewGame(int n,int nship,int mapPlayer1[][100],int mapPlayer2[][100],cha
     {
         printEnd2();
         if (rematch(2) == 0)
-            startNewGame(n,nship,mapPlayer1,mapPlayer2,namePlayer1,namePlayer2,shipPlayer1,shipPlayer2);
+            multiPlayer();
         else
             return 0;
     }
@@ -181,10 +204,28 @@ int startNewGame(int n,int nship,int mapPlayer1[][100],int mapPlayer2[][100],cha
     {
         printEnd1();
         if (rematch(1) == 0)
-            startNewGame(n,nship,mapPlayer1,mapPlayer2,namePlayer1,namePlayer2,shipPlayer1,shipPlayer2);
+            multiPlayer();
         else
             return 0;
     }
     return 0;
+}
+//--------------------------------------------------------------------
+
+int singlePlayer()
+{
+    return 0;
+}
+//----------------------------------------------------------------
+int startNewGame()
+{
+    if (startNewGameMenu() == 0)
+    {
+        return singlePlayer();
+    }
+    else
+    {
+        return multiPlayer();
+    }
 }
 #endif

@@ -5,7 +5,7 @@
 #include"general.h"
 #include<conio.h>
 
-int hitButton(int *i)
+int hitButton(int *i,int min,int max)
 {
     int x;
     if (kbhit())
@@ -24,11 +24,11 @@ int hitButton(int *i)
 
             break;
         case 72: // up
-            if (*i > 1)
+            if (*i >  min)
                 *i = *i - 1;
             break;
         case 80: // down
-            if (*i < 3)
+            if (*i < max)
             {
                 *i = *i + 1;
             }
@@ -120,6 +120,46 @@ void printShip3()
 }
 //-------------------------------------------------------------------
 
+void printShipStartNewGame1()
+{
+    Black(1);
+    printf("         ,|                                          \n");
+    printf("     -#=(  )=#-               \e[47m\033[1;30mSingle Player\033[0m          \n");
+    printf("       _:||_                  Multi Player           \n");
+    printf("     /       \\                                       \n");
+    printf("     \\=======/                                       \n");
+    printf("      |     |                                        \n");
+    printf("      |     |                                        \n");
+    printf("      |_____|_________________________________      \n");
+    printf("     |__                                    __|     \n");
+    printf("        \\                                  /       \n");
+    printf("         \\                                /        \n");
+    printf("          \\__                          __/         \n");
+    printf("             \\                        /            \n");
+    Reset();
+}
+//-------------------------------------------------------------------
+void printShipStartNewGame2()
+{
+    Black(1);
+    printf("         ,|                                          \n");
+    printf("     -#=(  )=#-               Single Player          \n");
+    printf("       _:||_                  \e[47m\033[1;30mMulti Player\033[0m           \n");
+    printf("     /       \\                                       \n");
+    printf("     \\=======/                                       \n");
+    printf("      |     |                                        \n");
+    printf("      |     |                                        \n");
+    printf("      |_____|_________________________________      \n");
+    printf("     |__                                    __|     \n");
+    printf("        \\                                  /       \n");
+    printf("         \\                                /        \n");
+    printf("          \\__                          __/         \n");
+    printf("             \\                        /            \n");
+    Reset();
+}
+//-------------------------------------------------------------------
+
+
 void wave1()
 {
 
@@ -162,7 +202,7 @@ void wave3()
 int animate()
 {
     int i = 1;
-    while (hitButton(&i) == -1)
+    while (hitButton(&i,1,3) == -1)
     {
         clearScreen();
         switch (i)
@@ -180,7 +220,7 @@ int animate()
         printf("\n");
         wave1();
         sleep(500);
-        if (hitButton(&i) != -1)
+        if (hitButton(&i,1,3) != -1)
             break;
         clearScreen();
         switch (i)
@@ -198,7 +238,7 @@ int animate()
         printf("\n");
         wave2();
         sleep(500);
-        if (hitButton(&i) != -1)
+        if (hitButton(&i,1,3) != -1)
             break;
         clearScreen();
         switch (i)
@@ -216,11 +256,66 @@ int animate()
         printf("\n");
         wave3();
         sleep(500);
-        if (hitButton(&i) != -1)
+        if (hitButton(&i,1,3) != -1)
             break;
     }
     return i;
 }
 
+//--------------------------------------------------------------
+
+int startNewGameMenu(){
+    int i = 0;
+    while (hitButton(&i,0,1) == -1)
+    {
+        clearScreen();
+        switch (i)
+        {
+        case 0:
+            printShipStartNewGame1();
+            break;
+        case 1:
+            printShipStartNewGame2();
+            break;
+        }
+        printf("\n");
+        wave1();
+        sleep(500);
+        if (hitButton(&i,0,1) != -1)
+            break;
+        clearScreen();
+        switch (i)
+        {
+        case 0:
+            printShipStartNewGame1();
+            break;
+        case 1:
+            printShipStartNewGame2();
+            break;
+        }
+        printf("\n");
+        wave2();
+        sleep(500);
+        if (hitButton(&i,0,1) != -1)
+            break;
+        clearScreen();
+        switch (i)
+        {
+        case 0:
+            printShipStartNewGame1();
+            break;
+        case 1:
+            printShipStartNewGame2();
+            break;
+        }
+        printf("\n");
+        wave3();
+        sleep(500);
+        if (hitButton(&i,0,1) != -1)
+            break;
+    }
+    return i;
+    
+}
 
 #endif

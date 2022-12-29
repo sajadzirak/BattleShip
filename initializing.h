@@ -1,7 +1,9 @@
 #ifndef initializing
 #define initializing
 
-int initializeMap(int map[][100], int n)
+#include"data.h"
+
+int initializeMap(int map[][100])
 {
     int i, j;
     for (i = 0, j = 0; j < n; j++)
@@ -32,13 +34,6 @@ int putShips(int map[][100], int i, int j, char direction)
     }
     return 0;
 }
-
-
-
-
-
-
-
 
 
 
