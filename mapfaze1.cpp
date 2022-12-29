@@ -8,8 +8,9 @@
 #include "printing.h"
 #include "match.h"
 #include "gamesetting.h"
+#include "singleplayer.h"
 
-int n, nship, mode;  // for singleplayer mode = 0 && for multiplayer mode = 1
+int n, nship;
 int mapPlayer1[100][100];
 int mapPlayer2[100][100];
 char namePlayer1[20];
@@ -52,8 +53,15 @@ int main()
     switch (animate())
     {
     case 1:
-        if(startNewGame(n,nship,mapPlayer1,mapPlayer2,namePlayer1,namePlayer2,shipPlayer1,shipPlayer2)==0)
-            main();
+    	if(chooseMode() == 1)
+    	{
+    		if(startNewMultiPlayerGame(n,nship,mapPlayer1,mapPlayer2,namePlayer1,namePlayer2,shipPlayer1,shipPlayer2)==0)
+        	main();
+		}
+		else
+		{
+			startNewSinglePlayerGame(n,nship,mapPlayer1,mapPlayer2,namePlayer1,namePlayer2,shipPlayer1,shipPlayer2);
+		}
         break;
     case 2:
         if (setting() == 0)

@@ -140,7 +140,7 @@ int rematch(int winner)
     return i;
 }
 //----------------------------------------------------------------
-int startNewGame(int n,int nship,int mapPlayer1[][100],int mapPlayer2[][100],char namePlayer1[],char namePlayer2[],int shipPlayer1,int shipPlayer2)
+int startNewMultiPlayerGame(int n,int nship,int mapPlayer1[][100],int mapPlayer2[][100],char namePlayer1[],char namePlayer2[],int shipPlayer1,int shipPlayer2)
 {
 
     clearScreen();
@@ -173,7 +173,7 @@ int startNewGame(int n,int nship,int mapPlayer1[][100],int mapPlayer2[][100],cha
     {
         printEnd2();
         if (rematch(2) == 0)
-            startNewGame(n,nship,mapPlayer1,mapPlayer2,namePlayer1,namePlayer2,shipPlayer1,shipPlayer2);
+            startNewMultiPlayerGame(n,nship,mapPlayer1,mapPlayer2,namePlayer1,namePlayer2,shipPlayer1,shipPlayer2);
         else
             return 0;
     }
@@ -181,10 +181,11 @@ int startNewGame(int n,int nship,int mapPlayer1[][100],int mapPlayer2[][100],cha
     {
         printEnd1();
         if (rematch(1) == 0)
-            startNewGame(n,nship,mapPlayer1,mapPlayer2,namePlayer1,namePlayer2,shipPlayer1,shipPlayer2);
+            startNewMultiPlayerGame(n,nship,mapPlayer1,mapPlayer2,namePlayer1,namePlayer2,shipPlayer1,shipPlayer2);
         else
             return 0;
     }
     return 0;
 }
+
 #endif
