@@ -98,6 +98,40 @@ void bombing(int map[][100], int *ship, int playerTurn)
 }
 //------------------------------------------------------------
 
+void computerBombing()
+{
+	int i, j, save;
+	clearScreen();
+	do
+	{
+		i = random();
+		j = random();
+	} while (checkHit(i, j, saveHits) == 1);
+	saveHits[i][j] = 1;
+	save = mapPlayer1[i][j];
+	mapPlayer1[i][j] = -1;
+	printInfo(shipPlayer1, namePlayer1, namePlayer2);
+	printMaps(mapPlayer1);
+	if (save == -2)
+	{
+        hitShip(shipPosP1,j,i);
+        if (checkShip(shipPosP1) == 1)
+                shipPlayer1--;
+		Green(1);
+		printf("\n  player 2 hit the ship!");
+		Reset();
+	}
+	else
+	{
+		mapPlayer1[i][j] = save;
+        Red(1);
+		printf("\n  player 2 missed!");
+		Reset();
+	}
+
+	sleep(3500);
+}
+//------------------------------------------------------------
 int rematch(int winner)
 {
     int x, i = 0;
@@ -214,18 +248,63 @@ int multiPlayer()
 
 int singlePlayer()
 {
+    clearScreen();
+    scanBasicInfo();
+    initializeMap(mapPlayer1);
+    initializeMap(mapPlayer2);
+    scanPlayerInfo(mapPlayer1, namePlayer1, 1, shipPosP1);
+    initializeComputerInfo();
+    shipPlayer1 = nship;
+    shipPlayer2 = nship;
+
+    while (1)
+    {
+        bombing(mapPlayer2, &shipPlayer2, 1);
+        if (shipPlayer2 == 0)
+        {
+            break;
+        }
+        computerBombing();//*****
+        if (shipPlayer1 == 0)
+        {
+            break;
+        }
+    }
+    clearScreen();
+    if (shipPlayer1 == 0)
+    {
+        printEnd2();
+        if (rematch(2) == 0)
+            singlePlayer();
+        else
+            return 0;
+    }
+    else
+    {
+        printEnd1();
+        if (rematch(1) == 0)
+            singlePlayer();
+        else
+            return 0;
+    }
     return 0;
 }
 //----------------------------------------------------------------
 int startNewGame()
 {
-    if (startNewGameMenu() == 0)
+    int x;
+    x = startNewGameMenu();
+    if (x == 0)
     {
         return singlePlayer();
     }
-    else
+    else if (x == 1)
     {
         return multiPlayer();
+    }
+    else
+    {
+        return 0;
     }
 }
 #endif

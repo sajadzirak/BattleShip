@@ -80,14 +80,61 @@ int checkShip(struct shipPosition shipPos[])
     {
         for (i = 0; i < 3 && shipPos[k].sw[i] == 0; i++)
             ;
-        if (i==3)
+        if (i == 3)
         {
-        for (i = 0; i < 3; i++)
-            shipPos[k].sw[i] = -1;
-        return 1;
+            for (i = 0; i < 3; i++)
+                shipPos[k].sw[i] = -1;
+            return 1;
         }
     }
     return 0;
+}
+//--------------------------------------------------------------------
+
+int checkComputerOverlap(int i, int j, char direction, int map[][100])
+{
+    int sw = 1, p;
+    if (direction == 'v')
+    {
+        for (p = 0; p < 3 && sw == 1; p++, i++)
+        {
+            if (map[i][j] == -2)
+            {
+                sw = 0;
+            }
+        }
+    }
+    else if (direction == 'h')
+    {
+        for (int p = 0; p < 3 && sw == 1; ++p, j++)
+        {
+            if (map[i][j] == -2)
+            {
+                sw = 0;
+            }
+        }
+    }
+    return sw;
+}
+//-------------------------------------------------------------------
+
+int checkComputerRange(int i, int j, char direction)
+{
+    int sw = 1;
+    if ((i + 2 > n && direction == 'v') || (j + 2 > n && direction == 'h'))
+    {
+        sw = 0;
+    }
+    return sw;
+}
+//-------------------------------------------------------------------
+
+int checkHit(int i, int j, int arr[][11])
+{
+	if (arr[i][j] == 1)
+		return 1;
+	else
+		return 0;
 }
 
 #endif

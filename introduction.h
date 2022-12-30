@@ -62,7 +62,6 @@ void intro(){
 
 void printShip1()
 {
-    Black(1);
     printf("         ,|                                          \n");
     printf("     -#=(  )=#-               \033[1;30mcontinue\033[0m               \n");
     printf("       _:||_                  \e[47m\033[1;30mstart new game\033[0m         \n");
@@ -82,7 +81,6 @@ void printShip1()
 
 void printShip2()
 {
-    Black(1);
     printf("         ,|                                          \n");
     printf("     -#=(  )=#-               \033[1;30mcontinue\033[0m               \n");
     printf("       _:||_                  start new game         \n");
@@ -102,7 +100,6 @@ void printShip2()
 
 void printShip3()
 {
-    Black(1);
     printf("         ,|                                          \n");
     printf("     -#=(  )=#-               \033[1;30mcontinue\033[0m               \n");
     printf("       _:||_                  start new game         \n");
@@ -122,11 +119,10 @@ void printShip3()
 
 void printShipStartNewGame1()
 {
-    Black(1);
     printf("         ,|                                          \n");
     printf("     -#=(  )=#-               \e[47m\033[1;30mSingle Player\033[0m          \n");
     printf("       _:||_                  Multi Player           \n");
-    printf("     /       \\                                       \n");
+    printf("     /       \\                Exit                        \n");
     printf("     \\=======/                                       \n");
     printf("      |     |                                        \n");
     printf("      |     |                                        \n");
@@ -141,11 +137,28 @@ void printShipStartNewGame1()
 //-------------------------------------------------------------------
 void printShipStartNewGame2()
 {
-    Black(1);
     printf("         ,|                                          \n");
     printf("     -#=(  )=#-               Single Player          \n");
     printf("       _:||_                  \e[47m\033[1;30mMulti Player\033[0m           \n");
-    printf("     /       \\                                       \n");
+    printf("     /       \\                Exit                        \n");
+    printf("     \\=======/                                       \n");
+    printf("      |     |                                        \n");
+    printf("      |     |                                        \n");
+    printf("      |_____|_________________________________      \n");
+    printf("     |__                                    __|     \n");
+    printf("        \\                                  /       \n");
+    printf("         \\                                /        \n");
+    printf("          \\__                          __/         \n");
+    printf("             \\                        /            \n");
+    Reset();
+}
+//-------------------------------------------------------------------
+void printShipStartNewGame3()
+{
+    printf("         ,|                                          \n");
+    printf("     -#=(  )=#-               Single Player          \n");
+    printf("       _:||_                  Multi Player           \n");
+    printf("     /       \\                \e[47m\033[1;30mExit\033[0m                       \n");
     printf("     \\=======/                                       \n");
     printf("      |     |                                        \n");
     printf("      |     |                                        \n");
@@ -266,7 +279,7 @@ int animate()
 
 int startNewGameMenu(){
     int i = 0;
-    while (hitButton(&i,0,1) == -1)
+    while (hitButton(&i,0,2) == -1)
     {
         clearScreen();
         switch (i)
@@ -277,11 +290,13 @@ int startNewGameMenu(){
         case 1:
             printShipStartNewGame2();
             break;
+        case 2:
+            printShipStartNewGame3();
         }
         printf("\n");
         wave1();
         sleep(500);
-        if (hitButton(&i,0,1) != -1)
+        if (hitButton(&i,0,2) != -1)
             break;
         clearScreen();
         switch (i)
@@ -292,11 +307,13 @@ int startNewGameMenu(){
         case 1:
             printShipStartNewGame2();
             break;
+        case 2:
+            printShipStartNewGame3();
         }
         printf("\n");
         wave2();
         sleep(500);
-        if (hitButton(&i,0,1) != -1)
+        if (hitButton(&i,0,2) != -1)
             break;
         clearScreen();
         switch (i)
@@ -307,11 +324,13 @@ int startNewGameMenu(){
         case 1:
             printShipStartNewGame2();
             break;
+        case 2:
+            printShipStartNewGame3();
         }
         printf("\n");
         wave3();
         sleep(500);
-        if (hitButton(&i,0,1) != -1)
+        if (hitButton(&i,0,2) != -1)
             break;
     }
     return i;
