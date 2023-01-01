@@ -116,7 +116,10 @@ void computerBombing()
 	{
         hitShip(shipPosP1,j,i);
         if (checkShip(shipPosP1) == 1)
-                shipPlayer1--;
+        {
+        	shipPlayer1--;
+        	previousHit = 1;
+		}
 		Green(1);
 		printf("\n  player 2 hit the ship!");
 		Reset();

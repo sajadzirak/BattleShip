@@ -20,6 +20,25 @@ int initializeMap(int map[][100])
     }
     return 0;
 }
+
+//--------------------------------------------------------------
+
+void fillCol(int i)  // it can almost remove half of the hits
+{
+	int j, faken = n;
+	if(i%2 == 1)
+	{
+		for(j = 1; j <= faken; j += 2)
+			saveHits[i][j] = 1;
+	}
+	else
+	{
+		if(n%2 == 1) ++faken;
+		for(j = faken; j > 1; j -= 2)
+			saveHits[i][j] = 1;
+	}
+}
+
 //--------------------------------------------------------------
 
 int putShips(int map[][100], int i, int j, char direction)
@@ -42,6 +61,8 @@ void initializeComputerInfo()
     int i, j, k;
     char direction;
     randomSeed();
+    for(i = 1; i <= n; ++i)
+    	fillCol(i);
     for (k = 0; k < nship; ++k)
     {
         i = random();
