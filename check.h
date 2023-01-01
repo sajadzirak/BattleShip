@@ -59,32 +59,51 @@ int checkRange(int i, int j, char direction)
 }
 //---------------------------------------------------------------
 
-void hitShip(struct shipPosition shipPos[], int x, int y)
+void hitShip(struct ships shipPlayer[], int x, int y)
 {
     int i, j, k;
     for (k = 0; k < nship; k++)
     {
         for (i = 0; i < 3; i++)
         {
-            if (shipPos[k].shipPosition[i][0] == x && shipPos[k].shipPosition[i][1] == y)
-                shipPos[k].sw[i] = 0;
+            if (shipPlayer[k].shipPosition[i][0] == x && shipPlayer[k].shipPosition[i][1] == y)
+                shipPlayer[k].sw[i] = 0;
         }
     }
 }
 
 //---------------------------------------------------------------
-int checkShip(struct shipPosition shipPos[])
+int checkShip(struct ships shipPlayer[])
 {
     int i, j, k;
     for (k = 0; k < nship; k++)
     {
-        for (i = 0; i < 3 && shipPos[k].sw[i] == 0; i++)
+        for (i = 0; i < 3 && shipPlayer[k].sw[i] == 0; i++)
             ;
         if (i == 3)
         {
             for (i = 0; i < 3; i++)
-                shipPos[k].sw[i] = -1;
+                shipPlayer[k].sw[i] = -1;
             return 1;
+        }
+    }
+    return 0;
+}
+//--------------------------------------------------------------------
+int passShip(struct ships shipPlayer[], int x, int y)
+{
+    int i, j, k;
+    for (k = 0; k < nship; k++)
+    {
+        for (i = 0; i < 3; i++)
+        {
+            if (shipPlayer[k].shipPosition[i][0] == x && shipPlayer[k].shipPosition[i][1] == y)
+            {
+                if (shipPlayer[k].sw[i] == 0 || shipPlayer[k].sw[i] == -1)
+                {
+                    return 1;
+                }
+            }
         }
     }
     return 0;
@@ -131,10 +150,10 @@ int checkComputerRange(int i, int j, char direction)
 
 int checkHit(int i, int j, int arr[][11])
 {
-	if (arr[i][j] == 1)
-		return 1;
-	else
-		return 0;
+    if (arr[i][j] == 1)
+        return 1;
+    else
+        return 0;
 }
 
 #endif

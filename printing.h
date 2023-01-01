@@ -1,9 +1,11 @@
 #ifndef printing
 #define printing
 
-#include"color.h"
-#include"data.h"
-int printInfo(int ships, char namePlayer[], char namePlayer2[])
+#include "color.h"
+#include "data.h"
+//-------------------------------------------------------------------
+
+int printInfo(int remainingShips, char namePlayer[], char namePlayer2[])
 {
     int i;
     printf(" %s's turn", namePlayer2);
@@ -13,11 +15,13 @@ int printInfo(int ships, char namePlayer[], char namePlayer2[])
 
     printf("\n\n");
     White(1);
-    printf(" remaining ships: %d", ships);
+    printf(" remaining ships: %d", remainingShips);
     Reset();
     printf("\n\n");
     return 0;
 }
+//-------------------------------------------------------------------
+
 int printMaps(int map[][100])
 {
     int i, j;
@@ -29,21 +33,35 @@ int printMaps(int map[][100])
             switch (map[i][j])
             {
             case 0:
-                Cyan(1);
+                Cyan(1); // free space
                 WhiteBack();
                 printf("~ ");
                 Reset();
                 break;
-            case -1:
+            case -1: // the bomb
                 printf("*");
                 WhiteBack();
                 printf(" ");
                 Reset();
                 break;
-            case -2:
+            case -2: // Ships that have not been hit yet
                 Cyan(1);
                 WhiteBack();
                 printf("~ ");
+                Reset();
+                break;
+            case -3: // Missed shot
+                Red(1);
+                printf("*");
+                WhiteBack();
+                printf(" ");
+                Reset();
+                break;
+            case -4: // Ships that have been hit
+                Green(1);
+                printf(">");
+                WhiteBack();
+                printf(" ");
                 Reset();
                 break;
             default:
@@ -94,6 +112,7 @@ int printMaps(int map[][100])
 
     return 0;
 }
+//-------------------------------------------------------------------
 
 void printEnd1()
 {
@@ -106,6 +125,8 @@ void printEnd1()
     printf("                  __/ |                                      \n");
     printf("                 |___/                                       \n");
 }
+//-------------------------------------------------------------------
+
 void printEnd2()
 {
     printf("  _____  _                         ___             _           \n");

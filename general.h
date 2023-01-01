@@ -1,28 +1,27 @@
 #ifndef general
 #define general
 
-
-#include<time.h>
-#include<stdlib.h>
-#include"data.h"
+#include <time.h>
+#include <stdlib.h>
+#include "data.h"
 
 void clearScreen()
 {
-    system("cls");
+	system("cls");
 }
 //------------------------------------------------
 void sleep(unsigned int mseconds)
 {
-    clock_t goal = mseconds + clock();
-    while (goal > clock())
-        ;
+	clock_t goal = mseconds + clock();
+	while (goal > clock())
+		;
 }
 //------------------------------------------------
 void randomSeed()
 {
-	time_t x; 
+	time_t x;
 	x = time(NULL);
-	srand(x);	
+	srand(x);
 }
 //------------------------------------------------
 int random()

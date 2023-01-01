@@ -1,17 +1,26 @@
 #ifndef match
 #define match
 #include "printing.h"
-#include "general.h"
-#include "conio.h"
 #include "scan.h"
-#include "initializing.h"
 #include "introduction.h"
-#include "data.h"
+#include "gamesetting.h"
+
 //-------------------------------------------------------------------
 
-void bombing(int map[][100], int *ship, int playerTurn)
+int bombing(int map[][100], int *ship, int playerTurn, struct ships shipPlayer[])
 {
-    int x, i = 1, j = 1, save;
+    int x, i = 1, j = 1, save, midMenu;
+    while (passShip(shipPlayer, j, i) == 1 && j != n)
+        {
+            j++;
+        }
+    if (passShip(shipPlayer, j, i) == 1 && j == n){
+        j=1;
+        while (passShip(shipPlayer, j, i) == 1 && i != n)
+        {
+            i++;
+        }
+    }
     clearScreen();
     save = map[i][j];
     map[i][j] = -1;
@@ -26,7 +35,7 @@ void bombing(int map[][100], int *ship, int playerTurn)
     x = getch();
     while (x != 13)
     {
-        while (x != 224 && x != 13)
+        while (x != 224 && x != 13 && x != 27)
         {
             x = getch();
         }
@@ -34,27 +43,79 @@ void bombing(int map[][100], int *ship, int playerTurn)
         {
             x = getch();
         }
+        if (x == 27)
+        {
+            midMenu = midGameMenu();
+            while (midMenu == 1)
+            {
+                setting();
+                midMenu = midGameMenu();
+            }
+            if (midMenu == 2)
+                return 0;
+            x=0;
+        }
 
         map[i][j] = save;
         if (x == 77)
         {
             if (j < n)
+            {
                 j++;
+                while (passShip(shipPlayer, j, i) == 1 && j != n)
+                {
+                    j++;
+                }
+                while (passShip(shipPlayer, j, i) == 1)
+                {
+                    j--;
+                }
+            }
         }
         else if (x == 75)
         {
             if (j > 1)
+            {
                 j--;
+                while (passShip(shipPlayer, j, i) == 1 && j != 1)
+                {
+                    j--;
+                }
+                while (passShip(shipPlayer, j, i) == 1)
+                {
+                    j++;
+                }
+            }
         }
         else if (x == 72)
         {
             if (i < n)
+            {
                 i++;
+                while (passShip(shipPlayer, j, i) == 1 && i != n)
+                {
+                    i++;
+                }
+                while (passShip(shipPlayer, j, i) == 1)
+                {
+                    i--;
+                }
+            }
         }
         else if (x == 80)
         {
             if (i > 1)
+            {
                 i--;
+                while (passShip(shipPlayer, j, i) == 1 && i != 1)
+                {
+                    i--;
+                }
+                while (passShip(shipPlayer, j, i) == 1)
+                {
+                    i++;
+                }
+            }
         }
         save = map[i][j];
         map[i][j] = -1;
@@ -72,64 +133,90 @@ void bombing(int map[][100], int *ship, int playerTurn)
     {
         if (playerTurn == 1)
         {
-            hitShip(shipPosP2, j, i);
-            if (checkShip(shipPosP2) == 1)
+            hitShip(shipP2, j, i);
+            if (checkShip(shipP2) == 1)
                 shipPlayer2--;
         }
         else
         {
-            hitShip(shipPosP1, j, i);
-            if (checkShip(shipPosP1) == 1)
+            hitShip(shipP1, j, i);
+            if (checkShip(shipP1) == 1)
                 shipPlayer1--;
         }
-
+        map[i][j] = -4;
+        clearScreen();
+        if (playerTurn == 1)
+        {
+            printInfo(*ship, namePlayer2, namePlayer1);
+        }
+        else
+            printInfo(*ship, namePlayer1, namePlayer2);
+        printMaps(map);
         Green(1);
         printf("\n  You hit the ship!");
         Reset();
     }
     else
     {
-        map[i][j] = save;
+        map[i][j] = -3;
+        clearScreen();
+        if (playerTurn == 1)
+        {
+            printInfo(*ship, namePlayer2, namePlayer1);
+        }
+        else
+            printInfo(*ship, namePlayer1, namePlayer2);
+        printMaps(map);
         Red(1);
         printf("\n  You missed!");
         Reset();
+        map[i][j] = save;
     }
     sleep(2000);
+    return 1;
 }
 //------------------------------------------------------------
 
 void computerBombing()
 {
-	int i, j, save;
-	clearScreen();
-	do
-	{
-		i = random();
-		j = random();
-	} while (checkHit(i, j, saveHits) == 1);
-	saveHits[i][j] = 1;
-	save = mapPlayer1[i][j];
-	mapPlayer1[i][j] = -1;
-	printInfo(shipPlayer1, namePlayer1, namePlayer2);
-	printMaps(mapPlayer1);
-	if (save == -2)
-	{
-        hitShip(shipPosP1,j,i);
-        if (checkShip(shipPosP1) == 1)
-                shipPlayer1--;
-		Green(1);
-		printf("\n  player 2 hit the ship!");
-		Reset();
-	}
-	else
-	{
-		mapPlayer1[i][j] = save;
+    int i, j, save;
+    clearScreen();
+    do
+    {
+        i = random();
+        j = random();
+    } while (checkHit(i, j, saveHits) == 1);
+    saveHits[i][j] = 1;
+    save = mapPlayer1[i][j];
+    mapPlayer1[i][j] = -1;
+    printInfo(shipPlayer1, namePlayer1, namePlayer2);
+    printMaps(mapPlayer1);
+    if (save == -2)
+    {
+        hitShip(shipP1, j, i);
+        if (checkShip(shipP1) == 1)
+            shipPlayer1--;
+        mapPlayer1[i][j] = -4;
+        clearScreen();
+        printInfo(shipPlayer1, namePlayer1, namePlayer2);
+        printMaps(mapPlayer1);
+        Green(1);
+        printf("\n  player 2 hit the ship!");
+        Reset();
+    }
+    else
+    {
+        mapPlayer1[i][j] = -3;
+        clearScreen();
+        printInfo(shipPlayer1, namePlayer1, namePlayer2);
+        printMaps(mapPlayer1);
         Red(1);
-		printf("\n  player 2 missed!");
-		Reset();
-	}
+        printf("\n  Player2 missed!");
+        Reset();
+        mapPlayer1[i][j] = save;
+    }
 
-	sleep(3500);
+    sleep(3500);
 }
 //------------------------------------------------------------
 int rematch(int winner)
@@ -204,22 +291,24 @@ int multiPlayer()
     scanBasicInfo();
     initializeMap(mapPlayer1);
     initializeMap(mapPlayer2);
-    scanPlayerInfo(mapPlayer1, namePlayer1, 1, shipPosP1);
+    scanPlayerInfo(mapPlayer1, namePlayer1, 1, shipP1);
     if (scanSign() == 1)
     {
         clearScreen();
     }
-    scanPlayerInfo(mapPlayer2, namePlayer2, 2, shipPosP2);
+    scanPlayerInfo(mapPlayer2, namePlayer2, 2, shipP2);
     shipPlayer1 = nship;
     shipPlayer2 = nship;
     while (1)
     {
-        bombing(mapPlayer2, &shipPlayer2, 1);
+        if (bombing(mapPlayer2, &shipPlayer2, 1, shipP2) == 0)
+            return 0;
         if (shipPlayer2 == 0)
         {
             break;
         }
-        bombing(mapPlayer1, &shipPlayer1, 2);
+        if (bombing(mapPlayer1, &shipPlayer1, 2, shipP1) == 0)
+            return 0;
         if (shipPlayer1 == 0)
         {
             break;
@@ -252,19 +341,19 @@ int singlePlayer()
     scanBasicInfo();
     initializeMap(mapPlayer1);
     initializeMap(mapPlayer2);
-    scanPlayerInfo(mapPlayer1, namePlayer1, 1, shipPosP1);
+    scanPlayerInfo(mapPlayer1, namePlayer1, 1, shipP1);
     initializeComputerInfo();
     shipPlayer1 = nship;
     shipPlayer2 = nship;
 
     while (1)
     {
-        bombing(mapPlayer2, &shipPlayer2, 1);
+        bombing(mapPlayer2, &shipPlayer2, 1, shipP2);
         if (shipPlayer2 == 0)
         {
             break;
         }
-        computerBombing();//*****
+        computerBombing(); //*****
         if (shipPlayer1 == 0)
         {
             break;
