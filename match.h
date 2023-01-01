@@ -102,6 +102,10 @@ void computerBombing()
 {
 	int i, j, save;
 	clearScreen();
+	if (hitsw == 1)
+	{
+		
+	}
 	do
 	{
 		i = random();
@@ -118,7 +122,9 @@ void computerBombing()
         if (checkShip(shipPosP1) == 1)
         {
         	shipPlayer1--;
-        	previousHit = 1;
+        	previousPos[0] = i;
+        	previousPos[1] = j;
+        	hitsw = 1;
 		}
 		Green(1);
 		printf("\n  player 2 hit the ship!");
@@ -251,6 +257,8 @@ int multiPlayer()
 
 int singlePlayer()
 {
+	for (int k = 1; k <= n; ++k)  // it can almost avoid half of the hits
+		fillCol(k);
     clearScreen();
     scanBasicInfo();
     initializeMap(mapPlayer1);

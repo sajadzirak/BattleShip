@@ -23,7 +23,7 @@ int initializeMap(int map[][100])
 
 //--------------------------------------------------------------
 
-void fillCol(int i)  // it can almost remove half of the hits
+void fillCol(int i)  // it can almost avoid half of the hits
 {
 	int j, faken = n;
 	if(i%2 == 1)

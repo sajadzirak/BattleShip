@@ -9,7 +9,8 @@ char namePlayer2[20]="Player 2";
 int shipPlayer1, shipPlayer2;
 int saveHits[13][13] = {0};
 int around[4] = {0};
-int previousHit = 0; // 0 = didn't hit && 1 = hit
+int hitsw = 0; // 0 = didn't hit && 1 = hit
+int previousPos[2];  // previousPos[0] = i && previousPos[1] = j
 
 struct shipPosition
 {
