@@ -1,8 +1,10 @@
 #ifndef gamesetting
 #define gamesetting
-#include"color.h"
-#include"general.h"
-#include<conio.h>
+
+#include "color.h"
+#include "general.h"
+#include <conio.h>
+//-------------------------------------------------------------------
 
 int setting()
 {

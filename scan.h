@@ -1,10 +1,10 @@
 #ifndef scan
 #define scan
 
-#include "color.h"
 #include "check.h"
 #include "initializing.h"
 #include "data.h"
+//-------------------------------------------------------------------
 
 int scanBasicInfo()
 {
@@ -19,8 +19,9 @@ int scanBasicInfo()
     Reset();
     return 0;
 }
+//-------------------------------------------------------------------
 
-int scanPlayerInfo(int map[][100], char name[], int playerNum, struct shipPosition shipPos[])
+int scanPlayerInfo(int map[][100], char name[], int playerNum, struct ships shipPlayer[])
 {
     int i, j, k;
     char direction;
@@ -37,25 +38,25 @@ int scanPlayerInfo(int map[][100], char name[], int playerNum, struct shipPositi
             putShips(map, i, j, direction);
             if (direction == 'v')
             {
-                shipPos[k].shipPosition[0][0] = j;
-                shipPos[k].shipPosition[0][1] = i;
+                shipPlayer[k].shipPosition[0][0] = j;
+                shipPlayer[k].shipPosition[0][1] = i;
 
-                shipPos[k].shipPosition[1][0] = j;
-                shipPos[k].shipPosition[1][1] = i + 1;
+                shipPlayer[k].shipPosition[1][0] = j;
+                shipPlayer[k].shipPosition[1][1] = i + 1;
 
-                shipPos[k].shipPosition[2][0] = j;
-                shipPos[k].shipPosition[2][1] = i + 2;
+                shipPlayer[k].shipPosition[2][0] = j;
+                shipPlayer[k].shipPosition[2][1] = i + 2;
             }
             else
             {
-                shipPos[k].shipPosition[0][0] = j;
-                shipPos[k].shipPosition[0][1] = i;
+                shipPlayer[k].shipPosition[0][0] = j;
+                shipPlayer[k].shipPosition[0][1] = i;
 
-                shipPos[k].shipPosition[1][0] = j + 1;
-                shipPos[k].shipPosition[1][1] = i;
+                shipPlayer[k].shipPosition[1][0] = j + 1;
+                shipPlayer[k].shipPosition[1][1] = i;
 
-                shipPos[k].shipPosition[2][0] = j + 2;
-                shipPos[k].shipPosition[2][1] = i;
+                shipPlayer[k].shipPosition[2][0] = j + 2;
+                shipPlayer[k].shipPosition[2][1] = i;
             }
         }
         else
@@ -67,6 +68,7 @@ int scanPlayerInfo(int map[][100], char name[], int playerNum, struct shipPositi
     sleep(1500);
     return 0;
 }
+//-------------------------------------------------------------------
 
 int scanSign()
 {

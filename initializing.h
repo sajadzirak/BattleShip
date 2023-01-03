@@ -2,7 +2,7 @@
 #define initializing
 
 #include "data.h"
-
+#include "general.h"
 int initializeMap(int map[][100])
 {
     int i, j;
@@ -77,25 +77,25 @@ void initializeComputerInfo()
             putShips(mapPlayer2, i, j, direction);
             if (direction == 'v')
             {
-                shipPosP2[k].shipPosition[0][0] = j;
-                shipPosP2[k].shipPosition[0][1] = i;
+                shipP2[k].shipPosition[0][0] = j;
+                shipP2[k].shipPosition[0][1] = i;
 
-                shipPosP2[k].shipPosition[1][0] = j;
-                shipPosP2[k].shipPosition[1][1] = i + 1;
+                shipP2[k].shipPosition[1][0] = j;
+                shipP2[k].shipPosition[1][1] = i + 1;
 
-                shipPosP2[k].shipPosition[2][0] = j;
-                shipPosP2[k].shipPosition[2][1] = i + 2;
+                shipP2[k].shipPosition[2][0] = j;
+                shipP2[k].shipPosition[2][1] = i + 2;
             }
             else
             {
-                shipPosP2[k].shipPosition[0][0] = j;
-                shipPosP2[k].shipPosition[0][1] = i;
+                shipP2[k].shipPosition[0][0] = j;
+                shipP2[k].shipPosition[0][1] = i;
 
-                shipPosP2[k].shipPosition[1][0] = j + 1;
-                shipPosP2[k].shipPosition[1][1] = i;
+                shipP2[k].shipPosition[1][0] = j + 1;
+                shipP2[k].shipPosition[1][1] = i;
 
-                shipPosP2[k].shipPosition[2][0] = j + 2;
-                shipPosP2[k].shipPosition[2][1] = i;
+                shipP2[k].shipPosition[2][0] = j + 2;
+                shipP2[k].shipPosition[2][1] = i;
             }
         }
         else

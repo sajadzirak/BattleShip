@@ -1,11 +1,12 @@
 #ifndef introduction
 #define introduction
 
-#include"color.h"
-#include"general.h"
-#include<conio.h>
+#include "color.h"
+#include "general.h"
+#include <conio.h>
+//-------------------------------------------------------------------
 
-int hitButton(int *i,int min,int max)
+int hitButton(int *i, int min, int max)
 {
     int x;
     if (kbhit())
@@ -24,7 +25,7 @@ int hitButton(int *i,int min,int max)
 
             break;
         case 72: // up
-            if (*i >  min)
+            if (*i > min)
                 *i = *i - 1;
             break;
         case 80: // down
@@ -39,8 +40,11 @@ int hitButton(int *i,int min,int max)
     }
     return -1;
 }
+//-------------------------------------------------------------------------
 
-void intro(){
+void intro()
+{
+    clearScreen();
     printf("\n");
     Green(0);
     printf("  ______       _   _   _        _____ _     _  \n");
@@ -172,7 +176,6 @@ void printShipStartNewGame3()
 }
 //-------------------------------------------------------------------
 
-
 void wave1()
 {
 
@@ -212,10 +215,10 @@ void wave3()
 }
 //-------------------------------------------------------------------
 
-int animate()
+int menu()
 {
     int i = 1;
-    while (hitButton(&i,1,3) == -1)
+    while (hitButton(&i, 1, 3) == -1)
     {
         clearScreen();
         switch (i)
@@ -233,7 +236,7 @@ int animate()
         printf("\n");
         wave1();
         sleep(500);
-        if (hitButton(&i,1,3) != -1)
+        if (hitButton(&i, 1, 3) != -1)
             break;
         clearScreen();
         switch (i)
@@ -251,7 +254,7 @@ int animate()
         printf("\n");
         wave2();
         sleep(500);
-        if (hitButton(&i,1,3) != -1)
+        if (hitButton(&i, 1, 3) != -1)
             break;
         clearScreen();
         switch (i)
@@ -269,7 +272,7 @@ int animate()
         printf("\n");
         wave3();
         sleep(500);
-        if (hitButton(&i,1,3) != -1)
+        if (hitButton(&i, 1, 3) != -1)
             break;
     }
     return i;
@@ -277,9 +280,10 @@ int animate()
 
 //--------------------------------------------------------------
 
-int startNewGameMenu(){
+int startNewGameMenu()
+{
     int i = 0;
-    while (hitButton(&i,0,2) == -1)
+    while (hitButton(&i, 0, 2) == -1)
     {
         clearScreen();
         switch (i)
@@ -296,7 +300,7 @@ int startNewGameMenu(){
         printf("\n");
         wave1();
         sleep(500);
-        if (hitButton(&i,0,2) != -1)
+        if (hitButton(&i, 0, 2) != -1)
             break;
         clearScreen();
         switch (i)
@@ -313,7 +317,7 @@ int startNewGameMenu(){
         printf("\n");
         wave2();
         sleep(500);
-        if (hitButton(&i,0,2) != -1)
+        if (hitButton(&i, 0, 2) != -1)
             break;
         clearScreen();
         switch (i)
@@ -330,11 +334,113 @@ int startNewGameMenu(){
         printf("\n");
         wave3();
         sleep(500);
-        if (hitButton(&i,0,2) != -1)
+        if (hitButton(&i, 0, 2) != -1)
             break;
     }
     return i;
-    
+}
+//-------------------------------------------------------------------
+
+int midGameMenu()
+{
+    clearScreen();
+    printf("  ");
+    WhiteBack();
+    Black(1);
+    printf("Continue");
+    Reset();
+    printf("\n  ");
+    White(1);
+    printf("Setting");
+    Reset();
+    printf("\n  ");
+    White(1);
+    printf("Exit");
+    Reset();
+    printf("\n");
+    int x, i = 0;
+    x = getch();
+    while (x != 13)
+    {
+        while (x != 224 && x != 13)
+        {
+            x = getch();
+        }
+        if (x == 224)
+        {
+            x = getch();
+        }
+        switch (x)
+        {
+        case 72: // up
+            if (i>0)
+            {
+                i--;
+            }
+            break;
+        case 80: // down
+            if (i<2)
+            {
+                i++;
+            }
+            break;
+        }
+        switch (i)
+        {
+        case 0:
+            clearScreen();
+            printf("  ");
+            WhiteBack();
+            Black(1);
+            printf("Continue");
+            Reset();
+            printf("\n  ");
+            White(1);
+            printf("Setting");
+            Reset();
+            printf("\n  ");
+            White(1);
+            printf("Exit");
+            Reset();
+            printf("\n");
+            break;
+        case 1:
+            clearScreen();
+            printf("  ");
+            White(1);
+            printf("Continue");
+            Reset();
+            printf("\n  ");
+            WhiteBack();
+            Black(1);
+            printf("Setting");
+            Reset();
+            printf("\n  ");
+            White(1);
+            printf("Exit");
+            Reset();
+            printf("\n");
+            break;
+        case 2:
+            clearScreen();
+            printf("  ");
+            White(1);
+            printf("Continue");
+            Reset();
+            printf("\n  ");
+            White(1);
+            printf("Setting");
+            Reset();
+            printf("\n  ");
+            WhiteBack();
+            Black(1);
+            printf("Exit");
+            Reset();
+            printf("\n");
+            break;
+        }
+    }
+    return i;
 }
 
 #endif
