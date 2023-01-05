@@ -179,42 +179,178 @@ int bombing(int map[][100], int *ship, int playerTurn, struct ships shipPlayer[]
 
 void computerBombing()
 {
-    int i, j, save;
+    int i, j, k, p, save, printsw = 0;
     clearScreen();
-    do
+    if(hitsw == 1)
     {
-        i = random();
-        j = random();
-    } while (checkHit(i, j, saveHits) == 1);
-    saveHits[i][j] = 1;
-    save = mapPlayer1[i][j];
-    mapPlayer1[i][j] = -1;
-    printInfo(shipPlayer1, namePlayer1, namePlayer2);
-    printMaps(mapPlayer1);
-    if (save == -2)
-    {
-        hitShip(shipP1, j, i);
-        if (checkShip(shipP1) == 1)
-            shipPlayer1--;
-        mapPlayer1[i][j] = -4;
-        clearScreen();
-        printInfo(shipPlayer1, namePlayer1, namePlayer2);
-        printMaps(mapPlayer1);
-        Green(1);
-        printf("\n  player 2 hit the ship!");
-        Reset();
-    }
-    else
-    {
-        mapPlayer1[i][j] = -3;
-        clearScreen();
-        printInfo(shipPlayer1, namePlayer1, namePlayer2);
-        printMaps(mapPlayer1);
-        Red(1);
-        printf("\n  Player2 missed!");
-        Reset();
-        mapPlayer1[i][j] = save;
-    }
+    	for(k = 0; k < 4; ++k)
+    	{
+    		if(around[k] == 0)
+    		{
+    			switch(k)
+    			{
+    				case 0:  //up
+    					++prevHit[1];
+    					if (prevHit[1] > n) break;
+    					if(checkHit(prevHit[0], prevHit[1], saveHits) != 1)
+    					{
+    						saveHits[prevHit[0]][prevHit[1]] = 1;
+    						if (mapPlayer1[prevHit[0]][prevHit[1]] == -2)
+    						{
+    							hitShip(shipP1, prevHit[1], prevHit[0]);
+    							mapPlayer1[prevHit[0]][prevHit[1]] = -4;
+    							printsw = 1;
+    							around[1] = 1; // Because the ship is vertical
+    							around[3] = 1; // Because the ship is vertical
+							}
+							else
+							{
+								around[0] = 1;
+								prevHit[0] = hitPos[0];
+    							prevHit[1] = hitPos[1];
+								mapPlayer1[prevHit[0]][prevHit[1]] = -3;
+								printsw = 0;
+							}
+						}
+    					break;
+    				case 1: // right
+    					++prevHit[0];
+    					if (prevHit[0] > n) break;
+    					if(checkHit(prevHit[0], prevHit[1], saveHits) != 1)
+    					{
+    						saveHits[prevHit[0]][prevHit[1]] = 1;
+    						if (mapPlayer1[prevHit[0]][prevHit[1]] == -2)
+    						{
+    							hitShip(shipP1, prevHit[1], prevHit[0]);
+    							mapPlayer1[prevHit[0]][prevHit[1]] = -4;
+    							printsw = 1;
+    							around[0] = 1; // Because the ship is horizental
+    							around[2] = 1; // Because the ship is horizental
+							}
+							else
+							{
+								around[1] = 1;
+								prevHit[0] = hitPos[0];
+    							prevHit[1] = hitPos[1];
+								mapPlayer1[prevHit[0]][prevHit[1]] = -3;
+								printsw = 0;
+							}
+						}
+    					break;
+    				case 2:  // down
+    					--prevHit[1];
+    					if (prevHit[1] < 1) break;
+    					if(checkHit(prevHit[0], prevHit[1], saveHits) != 1)
+    					{
+    						saveHits[prevHit[0]][prevHit[1]] = 1;
+    						if (mapPlayer1[prevHit[0]][prevHit[1]] == -2)
+    						{
+    							hitShip(shipP1, prevHit[1], prevHit[0]);
+    							mapPlayer1[prevHit[0]][prevHit[1]] = -4;
+    							printsw = 1;
+    							around[1] = 1; // Because the ship is vertical
+    							around[3] = 1; // Because the ship is vertical
+							}
+							else
+							{
+								around[2] = 1;
+								prevHit[0] = hitPos[0];
+    							prevHit[1] = hitPos[1];
+								mapPlayer1[prevHit[0]][prevHit[1]] = -3;
+								printsw = 0;
+							}
+						}
+    					break;
+    				case 3:  // left
+    					--prevHit[0];
+    					if (prevHit[0] < 1) break;
+    					if(checkHit(prevHit[0], prevHit[1], saveHits) != 1)
+    					{
+    						saveHits[prevHit[0]][prevHit[1]] = 1;
+    						if (mapPlayer1[prevHit[0]][prevHit[1]] == -2)
+    						{
+    							hitShip(shipP1, prevHit[1], prevHit[0]);
+    							mapPlayer1[prevHit[0]][prevHit[1]] = -4;
+    							printsw = 1;
+    							around[0] = 1; // Because the ship is horizental
+    							around[2] = 1; // Because the ship is horizental
+							}
+							else
+							{
+								around[3] = 1;
+								prevHit[0] = hitPos[0];
+    							prevHit[1] = hitPos[1];
+								mapPlayer1[prevHit[0]][prevHit[1]] = -3;
+								printsw = 0;
+							}
+						}
+    					break;
+				}
+				for(p = 0; p < 4; ++p)
+					if (around[p] == 0) break;
+				if (p == 4) hitsw = 0;
+				if (checkShip(shipP1) == 1)
+            		shipPlayer1--;
+            	clearScreen();
+        		printInfo(shipPlayer1, namePlayer1, namePlayer2);
+        		printMaps(mapPlayer1);
+            	if(printsw == 1)
+            	{
+         			Green(1);
+        			printf("\n  player 2 hit the ship!");           		
+				}
+				else
+				{
+					Red(1);
+        			printf("\n  Player2 missed!");
+				}
+				Reset();
+			}
+		}
+	}
+	else
+	{
+		do
+    	{
+        	i = random();
+        	j = random();
+    	} while (checkHit(i, j, saveHits) != 0);
+    	saveHits[i][j] = 1;
+    	save = mapPlayer1[i][j];
+    	mapPlayer1[i][j] = -1;
+    	printInfo(shipPlayer1, namePlayer1, namePlayer2);
+    	printMaps(mapPlayer1);
+    	if (save == -2)
+    	{
+    		hitsw = 1;
+    		hitPos[0] = i;
+    		hitPos[1]= j;
+    		prevHit[0] = hitPos[0];
+    		prevHit[1] = hitPos[1];
+    		resetAround(i, j);
+        	hitShip(shipP1, j, i);
+        	if (checkShip(shipP1) == 1)
+            	shipPlayer1--;
+        	mapPlayer1[i][j] = -4;
+        	clearScreen();
+        	printInfo(shipPlayer1, namePlayer1, namePlayer2);
+        	printMaps(mapPlayer1);
+        	Green(1);
+        	printf("\n  player 2 hit the ship!");
+        	Reset();
+    	}
+    	else
+    	{
+        	mapPlayer1[i][j] = -3;
+        	clearScreen();
+        	printInfo(shipPlayer1, namePlayer1, namePlayer2);
+        	printMaps(mapPlayer1);
+        	Red(1);
+        	printf("\n  Player2 missed!");
+        	Reset();
+        	mapPlayer1[i][j] = save;
+    	}
+	}	
 
     sleep(3500);
 }
@@ -337,8 +473,6 @@ int multiPlayer()
 
 int singlePlayer()
 {
-	for (int k = 1; k <= n; ++k)  // it can almost avoid half of the hits
-		fillCol(k);
     clearScreen();
     scanBasicInfo();
     initializeMap(mapPlayer1);

@@ -10,7 +10,8 @@ int shipPlayer1, shipPlayer2;
 int saveHits[13][13] = {0};
 int around[4] = {0};
 int hitsw = 0; // 0 = didn't hit && 1 = hit
-int previousPos[2];  // previousPos[0] = i && previousPos[1] = j
+int hitPos[2];
+int prevHit[2];  // prevHit[0] = i && prevHit[1] = j
 
 struct ships
 {

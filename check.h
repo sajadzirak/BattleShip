@@ -78,8 +78,7 @@ int checkShip(struct ships shipPlayer[])
     int i, j, k;
     for (k = 0; k < nship; k++)
     {
-        for (i = 0; i < 3 && shipPlayer[k].sw[i] == 0; i++)
-            ;
+        for (i = 0; i < 3 && shipPlayer[k].sw[i] == 0; i++);
         if (i == 3)
         {
             for (i = 0; i < 3; i++)
@@ -148,12 +147,14 @@ int checkComputerRange(int i, int j, char direction)
 }
 //-------------------------------------------------------------------
 
-int checkHit(int i, int j, int arr[][11])
+int checkHit(int i, int j, int arr[][13])
 {
-    if (arr[i][j] == 1)
-        return 1;
-    else
+    if (arr[i][j] == 0)
         return 0;
+    else if (arr[i][j] == 1)
+        return 1;
+    else if (arr[i][j] == 2)
+    	return 2;
 }
 
 #endif

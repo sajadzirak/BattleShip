@@ -23,19 +23,22 @@ int initializeMap(int map[][100])
 
 //--------------------------------------------------------------
 
-void fillCol(int i)  // it can almost avoid half of the hits
+void fillCols()  // it can almost avoid half of the hits
 {
-	int j, faken = n;
-	if(i%2 == 1)
+	int i, j, fake_n = n;
+	for(i = 1; i <= fake_n; ++i)
 	{
-		for(j = 1; j <= faken; j += 2)
-			saveHits[i][j] = 1;
-	}
-	else
-	{
-		if(n%2 == 1) ++faken;
-		for(j = faken; j > 1; j -= 2)
-			saveHits[i][j] = 1;
+		if(i%2 == 1)
+		{
+			for(j = 1; j <= fake_n; j += 2)
+				saveHits[i][j] = 2;
+		}
+		else
+		{
+			if(n%2 == 1) ++fake_n;
+			for(j = fake_n; j > 1; j -= 2)
+				saveHits[i][j] = 2;
+		}
 	}
 }
 
@@ -61,8 +64,7 @@ void initializeComputerInfo()
     int i, j, k;
     char direction;
     randomSeed();
-    for(i = 1; i <= n; ++i)
-    	fillCol(i);
+	fillCols();
     for (k = 0; k < nship; ++k)
     {
         i = random();
@@ -101,6 +103,18 @@ void initializeComputerInfo()
         else
             --k;
     }
+}
+
+//------------------------------------------------------------
+
+void resetAround(int i, int j)
+{
+	for(int k = 0; k < 4; ++k)
+		around[k] = 0;
+	if (i == 1) around[3] = 1;
+	if (j == 1) around[2] = 1;
+	if (i == n) around[1] = 1;
+	if (j == n) around[0] = 1;
 }
 
 #endif
