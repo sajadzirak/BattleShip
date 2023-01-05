@@ -179,132 +179,197 @@ int bombing(int map[][100], int *ship, int playerTurn, struct ships shipPlayer[]
 
 void computerBombing()
 {
-    int i, j, k, p, save, printsw = 0;
+    int i, j, k, p, save, loopsw = 1;
     clearScreen();
     if(hitsw == 1)
     {
-    	for(k = 0; k < 4; ++k)
+    	for(k = 0; k < 4 && loopsw == 1; ++k)
     	{
     		if(around[k] == 0)
     		{
+    			loopsw = 0;
     			switch(k)
     			{
-    				case 0:  //up
+    				case 0:  // right side
     					++prevHit[1];
-    					if (prevHit[1] > n) break;
+    					if (prevHit[1] > n)
+    					{
+    						around[0] = 1;
+    						prevHit[0] = hitPos[0];
+    						prevHit[1] = hitPos[1];
+    						loopsw = 1;
+    						break;
+						}
     					if(checkHit(prevHit[0], prevHit[1], saveHits) != 1)
     					{
     						saveHits[prevHit[0]][prevHit[1]] = 1;
+    						clearScreen();
     						if (mapPlayer1[prevHit[0]][prevHit[1]] == -2)
     						{
     							hitShip(shipP1, prevHit[1], prevHit[0]);
     							mapPlayer1[prevHit[0]][prevHit[1]] = -4;
-    							printsw = 1;
-    							around[1] = 1; // Because the ship is vertical
-    							around[3] = 1; // Because the ship is vertical
+    							if (checkShip(shipP1) == 1)
+            						shipPlayer1--;
+        						printInfo(shipPlayer1, namePlayer1, namePlayer2);
+        						printMaps(mapPlayer1);
+    							Green(1);
+        						printf("\n  player 2 hit the ship!");
+        						Reset();
+    							around[1] = 1; 
+    							around[3] = 1; 
 							}
 							else
 							{
 								around[0] = 1;
+								save = mapPlayer1[prevHit[0]][prevHit[1]];
+								mapPlayer1[prevHit[0]][prevHit[1]] = -3;
+        						printInfo(shipPlayer1, namePlayer1, namePlayer2);
+        						printMaps(mapPlayer1);
+        						Red(1);
+        						printf("\n  Player2 missed!");
+        						Reset();
+        						mapPlayer1[prevHit[0]][prevHit[1]] = save;
 								prevHit[0] = hitPos[0];
     							prevHit[1] = hitPos[1];
-								mapPlayer1[prevHit[0]][prevHit[1]] = -3;
-								printsw = 0;
 							}
+							break;
 						}
-    					break;
-    				case 1: // right
+    				case 1: // up
     					++prevHit[0];
-    					if (prevHit[0] > n) break;
+    					if (prevHit[0] > n)
+    					{
+    						around[1] = 1;
+    						prevHit[0] = hitPos[0];
+    						prevHit[1] = hitPos[1];
+    						loopsw = 1;
+    						break;
+						}
     					if(checkHit(prevHit[0], prevHit[1], saveHits) != 1)
     					{
     						saveHits[prevHit[0]][prevHit[1]] = 1;
+    						clearScreen();
     						if (mapPlayer1[prevHit[0]][prevHit[1]] == -2)
     						{
     							hitShip(shipP1, prevHit[1], prevHit[0]);
     							mapPlayer1[prevHit[0]][prevHit[1]] = -4;
-    							printsw = 1;
-    							around[0] = 1; // Because the ship is horizental
-    							around[2] = 1; // Because the ship is horizental
+    							if (checkShip(shipP1) == 1)
+            						shipPlayer1--;
+        						printInfo(shipPlayer1, namePlayer1, namePlayer2);
+        						printMaps(mapPlayer1);
+    							Green(1);
+        						printf("\n  player 2 hit the ship!");
+        						Reset();
+    							around[0] = 1; 
+    							around[2] = 1; 
 							}
 							else
 							{
 								around[1] = 1;
+								save = mapPlayer1[prevHit[0]][prevHit[1]];
+								mapPlayer1[prevHit[0]][prevHit[1]] = -3;
+        						printInfo(shipPlayer1, namePlayer1, namePlayer2);
+        						printMaps(mapPlayer1);
+        						Red(1);
+        						printf("\n  Player2 missed!");
+        						Reset();
+        						mapPlayer1[prevHit[0]][prevHit[1]] = save;
 								prevHit[0] = hitPos[0];
     							prevHit[1] = hitPos[1];
-								mapPlayer1[prevHit[0]][prevHit[1]] = -3;
-								printsw = 0;
 							}
+							break;
 						}
-    					break;
-    				case 2:  // down
+    				case 2:  // left side
     					--prevHit[1];
-    					if (prevHit[1] < 1) break;
+    					if (prevHit[1] < 1)
+    					{
+    						around[2] = 1;
+    						prevHit[0] = hitPos[0];
+    						prevHit[1] = hitPos[1];
+    						loopsw = 1;
+    						break;
+						}
     					if(checkHit(prevHit[0], prevHit[1], saveHits) != 1)
     					{
     						saveHits[prevHit[0]][prevHit[1]] = 1;
+    						clearScreen();
     						if (mapPlayer1[prevHit[0]][prevHit[1]] == -2)
     						{
     							hitShip(shipP1, prevHit[1], prevHit[0]);
     							mapPlayer1[prevHit[0]][prevHit[1]] = -4;
-    							printsw = 1;
-    							around[1] = 1; // Because the ship is vertical
-    							around[3] = 1; // Because the ship is vertical
+    							if (checkShip(shipP1) == 1)
+            						shipPlayer1--;
+        						printInfo(shipPlayer1, namePlayer1, namePlayer2);
+        						printMaps(mapPlayer1);
+    							Green(1);
+        						printf("\n  player 2 hit the ship!");
+        						Reset();
+    							around[1] = 1; 
+    							around[3] = 1; 
 							}
 							else
 							{
 								around[2] = 1;
+								save = mapPlayer1[prevHit[0]][prevHit[1]];
+								mapPlayer1[prevHit[0]][prevHit[1]] = -3;
+        						printInfo(shipPlayer1, namePlayer1, namePlayer2);
+        						printMaps(mapPlayer1);
+        						Red(1);
+        						printf("\n  Player2 missed!");
+        						Reset();
+        						mapPlayer1[prevHit[0]][prevHit[1]] = save;
 								prevHit[0] = hitPos[0];
     							prevHit[1] = hitPos[1];
-								mapPlayer1[prevHit[0]][prevHit[1]] = -3;
-								printsw = 0;
 							}
+							break;
 						}
-    					break;
-    				case 3:  // left
+    				case 3:  // down
     					--prevHit[0];
-    					if (prevHit[0] < 1) break;
+    					if (prevHit[0] < 1)
+    					{
+    						around[3] = 1;
+    						prevHit[0] = hitPos[0];
+    						prevHit[1] = hitPos[1];
+    						loopsw = 1;
+    						break;
+						}
     					if(checkHit(prevHit[0], prevHit[1], saveHits) != 1)
     					{
     						saveHits[prevHit[0]][prevHit[1]] = 1;
+    						clearScreen();
     						if (mapPlayer1[prevHit[0]][prevHit[1]] == -2)
     						{
     							hitShip(shipP1, prevHit[1], prevHit[0]);
     							mapPlayer1[prevHit[0]][prevHit[1]] = -4;
-    							printsw = 1;
-    							around[0] = 1; // Because the ship is horizental
-    							around[2] = 1; // Because the ship is horizental
+    							if (checkShip(shipP1) == 1)
+            						shipPlayer1--;
+        						printInfo(shipPlayer1, namePlayer1, namePlayer2);
+        						printMaps(mapPlayer1);
+    							Green(1);
+        						printf("\n  player 2 hit the ship!");
+        						Reset();
+    							around[0] = 1; 
+    							around[2] = 1; 
 							}
 							else
 							{
 								around[3] = 1;
+								save = mapPlayer1[prevHit[0]][prevHit[1]];
+								mapPlayer1[prevHit[0]][prevHit[1]] = -3;
+        						printInfo(shipPlayer1, namePlayer1, namePlayer2);
+        						printMaps(mapPlayer1);
+        						Red(1);
+        						printf("\n  Player2 missed!");
+        						Reset();
+        						mapPlayer1[prevHit[0]][prevHit[1]] = save;
 								prevHit[0] = hitPos[0];
     							prevHit[1] = hitPos[1];
-								mapPlayer1[prevHit[0]][prevHit[1]] = -3;
-								printsw = 0;
 							}
+							break;
 						}
-    					break;
 				}
 				for(p = 0; p < 4; ++p)
 					if (around[p] == 0) break;
 				if (p == 4) hitsw = 0;
-				if (checkShip(shipP1) == 1)
-            		shipPlayer1--;
-            	clearScreen();
-        		printInfo(shipPlayer1, namePlayer1, namePlayer2);
-        		printMaps(mapPlayer1);
-            	if(printsw == 1)
-            	{
-         			Green(1);
-        			printf("\n  player 2 hit the ship!");           		
-				}
-				else
-				{
-					Red(1);
-        			printf("\n  Player2 missed!");
-				}
-				Reset();
 			}
 		}
 	}
