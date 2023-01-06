@@ -108,8 +108,6 @@ void scanMultiPlayerByFile() {
     for ( k = 0; k < nship; k++)
     {
         fscanf(input, "%d%d%s", &j, &i, &direction);
-        printf("%d %d %s\n",j,i, direction);
-        sleep(2000);
         if (checkOverlap(i, j, direction[0], mapPlayer1) == 1 && checkRange(i, j, direction[0]) == 1)
         {
             putShips(mapPlayer1, i, j, direction[0]);
@@ -144,8 +142,6 @@ void scanMultiPlayerByFile() {
     for (k = 0; k < nship; k++)
     {
         fscanf(input, "%d%d%s", &j, &i, &direction);
-        printf("%d %d %s\n",j,i, direction);
-        sleep(2000);
         if (checkOverlap(i, j, direction[0], mapPlayer2) == 1 && checkRange(i, j, direction[0]) == 1)
         {
             putShips(mapPlayer2, i, j, direction[0]);
@@ -192,8 +188,6 @@ void scanSinglePlayerByFile() {
     for (k = 0; k < nship; k++)
     {
         fscanf(input, "%d%d%s", &j, &i, &direction);
-        printf("%d %d %s\n", j, i, direction);
-        sleep(2000);
         if (checkOverlap(i, j, direction[0], mapPlayer1) == 1 && checkRange(i, j, direction[0]) == 1)
         {
             putShips(mapPlayer1, i, j, direction[0]);
