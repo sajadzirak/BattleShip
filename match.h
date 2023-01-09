@@ -195,21 +195,27 @@ void computerBombing()
     					if (prevHit[1] > n)
     					{
     						around[0] = 1;
+    						for(p = 0; p < 4; ++p)
+								if (around[p] == 0) break;
+							if (p == 4)
+							{
+								hitsw = 0;
+								computerBombing();	
+							}	
     						prevHit[0] = hitPos[0];
     						prevHit[1] = hitPos[1];
     						loopsw = 1;
-    						break;
 						}
-    					if(checkHit(prevHit[0], prevHit[1], saveHits) != 1)
+    					else if(checkHit(prevHit[0], prevHit[1], saveHits) != 1)
     					{
     						saveHits[prevHit[0]][prevHit[1]] = 1;
     						clearScreen();
     						if (mapPlayer1[prevHit[0]][prevHit[1]] == -2)
     						{
     							hitShip(shipP1, prevHit[1], prevHit[0]);
-    							mapPlayer1[prevHit[0]][prevHit[1]] = -4;
     							if (checkShip(shipP1) == 1)
             						shipPlayer1--;
+            					mapPlayer1[prevHit[0]][prevHit[1]] = -4;  // it was between hitship && checkship
         						printInfo(shipPlayer1, namePlayer1, namePlayer2);
         						printMaps(mapPlayer1);
     							Green(1);
@@ -232,28 +238,41 @@ void computerBombing()
 								prevHit[0] = hitPos[0];
     							prevHit[1] = hitPos[1];
 							}
-							break;
 						}
+						else if(checkHit(prevHit[0], prevHit[1], saveHits) == 1)
+						{
+							around[0] = 1;
+							loopsw = 1;
+							prevHit[0] = hitPos[0];
+    						prevHit[1] = hitPos[1];
+						}
+						break;
     				case 1: // up
     					++prevHit[0];
     					if (prevHit[0] > n)
     					{
     						around[1] = 1;
+    						for(p = 0; p < 4; ++p)
+								if (around[p] == 0) break;
+							if (p == 4)
+							{
+								hitsw = 0;
+								computerBombing();	
+							}	
     						prevHit[0] = hitPos[0];
     						prevHit[1] = hitPos[1];
     						loopsw = 1;
-    						break;
 						}
-    					if(checkHit(prevHit[0], prevHit[1], saveHits) != 1)
+    					else if(checkHit(prevHit[0], prevHit[1], saveHits) != 1)
     					{
     						saveHits[prevHit[0]][prevHit[1]] = 1;
     						clearScreen();
     						if (mapPlayer1[prevHit[0]][prevHit[1]] == -2)
     						{
     							hitShip(shipP1, prevHit[1], prevHit[0]);
-    							mapPlayer1[prevHit[0]][prevHit[1]] = -4;
     							if (checkShip(shipP1) == 1)
             						shipPlayer1--;
+            					mapPlayer1[prevHit[0]][prevHit[1]] = -4;
         						printInfo(shipPlayer1, namePlayer1, namePlayer2);
         						printMaps(mapPlayer1);
     							Green(1);
@@ -276,28 +295,41 @@ void computerBombing()
 								prevHit[0] = hitPos[0];
     							prevHit[1] = hitPos[1];
 							}
-							break;
 						}
+						else if(checkHit(prevHit[0], prevHit[1], saveHits) == 1)
+						{
+							around[1] = 1;
+							loopsw = 1;
+							prevHit[0] = hitPos[0];
+    						prevHit[1] = hitPos[1];
+						}
+						break;
     				case 2:  // left side
     					--prevHit[1];
     					if (prevHit[1] < 1)
     					{
     						around[2] = 1;
+    						for(p = 0; p < 4; ++p)
+								if (around[p] == 0) break;
+							if (p == 4)
+							{
+								hitsw = 0;
+								computerBombing();	
+							}	
     						prevHit[0] = hitPos[0];
     						prevHit[1] = hitPos[1];
     						loopsw = 1;
-    						break;
 						}
-    					if(checkHit(prevHit[0], prevHit[1], saveHits) != 1)
+    					else if(checkHit(prevHit[0], prevHit[1], saveHits) != 1)
     					{
     						saveHits[prevHit[0]][prevHit[1]] = 1;
     						clearScreen();
     						if (mapPlayer1[prevHit[0]][prevHit[1]] == -2)
     						{
-    							hitShip(shipP1, prevHit[1], prevHit[0]);
-    							mapPlayer1[prevHit[0]][prevHit[1]] = -4;
+    							hitShip(shipP1, prevHit[1], prevHit[0]);	
     							if (checkShip(shipP1) == 1)
             						shipPlayer1--;
+            					mapPlayer1[prevHit[0]][prevHit[1]] = -4;
         						printInfo(shipPlayer1, namePlayer1, namePlayer2);
         						printMaps(mapPlayer1);
     							Green(1);
@@ -320,28 +352,41 @@ void computerBombing()
 								prevHit[0] = hitPos[0];
     							prevHit[1] = hitPos[1];
 							}
-							break;
 						}
+						else if(checkHit(prevHit[0], prevHit[1], saveHits) == 1)
+						{
+							around[2] = 1;
+							loopsw = 1;
+							prevHit[0] = hitPos[0];
+    						prevHit[1] = hitPos[1];
+						}
+						break;
     				case 3:  // down
     					--prevHit[0];
     					if (prevHit[0] < 1)
     					{
     						around[3] = 1;
+    						for(p = 0; p < 4; ++p)
+								if (around[p] == 0) break;
+							if (p == 4)
+							{
+								hitsw = 0;
+								computerBombing();	
+							}	
     						prevHit[0] = hitPos[0];
     						prevHit[1] = hitPos[1];
     						loopsw = 1;
-    						break;
 						}
-    					if(checkHit(prevHit[0], prevHit[1], saveHits) != 1)
+    					else if(checkHit(prevHit[0], prevHit[1], saveHits) != 1)
     					{
     						saveHits[prevHit[0]][prevHit[1]] = 1;
     						clearScreen();
     						if (mapPlayer1[prevHit[0]][prevHit[1]] == -2)
     						{
-    							hitShip(shipP1, prevHit[1], prevHit[0]);
-    							mapPlayer1[prevHit[0]][prevHit[1]] = -4;
+    							hitShip(shipP1, prevHit[1], prevHit[0]);    							
     							if (checkShip(shipP1) == 1)
             						shipPlayer1--;
+            					mapPlayer1[prevHit[0]][prevHit[1]] = -4;
         						printInfo(shipPlayer1, namePlayer1, namePlayer2);
         						printMaps(mapPlayer1);
     							Green(1);
@@ -364,12 +409,17 @@ void computerBombing()
 								prevHit[0] = hitPos[0];
     							prevHit[1] = hitPos[1];
 							}
-							break;
 						}
+						else if(checkHit(prevHit[0], prevHit[1], saveHits) == 1)
+						{
+							around[3] = 1;
+							loopsw = 1;
+							prevHit[0] = hitPos[0];
+    						prevHit[1] = hitPos[1];
+						}
+						break;
 				}
-				for(p = 0; p < 4; ++p)
-					if (around[p] == 0) break;
-				if (p == 4) hitsw = 0;
+				isFinishAround();
 			}
 		}
 	}

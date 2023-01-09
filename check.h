@@ -157,4 +157,21 @@ int checkHit(int i, int j, int arr[][13])
     	return 2;
 }
 
+//-------------------------------------------------------------------
+
+int isFinishAround()
+{
+	int p;
+	for(p = 0; p < 4 && around[p] == 1; ++p);
+	if (p == 4)
+	{
+		hitsw = 0;
+		return 1;	
+	}
+	else
+	{
+		return 0;
+	}
+}
+
 #endif

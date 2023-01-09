@@ -44,6 +44,20 @@ void fillCols()  // it can almost avoid half of the hits
 
 //--------------------------------------------------------------
 
+void resetSaveHits()
+{
+	int i, j;
+	for(i = 0; i < 13; ++i)
+	{
+		for(j = 0; j < 13; ++j)
+		{
+			saveHits[i][j] = 0;
+		}
+	}
+}
+
+//--------------------------------------------------------------
+
 int putShips(int map[][100], int i, int j, char direction)
 {
     int k = 0;
@@ -63,7 +77,9 @@ void initializeComputerInfo()
 {
     int i, j, k;
     char direction;
+    hitsw = 0;
     randomSeed();
+    resetSaveHits();
 	fillCols();
     for (k = 0; k < nship; ++k)
     {
@@ -116,5 +132,7 @@ void resetAround(int i, int j)
 	if (i == n) around[1] = 1;
 	if (j == n) around[0] = 1;
 }
+
+
 
 #endif
