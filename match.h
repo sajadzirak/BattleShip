@@ -195,15 +195,11 @@ void computerBombing()
     					if (prevHit[1] > n)
     					{
     						around[0] = 1;
-    						for(p = 0; p < 4; ++p)
-								if (around[p] == 0) break;
-							if (p == 4)
+							if (isFinishAround() == 1)
 							{
-								hitsw = 0;
 								computerBombing();	
 							}	
-    						prevHit[0] = hitPos[0];
-    						prevHit[1] = hitPos[1];
+							resetPrevHit();
     						loopsw = 1;
 						}
     					else if(checkHit(prevHit[0], prevHit[1], saveHits) != 1)
@@ -235,16 +231,14 @@ void computerBombing()
         						printf("\n  Player2 missed!");
         						Reset();
         						mapPlayer1[prevHit[0]][prevHit[1]] = save;
-								prevHit[0] = hitPos[0];
-    							prevHit[1] = hitPos[1];
+								resetPrevHit();
 							}
 						}
 						else if(checkHit(prevHit[0], prevHit[1], saveHits) == 1)
 						{
 							around[0] = 1;
 							loopsw = 1;
-							prevHit[0] = hitPos[0];
-    						prevHit[1] = hitPos[1];
+							resetPrevHit();
 						}
 						break;
     				case 1: // up
@@ -252,15 +246,11 @@ void computerBombing()
     					if (prevHit[0] > n)
     					{
     						around[1] = 1;
-    						for(p = 0; p < 4; ++p)
-								if (around[p] == 0) break;
-							if (p == 4)
+							if (isFinishAround() == 1)
 							{
-								hitsw = 0;
 								computerBombing();	
 							}	
-    						prevHit[0] = hitPos[0];
-    						prevHit[1] = hitPos[1];
+							resetPrevHit();
     						loopsw = 1;
 						}
     					else if(checkHit(prevHit[0], prevHit[1], saveHits) != 1)
@@ -292,16 +282,14 @@ void computerBombing()
         						printf("\n  Player2 missed!");
         						Reset();
         						mapPlayer1[prevHit[0]][prevHit[1]] = save;
-								prevHit[0] = hitPos[0];
-    							prevHit[1] = hitPos[1];
+								resetPrevHit();
 							}
 						}
 						else if(checkHit(prevHit[0], prevHit[1], saveHits) == 1)
 						{
 							around[1] = 1;
 							loopsw = 1;
-							prevHit[0] = hitPos[0];
-    						prevHit[1] = hitPos[1];
+							resetPrevHit();
 						}
 						break;
     				case 2:  // left side
@@ -309,15 +297,11 @@ void computerBombing()
     					if (prevHit[1] < 1)
     					{
     						around[2] = 1;
-    						for(p = 0; p < 4; ++p)
-								if (around[p] == 0) break;
-							if (p == 4)
+							if (isFinishAround() == 1)
 							{
-								hitsw = 0;
 								computerBombing();	
-							}	
-    						prevHit[0] = hitPos[0];
-    						prevHit[1] = hitPos[1];
+							}
+							resetPrevHit();
     						loopsw = 1;
 						}
     					else if(checkHit(prevHit[0], prevHit[1], saveHits) != 1)
@@ -349,16 +333,14 @@ void computerBombing()
         						printf("\n  Player2 missed!");
         						Reset();
         						mapPlayer1[prevHit[0]][prevHit[1]] = save;
-								prevHit[0] = hitPos[0];
-    							prevHit[1] = hitPos[1];
+								resetPrevHit();
 							}
 						}
 						else if(checkHit(prevHit[0], prevHit[1], saveHits) == 1)
 						{
 							around[2] = 1;
 							loopsw = 1;
-							prevHit[0] = hitPos[0];
-    						prevHit[1] = hitPos[1];
+							resetPrevHit();
 						}
 						break;
     				case 3:  // down
@@ -366,15 +348,11 @@ void computerBombing()
     					if (prevHit[0] < 1)
     					{
     						around[3] = 1;
-    						for(p = 0; p < 4; ++p)
-								if (around[p] == 0) break;
-							if (p == 4)
+							if (isFinishAround() == 1)
 							{
-								hitsw = 0;
 								computerBombing();	
-							}	
-    						prevHit[0] = hitPos[0];
-    						prevHit[1] = hitPos[1];
+							}
+							resetPrevHit();
     						loopsw = 1;
 						}
     					else if(checkHit(prevHit[0], prevHit[1], saveHits) != 1)
@@ -406,16 +384,14 @@ void computerBombing()
         						printf("\n  Player2 missed!");
         						Reset();
         						mapPlayer1[prevHit[0]][prevHit[1]] = save;
-								prevHit[0] = hitPos[0];
-    							prevHit[1] = hitPos[1];
+								resetPrevHit();
 							}
 						}
 						else if(checkHit(prevHit[0], prevHit[1], saveHits) == 1)
 						{
 							around[3] = 1;
 							loopsw = 1;
-							prevHit[0] = hitPos[0];
-    						prevHit[1] = hitPos[1];
+							resetPrevHit();
 						}
 						break;
 				}
@@ -440,8 +416,7 @@ void computerBombing()
     		hitsw = 1;
     		hitPos[0] = i;
     		hitPos[1]= j;
-    		prevHit[0] = hitPos[0];
-    		prevHit[1] = hitPos[1];
+			resetPrevHit();
     		resetAround(i, j);
         	hitShip(shipP1, j, i);
         	if (checkShip(shipP1) == 1)

@@ -133,6 +133,12 @@ void resetAround(int i, int j)
 	if (j == n) around[0] = 1;
 }
 
+//------------------------------------------------------------
 
+void resetPrevHit()
+{
+	prevHit[0] = hitPos[0];
+    prevHit[1] = hitPos[1];
+}
 
 #endif
