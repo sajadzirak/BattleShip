@@ -211,12 +211,8 @@ void computerBombing()
     							hitShip(shipP1, prevHit[1], prevHit[0]);
     							if (checkShip(shipP1) == 1)
             						shipPlayer1--;
-            					mapPlayer1[prevHit[0]][prevHit[1]] = -4;  // it was between hitship && checkship
-        						printInfo(shipPlayer1, namePlayer1, namePlayer2);
-        						printMaps(mapPlayer1);
-    							Green(1);
-        						printf("\n  player 2 hit the ship!");
-        						Reset();
+            					mapPlayer1[prevHit[0]][prevHit[1]] = -4;  
+								printComputerStats(1);
     							around[1] = 1; 
     							around[3] = 1; 
 							}
@@ -225,11 +221,7 @@ void computerBombing()
 								around[0] = 1;
 								save = mapPlayer1[prevHit[0]][prevHit[1]];
 								mapPlayer1[prevHit[0]][prevHit[1]] = -3;
-        						printInfo(shipPlayer1, namePlayer1, namePlayer2);
-        						printMaps(mapPlayer1);
-        						Red(1);
-        						printf("\n  Player2 missed!");
-        						Reset();
+								printComputerStats(0);
         						mapPlayer1[prevHit[0]][prevHit[1]] = save;
 								resetPrevHit();
 							}
@@ -263,11 +255,7 @@ void computerBombing()
     							if (checkShip(shipP1) == 1)
             						shipPlayer1--;
             					mapPlayer1[prevHit[0]][prevHit[1]] = -4;
-        						printInfo(shipPlayer1, namePlayer1, namePlayer2);
-        						printMaps(mapPlayer1);
-    							Green(1);
-        						printf("\n  player 2 hit the ship!");
-        						Reset();
+								printComputerStats(1);
     							around[0] = 1; 
     							around[2] = 1; 
 							}
@@ -276,11 +264,7 @@ void computerBombing()
 								around[1] = 1;
 								save = mapPlayer1[prevHit[0]][prevHit[1]];
 								mapPlayer1[prevHit[0]][prevHit[1]] = -3;
-        						printInfo(shipPlayer1, namePlayer1, namePlayer2);
-        						printMaps(mapPlayer1);
-        						Red(1);
-        						printf("\n  Player2 missed!");
-        						Reset();
+								printComputerStats(0);
         						mapPlayer1[prevHit[0]][prevHit[1]] = save;
 								resetPrevHit();
 							}
@@ -314,11 +298,7 @@ void computerBombing()
     							if (checkShip(shipP1) == 1)
             						shipPlayer1--;
             					mapPlayer1[prevHit[0]][prevHit[1]] = -4;
-        						printInfo(shipPlayer1, namePlayer1, namePlayer2);
-        						printMaps(mapPlayer1);
-    							Green(1);
-        						printf("\n  player 2 hit the ship!");
-        						Reset();
+								printComputerStats(1);
     							around[1] = 1; 
     							around[3] = 1; 
 							}
@@ -327,11 +307,7 @@ void computerBombing()
 								around[2] = 1;
 								save = mapPlayer1[prevHit[0]][prevHit[1]];
 								mapPlayer1[prevHit[0]][prevHit[1]] = -3;
-        						printInfo(shipPlayer1, namePlayer1, namePlayer2);
-        						printMaps(mapPlayer1);
-        						Red(1);
-        						printf("\n  Player2 missed!");
-        						Reset();
+								printComputerStats(0);
         						mapPlayer1[prevHit[0]][prevHit[1]] = save;
 								resetPrevHit();
 							}
@@ -365,11 +341,7 @@ void computerBombing()
     							if (checkShip(shipP1) == 1)
             						shipPlayer1--;
             					mapPlayer1[prevHit[0]][prevHit[1]] = -4;
-        						printInfo(shipPlayer1, namePlayer1, namePlayer2);
-        						printMaps(mapPlayer1);
-    							Green(1);
-        						printf("\n  player 2 hit the ship!");
-        						Reset();
+								printComputerStats(1);
     							around[0] = 1; 
     							around[2] = 1; 
 							}
@@ -378,11 +350,7 @@ void computerBombing()
 								around[3] = 1;
 								save = mapPlayer1[prevHit[0]][prevHit[1]];
 								mapPlayer1[prevHit[0]][prevHit[1]] = -3;
-        						printInfo(shipPlayer1, namePlayer1, namePlayer2);
-        						printMaps(mapPlayer1);
-        						Red(1);
-        						printf("\n  Player2 missed!");
-        						Reset();
+								printComputerStats(0);
         						mapPlayer1[prevHit[0]][prevHit[1]] = save;
 								resetPrevHit();
 							}
@@ -423,21 +391,13 @@ void computerBombing()
             	shipPlayer1--;
         	mapPlayer1[i][j] = -4;
         	clearScreen();
-        	printInfo(shipPlayer1, namePlayer1, namePlayer2);
-        	printMaps(mapPlayer1);
-        	Green(1);
-        	printf("\n  player 2 hit the ship!");
-        	Reset();
+			printComputerStats(1);
     	}
     	else
     	{
         	mapPlayer1[i][j] = -3;
         	clearScreen();
-        	printInfo(shipPlayer1, namePlayer1, namePlayer2);
-        	printMaps(mapPlayer1);
-        	Red(1);
-        	printf("\n  Player2 missed!");
-        	Reset();
+			printComputerStats(0);
         	mapPlayer1[i][j] = save;
     	}
 	}	

@@ -139,4 +139,25 @@ void printEnd2()
     printf("                 |___/                                         \n");
 }
 
+//-------------------------------------------------------------------
+
+void printComputerStats(int x)
+{
+	if(x == 1)
+	{
+		printInfo(shipPlayer1, namePlayer1, namePlayer2);
+    	printMaps(mapPlayer1);
+    	Green(1);
+        printf("\n  player 2 hit the ship!");
+        Reset();
+	}
+	else
+	{
+		printInfo(shipPlayer1, namePlayer1, namePlayer2);
+    	printMaps(mapPlayer1);
+        Red(1);
+   		printf("\n  Player2 missed!");
+		Reset();
+	}
+}
 #endif
