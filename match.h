@@ -4,23 +4,17 @@
 #include "scan.h"
 #include "introduction.h"
 #include "gamesetting.h"
-
+#include "music.h"
 //-------------------------------------------------------------------
 
-int bombing(int map[][100], int *ship, int playerTurn, struct ships shipPlayer[])
+int bombing(int map[][12], int *ship, struct ships shipPlayer[])
 {
     int x, i = 1, j = 1, save, midMenu;
-    while (passShip(shipPlayer, j, i) == 1 && j != n)
-        {
-            j++;
-        }
-    if (passShip(shipPlayer, j, i) == 1 && j == n){
-        j=1;
-        while (passShip(shipPlayer, j, i) == 1 && i != n)
-        {
-            i++;
-        }
-    }
+    do
+    {
+        i = random();
+        j = random();
+    } while (passShip(shipPlayer, j, i) == 1);
     clearScreen();
     save = map[i][j];
     map[i][j] = -1;
@@ -32,28 +26,34 @@ int bombing(int map[][100], int *ship, int playerTurn, struct ships shipPlayer[]
         printInfo(*ship, namePlayer1, namePlayer2);
 
     printMaps(map);
-    x = getch();
+    x = _getch();
     while (x != 13)
     {
         while (x != 224 && x != 13 && x != 27)
         {
-            x = getch();
+            x = _getch();
         }
         if (x == 224)
         {
-            x = getch();
+            x = _getch();
         }
         if (x == 27)
         {
             midMenu = midGameMenu();
-            while (midMenu == 1)
+            if (midMenu == 1)
+            {
+                map[i][j] = save;
+                saveGame();
+                map[i][j] = -1;
+            }
+            while (midMenu == 2)
             {
                 setting();
                 midMenu = midGameMenu();
             }
-            if (midMenu == 2)
+            if (midMenu == 3)
                 return 0;
-            x=0;
+            x = 0;
         }
 
         map[i][j] = save;
@@ -126,7 +126,6 @@ int bombing(int map[][100], int *ship, int playerTurn, struct ships shipPlayer[]
         }
         else
             printInfo(*ship, namePlayer1, namePlayer2);
-
         printMaps(map);
     }
     if (save == -2)
@@ -155,6 +154,8 @@ int bombing(int map[][100], int *ship, int playerTurn, struct ships shipPlayer[]
         Green(1);
         printf("\n  You hit the ship!");
         Reset();
+        if (soundEffectSw == 1)
+            playFire();
     }
     else
     {
@@ -171,238 +172,398 @@ int bombing(int map[][100], int *ship, int playerTurn, struct ships shipPlayer[]
         printf("\n  You missed!");
         Reset();
         map[i][j] = save;
+        if (soundEffectSw == 1)
+            playWater();
     }
-    sleep(2000);
+    sleep(4000);
     return 1;
 }
 //------------------------------------------------------------
 
+void findCleanArea(int *firstX,int *firstY,int *lastX,int *lastY) {
+    int i, j;
+    int y, x;
+    int swV, swH;
+
+    for (i = 1; i <= n; i++)
+    {
+        for (j = 1; j <= n; j++)
+        {
+            if (saveHits[i][j] == 0)
+            {
+                swV = swH = 1;
+                for (x = j, y = i; saveHits[y][x]==0 && swV == 1 && swH == 1 && x <= n && y <= n; x++, y++)
+                {
+                    Hcheck(x, y, i, j, &swH);
+                    Vcheck(x, y, i, j, &swV);
+                }
+                x--;
+                y--;
+                if (swH == 0 && swV == 0)
+                {
+                    x--;
+                    y--;
+                }
+                else if (swH == 0)
+                {
+                    y--;
+                    for (; x <= n && swV == 1; x++)
+                    {
+                        Vcheck(x, y, i, j, &swV);
+                    }
+                    x--;
+                    if (swV == 0)
+                    {
+                        x--;
+                    }
+                }
+                else if (swV == 0)
+                {
+                    x--;
+                    for (; y <= n && swH == 1; y++)
+                    {
+                        Hcheck(x, y, i, j, &swH);
+                    }
+                    y--;
+                    if (swH == 0)
+                    {
+                        y--;
+                    }
+                }
+                else if (x == n && saveHits[y][x] == 0)
+                {
+                    for (; y <= n && swH == 1; y++)
+                    {
+                        Hcheck(x, y, i, j, &swH);
+                    }
+                    y--;
+                    if (swH == 0)
+                    {
+                        y--;
+                    }
+                }
+                else if (y == n && saveHits[y][x] == 0)
+                {
+                    for (; x <= n && swV == 1; x++)
+                    {
+                        Hcheck(x, y, i, j, &swV);
+                    }
+                    x--;
+                    if (swV == 0)
+                    {
+                        x--;
+                    }
+                }
+                else
+                {
+                    for (; x <= n && swV == 1; x++)
+                    {
+                        Vcheck(x, y, i, j, &swV);
+                    }
+                    x--;
+                    if (swV == 0)
+                    {
+                        x--;
+                    }
+                    for (; y <= n && swH == 1; y++)
+                    {
+                        Hcheck(x, y, i, j, &swH);
+                    }
+                    y--;
+                    if (swH == 0)
+                    {
+                        y--;
+                    }
+
+                }
+                if (((x - j + 1) * (y - i + 1)) >= ((*lastX - *firstX + 1) * (*lastY - *firstY + 1)))
+                {
+                    *lastX = x;
+                    *firstX = j;
+                    *lastY = y;
+                    *firstY = i;
+                }
+            }
+        }
+    }
+}
+//------------------------------------------------------------
 void computerBombing()
 {
-    int i, j, k, p, save, loopsw = 1;
-    clearScreen();
-    if(hitsw == 1)
+    int firstX = 0, firstY = 0;
+    int lastX = 0, lastY = 0;
+    int i, j, k, save, loopsw = 1;
+    if (hitsw == 1)
     {
-    	for(k = 0; k < 4 && loopsw == 1; ++k)
-    	{
-    		if(around[k] == 0)
-    		{
-    			loopsw = 0;
-    			switch(k)
-    			{
-    				case 0:  // right side
-    					++prevHit[1];
-    					if (prevHit[1] > n)
-    					{
-    						around[0] = 1;
-							if (isFinishAround() == 1)
-							{
-								computerBombing();	
-							}	
-							resetPrevHit();
-    						loopsw = 1;
-						}
-    					else if(checkHit(prevHit[0], prevHit[1], saveHits) != 1)
-    					{
-    						saveHits[prevHit[0]][prevHit[1]] = 1;
-    						clearScreen();
-    						if (mapPlayer1[prevHit[0]][prevHit[1]] == -2)
-    						{
-    							hitShip(shipP1, prevHit[1], prevHit[0]);
-    							if (checkShip(shipP1) == 1)
-            						shipPlayer1--;
-            					mapPlayer1[prevHit[0]][prevHit[1]] = -4;  
-								printComputerStats(1);
-    							around[1] = 1; 
-    							around[3] = 1; 
-							}
-							else
-							{
-								around[0] = 1;
-								save = mapPlayer1[prevHit[0]][prevHit[1]];
-								mapPlayer1[prevHit[0]][prevHit[1]] = -3;
-								printComputerStats(0);
-        						mapPlayer1[prevHit[0]][prevHit[1]] = save;
-								resetPrevHit();
-							}
-						}
-						else if(checkHit(prevHit[0], prevHit[1], saveHits) == 1)
-						{
-							around[0] = 1;
-							loopsw = 1;
-							resetPrevHit();
-						}
-						break;
-    				case 1: // up
-    					++prevHit[0];
-    					if (prevHit[0] > n)
-    					{
-    						around[1] = 1;
-							if (isFinishAround() == 1)
-							{
-								computerBombing();	
-							}	
-							resetPrevHit();
-    						loopsw = 1;
-						}
-    					else if(checkHit(prevHit[0], prevHit[1], saveHits) != 1)
-    					{
-    						saveHits[prevHit[0]][prevHit[1]] = 1;
-    						clearScreen();
-    						if (mapPlayer1[prevHit[0]][prevHit[1]] == -2)
-    						{
-    							hitShip(shipP1, prevHit[1], prevHit[0]);
-    							if (checkShip(shipP1) == 1)
-            						shipPlayer1--;
-            					mapPlayer1[prevHit[0]][prevHit[1]] = -4;
-								printComputerStats(1);
-    							around[0] = 1; 
-    							around[2] = 1; 
-							}
-							else
-							{
-								around[1] = 1;
-								save = mapPlayer1[prevHit[0]][prevHit[1]];
-								mapPlayer1[prevHit[0]][prevHit[1]] = -3;
-								printComputerStats(0);
-        						mapPlayer1[prevHit[0]][prevHit[1]] = save;
-								resetPrevHit();
-							}
-						}
-						else if(checkHit(prevHit[0], prevHit[1], saveHits) == 1)
-						{
-							around[1] = 1;
-							loopsw = 1;
-							resetPrevHit();
-						}
-						break;
-    				case 2:  // left side
-    					--prevHit[1];
-    					if (prevHit[1] < 1)
-    					{
-    						around[2] = 1;
-							if (isFinishAround() == 1)
-							{
-								computerBombing();	
-							}
-							resetPrevHit();
-    						loopsw = 1;
-						}
-    					else if(checkHit(prevHit[0], prevHit[1], saveHits) != 1)
-    					{
-    						saveHits[prevHit[0]][prevHit[1]] = 1;
-    						clearScreen();
-    						if (mapPlayer1[prevHit[0]][prevHit[1]] == -2)
-    						{
-    							hitShip(shipP1, prevHit[1], prevHit[0]);	
-    							if (checkShip(shipP1) == 1)
-            						shipPlayer1--;
-            					mapPlayer1[prevHit[0]][prevHit[1]] = -4;
-								printComputerStats(1);
-    							around[1] = 1; 
-    							around[3] = 1; 
-							}
-							else
-							{
-								around[2] = 1;
-								save = mapPlayer1[prevHit[0]][prevHit[1]];
-								mapPlayer1[prevHit[0]][prevHit[1]] = -3;
-								printComputerStats(0);
-        						mapPlayer1[prevHit[0]][prevHit[1]] = save;
-								resetPrevHit();
-							}
-						}
-						else if(checkHit(prevHit[0], prevHit[1], saveHits) == 1)
-						{
-							around[2] = 1;
-							loopsw = 1;
-							resetPrevHit();
-						}
-						break;
-    				case 3:  // down
-    					--prevHit[0];
-    					if (prevHit[0] < 1)
-    					{
-    						around[3] = 1;
-							if (isFinishAround() == 1)
-							{
-								computerBombing();	
-							}
-							resetPrevHit();
-    						loopsw = 1;
-						}
-    					else if(checkHit(prevHit[0], prevHit[1], saveHits) != 1)
-    					{
-    						saveHits[prevHit[0]][prevHit[1]] = 1;
-    						clearScreen();
-    						if (mapPlayer1[prevHit[0]][prevHit[1]] == -2)
-    						{
-    							hitShip(shipP1, prevHit[1], prevHit[0]);    							
-    							if (checkShip(shipP1) == 1)
-            						shipPlayer1--;
-            					mapPlayer1[prevHit[0]][prevHit[1]] = -4;
-								printComputerStats(1);
-    							around[0] = 1; 
-    							around[2] = 1; 
-							}
-							else
-							{
-								around[3] = 1;
-								save = mapPlayer1[prevHit[0]][prevHit[1]];
-								mapPlayer1[prevHit[0]][prevHit[1]] = -3;
-								printComputerStats(0);
-        						mapPlayer1[prevHit[0]][prevHit[1]] = save;
-								resetPrevHit();
-							}
-						}
-						else if(checkHit(prevHit[0], prevHit[1], saveHits) == 1)
-						{
-							around[3] = 1;
-							loopsw = 1;
-							resetPrevHit();
-						}
-						break;
-				}
-				isFinishAround();
-			}
-		}
-	}
-	else
-	{
-		do
-    	{
-        	i = random();
-        	j = random();
-    	} while (checkHit(i, j, saveHits) != 0);
-    	saveHits[i][j] = 1;
-    	save = mapPlayer1[i][j];
-    	mapPlayer1[i][j] = -1;
-    	printInfo(shipPlayer1, namePlayer1, namePlayer2);
-    	printMaps(mapPlayer1);
-    	if (save == -2)
-    	{
-    		hitsw = 1;
-    		hitPos[0] = i;
-    		hitPos[1]= j;
-			resetPrevHit();
-    		resetAround(i, j);
-        	hitShip(shipP1, j, i);
-        	if (checkShip(shipP1) == 1)
-            	shipPlayer1--;
-        	mapPlayer1[i][j] = -4;
-        	clearScreen();
-			printComputerStats(1);
-    	}
-    	else
-    	{
-        	mapPlayer1[i][j] = -3;
-        	clearScreen();
-			printComputerStats(0);
-        	mapPlayer1[i][j] = save;
-    	}
-	}	
-
-    sleep(3500);
+        for (k = 0; k < 4 && loopsw == 1; ++k)
+        {
+            if (around[k] == 0)
+            {
+                loopsw = 0;
+                switch (k)
+                {
+                case 0:  // right side
+                    ++prevHit[1];
+                    if (prevHit[1] > n)
+                    {
+                        around[0] = 1;
+                        if (isFinishAround() == 1)
+                        {
+                            computerBombing();
+                        }
+                        resetPrevHit();
+                        loopsw = 1;
+                    }
+                    else if (checkHit(prevHit[0], prevHit[1], saveHits) != 1)
+                    {
+                        saveHits[prevHit[0]][prevHit[1]] = 1;
+                        save = mapPlayer1[prevHit[0]][prevHit[1]];
+                        mapPlayer1[prevHit[0]][prevHit[1]] = -1;
+                        clearScreen();
+                        printComputerStats(0);
+                        sleep(750);
+                        clearScreen();
+                        if (save == -2)
+                        {
+                            hitShip(shipP1, prevHit[1], prevHit[0]);
+                            if (checkShip(shipP1) == 1)
+                                shipPlayer1--;
+                            mapPlayer1[prevHit[0]][prevHit[1]] = -4;
+                            printComputerStats(1);
+                            if (soundEffectSw == 1)
+                                playFire();
+                            around[1] = 1;
+                            around[3] = 1;
+                        }
+                        else
+                        {
+                            around[0] = 1;
+                            mapPlayer1[prevHit[0]][prevHit[1]] = -3;
+                            printComputerStats(-1);
+                            if (soundEffectSw == 1)
+                                playWater();
+                            mapPlayer1[prevHit[0]][prevHit[1]] = save;
+                            resetPrevHit();
+                        }
+                    }
+                    else if (checkHit(prevHit[0], prevHit[1], saveHits) == 1)
+                    {
+                        around[0] = 1;
+                        loopsw = 1;
+                        resetPrevHit();
+                    }
+                    break;
+                case 1: // up
+                    ++prevHit[0];
+                    if (prevHit[0] > n)
+                    {
+                        around[1] = 1;
+                        if (isFinishAround() == 1)
+                        {
+                            computerBombing();
+                        }
+                        resetPrevHit();
+                        loopsw = 1;
+                    }
+                    else if (checkHit(prevHit[0], prevHit[1], saveHits) != 1)
+                    {
+                        saveHits[prevHit[0]][prevHit[1]] = 1;
+                        save = mapPlayer1[prevHit[0]][prevHit[1]];
+                        mapPlayer1[prevHit[0]][prevHit[1]] = -1;
+                        clearScreen();
+                        printComputerStats(0);
+                        sleep(750);
+                        clearScreen();
+                        if (save == -2)
+                        {
+                            hitShip(shipP1, prevHit[1], prevHit[0]);
+                            if (checkShip(shipP1) == 1)
+                                shipPlayer1--;
+                            mapPlayer1[prevHit[0]][prevHit[1]] = -4;
+                            printComputerStats(1);
+                            if (soundEffectSw == 1)
+                                playFire();
+                            around[0] = 1;
+                            around[2] = 1;
+                        }
+                        else
+                        {
+                            around[1] = 1;
+                            mapPlayer1[prevHit[0]][prevHit[1]] = -3;
+                            printComputerStats(-1);
+                            if (soundEffectSw == 1)
+                                playWater();
+                            mapPlayer1[prevHit[0]][prevHit[1]] = save;
+                            resetPrevHit();
+                        }
+                    }
+                    else if (checkHit(prevHit[0], prevHit[1], saveHits) == 1)
+                    {
+                        around[1] = 1;
+                        loopsw = 1;
+                        resetPrevHit();
+                    }
+                    break;
+                case 2:  // left side
+                    --prevHit[1];
+                    if (prevHit[1] < 1)
+                    {
+                        around[2] = 1;
+                        if (isFinishAround() == 1)
+                        {
+                            computerBombing();
+                        }
+                        resetPrevHit();
+                        loopsw = 1;
+                    }
+                    else if (checkHit(prevHit[0], prevHit[1], saveHits) != 1)
+                    {
+                        saveHits[prevHit[0]][prevHit[1]] = 1;
+                        save = mapPlayer1[prevHit[0]][prevHit[1]];
+                        mapPlayer1[prevHit[0]][prevHit[1]] = -1;
+                        clearScreen();
+                        printComputerStats(0);
+                        sleep(750);
+                        clearScreen();
+                        if (save == -2)
+                        {
+                            hitShip(shipP1, prevHit[1], prevHit[0]);
+                            if (checkShip(shipP1) == 1)
+                                shipPlayer1--;
+                            mapPlayer1[prevHit[0]][prevHit[1]] = -4;
+                            printComputerStats(1);
+                            if (soundEffectSw == 1)
+                                playFire();
+                            around[1] = 1;
+                            around[3] = 1;
+                        }
+                        else
+                        {
+                            around[2] = 1;
+                            mapPlayer1[prevHit[0]][prevHit[1]] = -3;
+                            printComputerStats(-1);
+                            if (soundEffectSw == 1)
+                                playWater();
+                            mapPlayer1[prevHit[0]][prevHit[1]] = save;
+                            resetPrevHit();
+                        }
+                    }
+                    else if (checkHit(prevHit[0], prevHit[1], saveHits) == 1)
+                    {
+                        around[2] = 1;
+                        loopsw = 1;
+                        resetPrevHit();
+                    }
+                    break;
+                case 3:  // down
+                    --prevHit[0];
+                    if (prevHit[0] < 1)
+                    {
+                        around[3] = 1;
+                        if (isFinishAround() == 1)
+                        {
+                            computerBombing();
+                        }
+                        resetPrevHit();
+                        loopsw = 1;
+                    }
+                    else if (checkHit(prevHit[0], prevHit[1], saveHits) != 1)
+                    {
+                        saveHits[prevHit[0]][prevHit[1]] = 1;
+                        save = mapPlayer1[prevHit[0]][prevHit[1]];
+                        mapPlayer1[prevHit[0]][prevHit[1]] = -1;
+                        clearScreen();
+                        printComputerStats(0);
+                        sleep(750);
+                        clearScreen();
+                        if (save == -2)
+                        {
+                            hitShip(shipP1, prevHit[1], prevHit[0]);
+                            if (checkShip(shipP1) == 1)
+                                shipPlayer1--;
+                            mapPlayer1[prevHit[0]][prevHit[1]] = -4;
+                            printComputerStats(1);
+                            if (soundEffectSw == 1)
+                                playFire();
+                            around[0] = 1;
+                            around[2] = 1;
+                        }
+                        else
+                        {
+                            around[3] = 1;
+                            mapPlayer1[prevHit[0]][prevHit[1]] = -3;
+                            printComputerStats(-1);
+                            if (soundEffectSw == 1)
+                                playWater();
+                            mapPlayer1[prevHit[0]][prevHit[1]] = save;
+                            resetPrevHit();
+                        }
+                    }
+                    else if (checkHit(prevHit[0], prevHit[1], saveHits) == 1)
+                    {
+                        around[3] = 1;
+                        loopsw = 1;
+                        resetPrevHit();
+                    }
+                    break;
+                }
+                isFinishAround();
+            }
+        }
+    }
+    else
+    {
+        findCleanArea(&firstX, &firstY, &lastX, &lastY);
+        if (firstX == lastX && firstY == lastY)
+        {
+            do
+            {
+                i = random();
+                j = random();
+            } while (saveHits[i][j] != 0);
+        }
+        else
+        {
+            do
+            {
+                i = random();
+                j = random();
+            } while ((i < firstY || i > lastY) || (j < firstX || j > lastX));
+        }
+        saveHits[i][j] = 1;
+        save = mapPlayer1[i][j];
+        mapPlayer1[i][j] = -1;
+        clearScreen();
+        printInfo(shipPlayer1, namePlayer1, namePlayer2);
+        printMaps(mapPlayer1);
+        sleep(750);
+        if (save == -2)
+        {
+            hitsw = 1;
+            hitPos[0] = i;
+            hitPos[1] = j;
+            resetPrevHit();
+            resetAround(i, j);
+            hitShip(shipP1, j, i);
+            if (checkShip(shipP1) == 1)
+                shipPlayer1--;
+            mapPlayer1[i][j] = -4;
+            clearScreen();
+            printComputerStats(1);
+            if (soundEffectSw == 1)
+                playFire();
+        }
+        else
+        {
+            mapPlayer1[i][j] = -3;
+            clearScreen();
+            printComputerStats(-1);
+            mapPlayer1[i][j] = save;
+            if (soundEffectSw == 1)
+                playWater();
+        }
+    }
+    sleep(4000);
 }
 //------------------------------------------------------------
 int rematch(int winner)
@@ -410,19 +571,20 @@ int rematch(int winner)
     int x, i = 0;
     printf("\n\n   do you want a rematch?\n      ");
     WhiteBack();
+    Black(1);
     printf("Yes");
     Reset();
     printf("   ");
     printf("No\n");
-    x = getch();
+    x = _getch();
     while (x != 13)
     {
         while (x != 224 && x != 13)
         {
-            x = getch();
+            x = _getch();
         }
         if (x == 224)
-            x = getch();
+            x = _getch();
         switch (x)
         {
         case 77:
@@ -450,6 +612,7 @@ int rematch(int winner)
         {
         case 0:
             WhiteBack();
+            Black(1);
             printf("Yes");
             Reset();
             printf("   ");
@@ -459,6 +622,7 @@ int rematch(int winner)
             printf("Yes");
             printf("   ");
             WhiteBack();
+            Black(1);
             printf("No");
             Reset();
             printf("\n");
@@ -474,26 +638,30 @@ int rematch(int winner)
 int multiPlayer()
 {
     clearScreen();
-    scanBasicInfo();
-    initializeMap(mapPlayer1);
-    initializeMap(mapPlayer2);
-    scanPlayerInfo(mapPlayer1, namePlayer1, 1, shipP1);
-    if (scanSign() == 1)
+    //scanBasicInfo();
+    scanMultiPlayerByFile();
+
+    //scanPlayerInfo(mapPlayer1, namePlayer1, 1, shipP1);
+    //if (scanSign() == 1)
     {
-        clearScreen();
+    //    clearScreen();
     }
-    scanPlayerInfo(mapPlayer2, namePlayer2, 2, shipP2);
+    //scanPlayerInfo(mapPlayer2, namePlayer2, 2, shipP2);
     shipPlayer1 = nship;
     shipPlayer2 = nship;
+    resetShipsSW();
+    gameType = 2;
     while (1)
     {
-        if (bombing(mapPlayer2, &shipPlayer2, 1, shipP2) == 0)
+        playerTurn = 1;
+        if (bombing(mapPlayer2, &shipPlayer2, shipP2) == 0)
             return 0;
         if (shipPlayer2 == 0)
         {
             break;
         }
-        if (bombing(mapPlayer1, &shipPlayer1, 2, shipP1) == 0)
+        playerTurn = 2;
+        if (bombing(mapPlayer1, &shipPlayer1, shipP1) == 0)
             return 0;
         if (shipPlayer1 == 0)
         {
@@ -524,17 +692,22 @@ int multiPlayer()
 int singlePlayer()
 {
     clearScreen();
-    scanBasicInfo();
-    initializeMap(mapPlayer1);
-    initializeMap(mapPlayer2);
-    scanPlayerInfo(mapPlayer1, namePlayer1, 1, shipP1);
+    //scanBasicInfo();
+    //initializeMap(mapPlayer1);
+    //initializeMap(mapPlayer2);
+    //scanPlayerInfo(mapPlayer1, namePlayer1, 1, shipP1);
+    scanSinglePlayerByFile();
     initializeComputerInfo();
+    resetSaveHits();
     shipPlayer1 = nship;
     shipPlayer2 = nship;
-
+    resetShipsSW();
+    gameType = 1;
     while (1)
     {
-        bombing(mapPlayer2, &shipPlayer2, 1, shipP2);
+        playerTurn = 1;
+        if (bombing(mapPlayer2, &shipPlayer2, shipP2)==0)
+            return 0;
         if (shipPlayer2 == 0)
         {
             break;
@@ -571,10 +744,12 @@ int startNewGame()
     x = startNewGameMenu();
     if (x == 0)
     {
+        gameType = 1;
         return singlePlayer();
     }
     else if (x == 1)
     {
+        gameType = 2;
         return multiPlayer();
     }
     else

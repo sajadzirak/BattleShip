@@ -1,10 +1,10 @@
 #ifndef check
 #define check
 
-#include "color.h"
-#include "data.h"
+#include "gameColor.h"
+#include "gameData.h"
 
-int checkOverlap(int i, int j, char direction, int map[][100])
+int checkOverlap(int i, int j, char direction, int map[][12])
 {
     int sw = 1, p;
     if (direction == 'v')
@@ -61,7 +61,7 @@ int checkRange(int i, int j, char direction)
 
 void hitShip(struct ships shipPlayer[], int x, int y)
 {
-    int i, j, k;
+    int i, k;
     for (k = 0; k < nship; k++)
     {
         for (i = 0; i < 3; i++)
@@ -75,10 +75,11 @@ void hitShip(struct ships shipPlayer[], int x, int y)
 //---------------------------------------------------------------
 int checkShip(struct ships shipPlayer[])
 {
-    int i, j, k;
+    int i, k;
     for (k = 0; k < nship; k++)
     {
-        for (i = 0; i < 3 && shipPlayer[k].sw[i] == 0; i++);
+        for (i = 0; i < 3 && shipPlayer[k].sw[i] == 0; i++)
+            ;
         if (i == 3)
         {
             for (i = 0; i < 3; i++)
@@ -91,7 +92,7 @@ int checkShip(struct ships shipPlayer[])
 //--------------------------------------------------------------------
 int passShip(struct ships shipPlayer[], int x, int y)
 {
-    int i, j, k;
+    int i, k;
     for (k = 0; k < nship; k++)
     {
         for (i = 0; i < 3; i++)
@@ -109,7 +110,7 @@ int passShip(struct ships shipPlayer[], int x, int y)
 }
 //--------------------------------------------------------------------
 
-int checkComputerOverlap(int i, int j, char direction, int map[][100])
+int checkComputerOverlap(int i, int j, char direction, int map[][12])
 {
     int sw = 1, p;
     if (direction == 'v')
@@ -151,27 +152,63 @@ int checkHit(int i, int j, int arr[][13])
 {
     if (arr[i][j] == 0)
         return 0;
-    else if (arr[i][j] == 1)
+    else
         return 1;
-    else if (arr[i][j] == 2)
-    	return 2;
+
 }
 
 //-------------------------------------------------------------------
 
 int isFinishAround()
 {
-	int p;
-	for(p = 0; p < 4 && around[p] == 1; ++p);
-	if (p == 4)
-	{
-		hitsw = 0;
-		return 1;	
-	}
-	else
-	{
-		return 0;	
-	}
+    int p;
+    for (p = 0; p < 4 && around[p] == 1; ++p);
+    if (p == 4)
+    {
+        hitsw = 0;
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
 }
+
+//-------------------------------------------------------------------
+void Hcheck(int x, int y, int i, int j, int* sw)
+{
+    while (x >= j && *sw == 1)
+    {
+        if (saveHits[y][x] == 1)
+        {
+            *sw = 0;
+        }
+        x--;
+    }
+}
+//--------------------------------------------------------------------
+
+void Vcheck(int x, int y, int i, int j, int* sw)
+{
+    while (y >= i && *sw == 1)
+    {
+        if (saveHits[y][x] == 1)
+        {
+            *sw = 0;
+        }
+        y--;
+    }
+}
+//--------------------------------------------------------------
+
+int fileCheck() {
+    FILE *f = fopen("gameData.dat", "rb");
+    int x;
+    fread(&x, sizeof(int), 1, f);
+    if (feof(f))
+        return 0;
+    return 1;
+}
+
 
 #endif

@@ -1,8 +1,8 @@
 #ifndef printing
 #define printing
 
-#include "color.h"
-#include "data.h"
+#include "gameColor.h"
+#include "gameData.h"
 //-------------------------------------------------------------------
 
 int printInfo(int remainingShips, char namePlayer[], char namePlayer2[])
@@ -22,7 +22,7 @@ int printInfo(int remainingShips, char namePlayer[], char namePlayer2[])
 }
 //-------------------------------------------------------------------
 
-int printMaps(int map[][100])
+int printMaps(int map[][12])
 {
     int i, j;
     for (i = n; i > 0; i--)
@@ -33,7 +33,7 @@ int printMaps(int map[][100])
             switch (map[i][j])
             {
             case 0:
-                Cyan(1); // free space
+                Blue(1); // free space
                 WhiteBack();
                 printf("~ ");
                 Reset();
@@ -45,7 +45,7 @@ int printMaps(int map[][100])
                 Reset();
                 break;
             case -2: // Ships that have not been hit yet
-                Cyan(1);
+                Blue(1);
                 WhiteBack();
                 printf("~ ");
                 Reset();
@@ -138,26 +138,23 @@ void printEnd2()
     printf("                  __/ |                                        \n");
     printf("                 |___/                                         \n");
 }
-
-//-------------------------------------------------------------------
+//---------------------------------------------------------------------------------------
 
 void printComputerStats(int x)
 {
-	if(x == 1)
-	{
-		printInfo(shipPlayer1, namePlayer1, namePlayer2);
-    	printMaps(mapPlayer1);
-    	Green(1);
+    printInfo(shipPlayer1, namePlayer1, namePlayer2);
+    printMaps(mapPlayer1);
+    if (x == 1)
+    {
+        Green(1);
         printf("\n  player 2 hit the ship!");
         Reset();
-	}
-	else
-	{
-		printInfo(shipPlayer1, namePlayer1, namePlayer2);
-    	printMaps(mapPlayer1);
+    }
+    else if (x == -1)
+    {
         Red(1);
-   		printf("\n  Player2 missed!");
-		Reset();
-	}
+        printf("\n  Player2 missed!");
+        Reset();
+    }
 }
 #endif

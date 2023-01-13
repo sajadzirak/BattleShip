@@ -1,9 +1,10 @@
 #ifndef initializing
 #define initializing
 
-#include "data.h"
+#include "gameData.h"
 #include "general.h"
-int initializeMap(int map[][100])
+#include <string.h>
+int initializeMap(int map[][12])
 {
     int i, j;
     for (i = 0, j = 0; j < n; j++)
@@ -13,52 +14,16 @@ int initializeMap(int map[][100])
     for (i = 1; i <= n; i++)
     {
         map[i][0] = i;
-        for (j = 1; j < n; j++)
+        for (j = 1; j <= n; j++)
         {
             map[i][j] = 0;
         }
     }
     return 0;
 }
-
 //--------------------------------------------------------------
 
-void fillCols()  // it can almost avoid half of the hits
-{
-	int i, j, fake_n = n;
-	for(i = 1; i <= fake_n; ++i)
-	{
-		if(i%2 == 1)
-		{
-			for(j = 1; j <= fake_n; j += 2)
-				saveHits[i][j] = 2;
-		}
-		else
-		{
-			if(n%2 == 1) ++fake_n;
-			for(j = fake_n; j > 1; j -= 2)
-				saveHits[i][j] = 2;
-		}
-	}
-}
-
-//--------------------------------------------------------------
-
-void resetSaveHits()
-{
-	int i, j;
-	for(i = 0; i < 13; ++i)
-	{
-		for(j = 0; j < 13; ++j)
-		{
-			saveHits[i][j] = 0;
-		}
-	}
-}
-
-//--------------------------------------------------------------
-
-int putShips(int map[][100], int i, int j, char direction)
+int putShips(int map[][12], int i, int j, char direction)
 {
     int k = 0;
     for (k = 0; k < 3; k++)
@@ -77,10 +42,8 @@ void initializeComputerInfo()
 {
     int i, j, k;
     char direction;
-    hitsw = 0;
+    strcpy(namePlayer2, "Player2");
     randomSeed();
-    resetSaveHits();
-	fillCols();
     for (k = 0; k < nship; ++k)
     {
         i = random();
@@ -120,24 +83,42 @@ void initializeComputerInfo()
             --k;
     }
 }
+//-----------------------------------------------------------------
 
-//------------------------------------------------------------
+void resetShipsSW(){
+    int k;
+    for (k = 0; k < nship; k++)
+    {
+        shipP1[k].sw[0] = shipP1[k].sw[1] = shipP1[k].sw[2] = 1;
+        shipP2[k].sw[0] = shipP2[k].sw[1] = shipP2[k].sw[2] = 1;
+    }
+}
+//-----------------------------------------------------------------------
 
+void resetSaveHits() {
+    int i, j;
+    for ( i = 0;  i < 13;  i++)
+    {
+        for (j = 0; j < 13; j++) {
+            saveHits[i][j] = 0;
+        }
+    }
+}
+//-----------------------------------------------------------------------
 void resetAround(int i, int j)
 {
-	for(int k = 0; k < 4; ++k)
-		around[k] = 0;
-	if (i == 1) around[3] = 1;
-	if (j == 1) around[2] = 1;
-	if (i == n) around[1] = 1;
-	if (j == n) around[0] = 1;
+    for (int k = 0; k < 4; ++k)
+        around[k] = 0;
+    if (i == 1) around[3] = 1;
+    if (j == 1) around[2] = 1;
+    if (i == n) around[1] = 1;
+    if (j == n) around[0] = 1;
 }
-
 //------------------------------------------------------------
 
 void resetPrevHit()
 {
-	prevHit[0] = hitPos[0];
+    prevHit[0] = hitPos[0];
     prevHit[1] = hitPos[1];
 }
 

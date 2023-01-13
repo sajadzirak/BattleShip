@@ -3,7 +3,7 @@
 
 #include "check.h"
 #include "initializing.h"
-#include "data.h"
+#include "gameData.h"
 //-------------------------------------------------------------------
 
 int scanBasicInfo()
@@ -17,11 +17,12 @@ int scanBasicInfo()
     Green(0);
     scanf("%d", &nship);
     Reset();
+
     return 0;
 }
 //-------------------------------------------------------------------
 
-int scanPlayerInfo(int map[][100], char name[], int playerNum, struct ships shipPlayer[])
+int scanPlayerInfo(int map[][12], char name[], int playerNum, struct ships shipPlayer[])
 {
     int i, j, k;
     char direction;
@@ -93,5 +94,132 @@ int scanSign()
     // }
     return 0;
 }
+//-------------------------------------------------------------------
 
+void scanMultiPlayerByFile() {
+    int i, j, k;
+    char direction[2];
+    char sign[4];
+    input = fopen("input.txt", "rt");
+    if (!input) {
+        printf("File don't open");
+        exit(1);
+    }
+    fscanf(input, "%d%d", &n, &nship);
+    initializeMap(mapPlayer1);
+    initializeMap(mapPlayer2);
+    fscanf(input, "%s", namePlayer1);
+    for ( k = 0; k < nship; k++)
+    {
+        fscanf(input, "%d%d%s", &j, &i, &direction);
+        if (checkOverlap(i, j, direction[0], mapPlayer1) == 1 && checkRange(i, j, direction[0]) == 1)
+        {
+            putShips(mapPlayer1, i, j, direction[0]);
+            if (direction[0] == 'v')
+            {
+                shipP1[k].shipPosition[0][0] = j;
+                shipP1[k].shipPosition[0][1] = i;
+
+                shipP1[k].shipPosition[1][0] = j;
+                shipP1[k].shipPosition[1][1] = i + 1;
+
+                shipP1[k].shipPosition[2][0] = j;
+                shipP1[k].shipPosition[2][1] = i + 2;
+            }
+            else
+            {
+                shipP1[k].shipPosition[0][0] = j;
+                shipP1[k].shipPosition[0][1] = i;
+
+                shipP1[k].shipPosition[1][0] = j + 1;
+                shipP1[k].shipPosition[1][1] = i;
+
+                shipP1[k].shipPosition[2][0] = j + 2;
+                shipP1[k].shipPosition[2][1] = i;
+            }
+        }
+        else
+            k--;
+    }
+    fscanf(input, "%s", sign);
+    fscanf(input, "%s", namePlayer2);
+    for (k = 0; k < nship; k++)
+    {
+        fscanf(input, "%d%d%s", &j, &i, &direction);
+        if (checkOverlap(i, j, direction[0], mapPlayer2) == 1 && checkRange(i, j, direction[0]) == 1)
+        {
+            putShips(mapPlayer2, i, j, direction[0]);
+            if (direction[0] == 'v')
+            {
+                shipP2[k].shipPosition[0][0] = j;
+                shipP2[k].shipPosition[0][1] = i;
+
+                shipP2[k].shipPosition[1][0] = j;
+                shipP2[k].shipPosition[1][1] = i + 1;
+
+                shipP2[k].shipPosition[2][0] = j;
+                shipP2[k].shipPosition[2][1] = i + 2;
+            }
+            else
+            {
+                shipP2[k].shipPosition[0][0] = j;
+                shipP2[k].shipPosition[0][1] = i;
+
+                shipP2[k].shipPosition[1][0] = j + 1;
+                shipP2[k].shipPosition[1][1] = i;
+
+                shipP2[k].shipPosition[2][0] = j + 2;
+                shipP2[k].shipPosition[2][1] = i;
+            }
+        }
+        else
+            k--;
+    }
+}
+//---------------------------------------------------------------------
+void scanSinglePlayerByFile() {
+    int i, j, k;
+    char direction[2];
+    input = fopen("input2.txt", "rt");
+    if (!input) {
+        printf("File don't open");
+        exit(1);
+    }
+    fscanf(input, "%d%d", &n, &nship);
+    initializeMap(mapPlayer1);
+    initializeMap(mapPlayer2);
+    fscanf(input, "%s", namePlayer1);
+    for (k = 0; k < nship; k++)
+    {
+        fscanf(input, "%d%d%s", &j, &i, &direction);
+        if (checkOverlap(i, j, direction[0], mapPlayer1) == 1 && checkRange(i, j, direction[0]) == 1)
+        {
+            putShips(mapPlayer1, i, j, direction[0]);
+            if (direction[0] == 'v')
+            {
+                shipP1[k].shipPosition[0][0] = j;
+                shipP1[k].shipPosition[0][1] = i;
+
+                shipP1[k].shipPosition[1][0] = j;
+                shipP1[k].shipPosition[1][1] = i + 1;
+
+                shipP1[k].shipPosition[2][0] = j;
+                shipP1[k].shipPosition[2][1] = i + 2;
+            }
+            else
+            {
+                shipP1[k].shipPosition[0][0] = j;
+                shipP1[k].shipPosition[0][1] = i;
+
+                shipP1[k].shipPosition[1][0] = j + 1;
+                shipP1[k].shipPosition[1][1] = i;
+
+                shipP1[k].shipPosition[2][0] = j + 2;
+                shipP1[k].shipPosition[2][1] = i;
+            }
+        }
+        else
+            k--;
+    }
+}
 #endif

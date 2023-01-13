@@ -3,7 +3,7 @@
 
 #include <time.h>
 #include <stdlib.h>
-#include "data.h"
+#include "gameData.h"
 
 void clearScreen()
 {
