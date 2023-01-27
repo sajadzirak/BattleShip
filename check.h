@@ -9,39 +9,6 @@ int checkOverlap(int i, int j, char direction, int map[][12], int width, int len
 {
     int sw = 1, p, k;
     int holdj = j;
-    //if (direction == 'v')
-    //{
-    //    for (p = 0; p < 3 && sw == 1; p++, i++)
-    //    {
-    //        if (map[i][j] == -2)
-    //        {
-    //            White(1);
-    //            printf("Ships overlap with each other. Please input another location.\n");
-    //            Reset();
-    //            sw = 0;
-    //        }
-    //    }
-    //}
-    //else if (direction == 'h')
-    //{
-    //    for (int p = 0; p < 3 && sw == 1; ++p, j++)
-    //    {
-    //        if (map[i][j] == -2)
-    //        {
-    //            White(1);
-    //            printf("Ships overlap with each other. Please input another location.\n");
-    //            Reset();
-    //            sw = 0;
-    //        }
-    //    }
-    //}
-    //else
-    //{
-    //    White(1);
-    //    printf("Direction is not valid. Please input the correct direction (v/h)\n");
-    //    Reset();
-    //    sw = 0;
-    //}
     if (direction == 'v')
     {
         for (p = 0; p < lengh && sw == 1; ++p, ++i)
@@ -91,13 +58,6 @@ int checkOverlap(int i, int j, char direction, int map[][12], int width, int len
 int checkRange(int i, int j, char direction, int width, int lengh)
 {
     int sw = 1;
-    //if ((i + 2 > n && direction == 'v') || (j + 2 > n && direction == 'h'))
-    //{
-    //    White(1);
-    //    printf("Ships are out of range. Please input another location.\n");
-    //    Reset();
-    //    sw = 0;
-    //}
     if (direction == 'v')
     {
         if ((i + (lengh - 1) > n) || (j + (width - 1) > n))
@@ -122,18 +82,6 @@ int checkRange(int i, int j, char direction, int width, int lengh)
 }
 //---------------------------------------------------------------
 
-//void hitShip(struct ships shipPlayer[], int x, int y)
-//{
-//    int i, k;
-//    //for (k = 0; k < nship; k++)
-//    //{
-//    //    for (i = 0; i < 3; i++)
-//    //    {
-//    //        if (shipPlayer[k].shipPosition[i][0] == x && shipPlayer[k].shipPosition[i][1] == y)
-//    //            shipPlayer[k].sw[i] = 0;
-//    //    }
-//    //}
-//}
 void hitShip(int playerNum, int x, int y)
 {
     int i, k, contsw = 1;
@@ -169,21 +117,6 @@ void hitShip(int playerNum, int x, int y)
     }
 }
 //---------------------------------------------------------------
-//int checkShip(struct ships shipPlayer[])
-//{
-//    int i, k;
-//    for (k = 0; k < nship; k++)
-//    {
-//        for (i = 0; i < 3 && shipPlayer[k].sw[i] == 0; i++);
-//        if (i == 3)
-//        {
-//            for (i = 0; i < 3; i++)
-//                shipPlayer[k].sw[i] = -1;
-//            return 1;
-//        }
-//    }
-//    return 0;
-//}
 int checkShip(int playerNum)
 {
     int k;
@@ -202,14 +135,11 @@ int checkShip(int playerNum)
     {
         for (k = 0; k < P2.nship; k++)
         {
-            //clearScreen();
-            //printf("k = %d\nremain = %d\nstats = %d", k, P2.ships[k].remainCell, P2.ships[k].stats);
             if (P2.ships[k].remainCell == 0 && P2.ships[k].stats == 0)
             {
                 P2.ships[k].stats = 1;
                 return 1;
             }
-            //sleep(5500);
         }
     }
 }
@@ -217,20 +147,6 @@ int checkShip(int playerNum)
 int passShip(int playerNum, int x, int y)
 {
     int i, k;
-    //for (k = 0; k < nship; k++)
-    //{
-    //    for (i = 0; i < 3; i++)
-    //    {
-    //        if (shipPlayer[k].shipPosition[i][0] == x && shipPlayer[k].shipPosition[i][1] == y)
-    //        {
-    //            if (shipPlayer[k].sw[i] == 0 || shipPlayer[k].sw[i] == -1)
-    //            {
-    //                return 1;
-    //            }
-    //        }
-    //    }
-    //}
-    //return 0;
     if (playerNum == 1)
     {
         for (k = 0; k < P1.nship; ++k)

@@ -27,14 +27,6 @@ int putShips(int map[][12], int i, int j, char direction, int width, int lengh)
 {
     int k, p;
     int holdj = j;
-    //for (k = 0; k < 3; k++)
-    //{
-    //    map[i][j] = -2;
-    //    if (direction == 'v')
-    //        i++;
-    //    else
-    //        j++;
-    //}
     if (direction == 'v')
     {
         for (p = 0; p < lengh; ++p, ++i)
