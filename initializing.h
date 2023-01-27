@@ -23,66 +23,89 @@ int initializeMap(int map[][12])
 }
 //--------------------------------------------------------------
 
-int putShips(int map[][12], int i, int j, char direction)
+int putShips(int map[][12], int i, int j, char direction, int width, int lengh)
 {
-    int k = 0;
-    for (k = 0; k < 3; k++)
+    int k, p;
+    int holdj = j;
+    //for (k = 0; k < 3; k++)
+    //{
+    //    map[i][j] = -2;
+    //    if (direction == 'v')
+    //        i++;
+    //    else
+    //        j++;
+    //}
+    if (direction == 'v')
     {
-        map[i][j] = -2;
-        if (direction == 'v')
-            i++;
-        else
-            j++;
+        for (p = 0; p < lengh; ++p, ++i)
+        {
+            j = holdj;
+            for (k = 0; k < width; ++k, ++j)
+            {
+                map[i][j] = -2;
+            }
+        }
+    }
+    else if (direction == 'h')
+    {
+        for (p = 0; p < width; ++p, ++i)
+        {
+            j = holdj;
+            for (k = 0; k < lengh; ++k, ++j)
+            {
+                map[i][j] = -2;
+            }
+        }
     }
     return 0;
 }
 //------------------------------------------------------------
 
-void initializeComputerInfo()
-{
-    int i, j, k;
-    char direction;
-    strcpy(namePlayer2, "Player2");
-    randomSeed();
-    for (k = 0; k < nship; ++k)
-    {
-        i = random();
-        j = random();
-        direction = random();
-        if (direction % 2 == 1)
-            direction = 'v';
-        else
-            direction = 'h';
-        if (checkComputerOverlap(i, j, direction, mapPlayer2) == 1 && checkComputerRange(i, j, direction) == 1)
-        {
-            putShips(mapPlayer2, i, j, direction);
-            if (direction == 'v')
-            {
-                shipP2[k].shipPosition[0][0] = j;
-                shipP2[k].shipPosition[0][1] = i;
-
-                shipP2[k].shipPosition[1][0] = j;
-                shipP2[k].shipPosition[1][1] = i + 1;
-
-                shipP2[k].shipPosition[2][0] = j;
-                shipP2[k].shipPosition[2][1] = i + 2;
-            }
-            else
-            {
-                shipP2[k].shipPosition[0][0] = j;
-                shipP2[k].shipPosition[0][1] = i;
-
-                shipP2[k].shipPosition[1][0] = j + 1;
-                shipP2[k].shipPosition[1][1] = i;
-
-                shipP2[k].shipPosition[2][0] = j + 2;
-                shipP2[k].shipPosition[2][1] = i;
-            }
-        }
-        else
-            --k;
-    }
-}
+//void initializeComputerInfo()     // temporary
+//{
+//    int i, j, k;
+//    char direction;
+//    strcpy(namePlayer2, "Player2");
+//    randomSeed();
+//    for (k = 0; k < nship; ++k)
+//    {
+//        i = random();
+//        j = random();
+//        direction = random();
+//        if (direction % 2 == 1)
+//            direction = 'v';
+//        else
+//            direction = 'h';
+//        if (checkComputerOverlap(i, j, direction, mapPlayer2) == 1 && checkComputerRange(i, j, direction) == 1)
+//        {
+//            putShips(mapPlayer2, i, j, direction);
+//            if (direction == 'v')
+//            {
+//                shipP2[k].shipPosition[0][0] = j;
+//                shipP2[k].shipPosition[0][1] = i;
+//
+//                shipP2[k].shipPosition[1][0] = j;
+//                shipP2[k].shipPosition[1][1] = i + 1;
+//
+//                shipP2[k].shipPosition[2][0] = j;
+//                shipP2[k].shipPosition[2][1] = i + 2;
+//            }
+//            else
+//            {
+//                shipP2[k].shipPosition[0][0] = j;
+//                shipP2[k].shipPosition[0][1] = i;
+//
+//                shipP2[k].shipPosition[1][0] = j + 1;
+//                shipP2[k].shipPosition[1][1] = i;
+//
+//                shipP2[k].shipPosition[2][0] = j + 2;
+//                shipP2[k].shipPosition[2][1] = i;
+//            }
+//        }
+//        else
+//            --k;
+//    }
+//}
 //-----------------------------------------------------------------
 
 void resetShipsSW(){

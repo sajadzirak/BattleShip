@@ -8,14 +8,14 @@ int continueMultiPlayerGame() {
         while (1)
         {
             playerTurn = 1;
-            if (bombing(mapPlayer2, &shipPlayer2, shipP2) == 0)
+            if (bombing(mapPlayer2, &shipPlayer2, 2) == 0)
                 return 0;
             if (shipPlayer2 == 0)
             {
                 break;
             }
             playerTurn = 2;
-            if (bombing(mapPlayer1, &shipPlayer1, shipP1) == 0)
+            if (bombing(mapPlayer1, &shipPlayer1, 1) == 0)
                 return 0;
             if (shipPlayer1 == 0)
             {
@@ -28,14 +28,14 @@ int continueMultiPlayerGame() {
         while (1)
         {
             playerTurn = 2;
-            if (bombing(mapPlayer1, &shipPlayer1, shipP1) == 0)
+            if (bombing(mapPlayer1, &shipPlayer1, 1) == 0)
                 return 0;
             if (shipPlayer1 == 0)
             {
                 break;
             }
             playerTurn = 1;
-            if (bombing(mapPlayer2, &shipPlayer2, shipP2) == 0)
+            if (bombing(mapPlayer2, &shipPlayer2, 2) == 0)
                 return 0;
             if (shipPlayer2 == 0)
             {
@@ -66,13 +66,13 @@ int continueSinglePlayerGame() {
     while (1)
     {
         playerTurn = 1;
-        if (bombing(mapPlayer2, &shipPlayer2, shipP2) == 0)
+        if (bombing(mapPlayer2, &shipPlayer2, 2) == 0)
             return 0;
         if (shipPlayer2 == 0)
         {
             break;
         }
-        computerBombing(); //*****
+        //computerBombing(); //*****   // temporary
         if (shipPlayer1 == 0)
         {
             break;
