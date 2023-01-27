@@ -31,7 +31,6 @@ struct ships
     int width=1;
     char direction;
     int shipPosition[10][2] = {};
-    int sw[3] = {1, 1, 1};
     int ncell;
     int remainCell;
     int stats = 0; // 0 means ship didn't destroy yet and 1 means ship completely destroyed
@@ -43,7 +42,6 @@ struct player
     struct ships ships[15];
     int nship = 0;
     int ncell = 0;
-    //int remainCell;
     int remainShip = 0;
     int remainRepair;
 } P1, P2;

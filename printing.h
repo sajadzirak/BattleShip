@@ -5,7 +5,7 @@
 #include "gameData.h"
 //-------------------------------------------------------------------
 
-int printInfo(int remainingShips, char namePlayer[], char namePlayer2[])
+int printInfo(int remainingShips, int remainingRepair, char namePlayer[], char namePlayer2[])
 {
     int i;
     printf(" %s's turn", namePlayer2);
@@ -15,7 +15,8 @@ int printInfo(int remainingShips, char namePlayer[], char namePlayer2[])
 
     printf("\n\n");
     White(1);
-    printf(" remaining ships: %d", remainingShips);
+    printf(" %s's remaining ships: %d\n", namePlayer, remainingShips);
+    printf(" %s's remaining repairs: %d", namePlayer2, remainingRepair);
     Reset();
     printf("\n\n");
     return 0;
@@ -140,21 +141,21 @@ void printEnd2()
 }
 //---------------------------------------------------------------------------------------
 
-void printComputerStats(int x)
-{
-    printInfo(shipPlayer1, namePlayer1, namePlayer2);
-    printMaps(mapPlayer1);
-    if (x == 1)
-    {
-        Green(1);
-        printf("\n  player 2 hit the ship!");
-        Reset();
-    }
-    else if (x == -1)
-    {
-        Red(1);
-        printf("\n  Player2 missed!");
-        Reset();
-    }
-}
+//void printComputerStats(int x)
+//{
+//    printInfo(shipPlayer1, namePlayer1, namePlayer2);
+//    printMaps(mapPlayer1);
+//    if (x == 1)
+//    {
+//        Green(1);
+//        printf("\n  player 2 hit the ship!");
+//        Reset();
+//    }
+//    else if (x == -1)
+//    {
+//        Red(1);
+//        printf("\n  Player2 missed!");
+//        Reset();
+//    }
+//}
 #endif

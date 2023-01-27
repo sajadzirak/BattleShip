@@ -108,14 +108,14 @@ int putShips(int map[][12], int i, int j, char direction, int width, int lengh)
 //}
 //-----------------------------------------------------------------
 
-void resetShipsSW(){
-    int k;
-    for (k = 0; k < nship; k++)
-    {
-        shipP1[k].sw[0] = shipP1[k].sw[1] = shipP1[k].sw[2] = 1;
-        shipP2[k].sw[0] = shipP2[k].sw[1] = shipP2[k].sw[2] = 1;
-    }
-}
+//void resetShipsSW(){
+//    int k;
+//    for (k = 0; k < nship; k++)
+//    {
+//        shipP1[k].sw[0] = shipP1[k].sw[1] = shipP1[k].sw[2] = 1;
+//        shipP2[k].sw[0] = shipP2[k].sw[1] = shipP2[k].sw[2] = 1;
+//    }
+//}
 //-----------------------------------------------------------------------
 
 void resetSaveHits() {

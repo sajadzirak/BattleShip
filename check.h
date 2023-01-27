@@ -191,14 +191,11 @@ int checkShip(int playerNum)
     {
         for (k = 0; k < P1.nship; k++)
         {
-            //clearScreen();
-            //printf("k = %d\nremain = %d\nstats = %d", k, P1.ships[k].remainCell, P1.ships[k].stats);
             if (P1.ships[k].remainCell == 0 && P1.ships[k].stats == 0)
             {
                 P1.ships[k].stats = 1;
                 return 1;
             }
-            //sleep(5500);
         }
     }
     else if (playerNum == 2)

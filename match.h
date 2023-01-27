@@ -5,6 +5,8 @@
 #include "introduction.h"
 #include "gamesetting.h"
 #include "music.h"
+
+int repair(int, int map[][12]);
 //-------------------------------------------------------------------
 
 int bombing(int map[][12], int *ship, int playerNum)
@@ -20,22 +22,70 @@ int bombing(int map[][12], int *ship, int playerNum)
     map[i][j] = -1;
     if (playerTurn == 1)
     {
-        printInfo(P2.remainShip, P2.namePlayer, P1.namePlayer);
+        printInfo(P2.remainShip, P1.remainRepair, P2.namePlayer, P1.namePlayer);
     }
     else
-        printInfo(P1.remainShip, P1.namePlayer, P2.namePlayer);
+        printInfo(P1.remainShip, P2.remainRepair, P1.namePlayer, P2.namePlayer);
 
     printMaps(map);
     x = _getch();
     while (x != 13)
     {
-        while (x != 224 && x != 13 && x != 27)
+        while (x != 224 && x != 13 && x != 27 && x != 8)
         {
             x = _getch();
         }
         if (x == 224)
         {
             x = _getch();
+        }
+        if (x == 8)  // backspace for repair
+        {
+            map[i][j] = save;
+            if (playerNum == 1)
+            {
+                if (repair(2, mapPlayer2) == 1)
+                {
+                    return 1;
+                }
+                else
+                {
+                    clearScreen();
+                    save = map[i][j];
+                    map[i][j] = -1;
+                    if (playerTurn == 1)
+                    {
+                        printInfo(P2.remainShip, P1.remainRepair, P2.namePlayer, P1.namePlayer);
+                    }
+                    else
+                        printInfo(P1.remainShip, P2.remainRepair, P1.namePlayer, P2.namePlayer);
+
+                    printMaps(map);
+                    x = _getch();
+                }
+            }
+            else if (playerNum == 2)
+            {
+                if (repair(1, mapPlayer1) == 1)
+                {
+                    return 1;
+                }
+                else
+                {
+                    clearScreen();
+                    save = map[i][j];
+                    map[i][j] = -1;
+                    if (playerTurn == 1)
+                    {
+                        printInfo(P2.remainShip, P1.remainRepair, P2.namePlayer, P1.namePlayer);
+                    }
+                    else
+                        printInfo(P1.remainShip, P2.remainRepair, P1.namePlayer, P2.namePlayer);
+
+                    printMaps(map);
+                    x = _getch();
+                }
+            }
         }
         if (x == 27)
         {
@@ -117,28 +167,15 @@ int bombing(int map[][12], int *ship, int playerNum)
                 }
             }
         }
-        if (x == 8)  // backspace for repair
-        {
-            if (playerNum == 1 && P1.remainRepair != 0)
-            {
-                x = 13;
-                repair(2, j, i);
-            }
-            else if (playerNum == 2 && P2.remainRepair != 0)
-            {
-                x = 13;
-                P2.remainRepair--;
-            }
-        }
         save = map[i][j];
         map[i][j] = -1;
         clearScreen();
         if (playerTurn == 1)
         {
-            printInfo(P2.remainShip, P2.namePlayer, P1.namePlayer);
+            printInfo(P2.remainShip, P1.remainRepair, P2.namePlayer, P1.namePlayer);
         }
         else
-            printInfo(P1.remainShip, P1.namePlayer, P2.namePlayer);
+            printInfo(P1.remainShip, P2.remainRepair, P1.namePlayer, P2.namePlayer);
         printMaps(map);
     }
     if (save == -2)
@@ -163,10 +200,10 @@ int bombing(int map[][12], int *ship, int playerNum)
         clearScreen();
         if (playerTurn == 1)
         {
-            printInfo(P2.remainShip, P2.namePlayer, P1.namePlayer);
+            printInfo(P2.remainShip, P1.remainRepair, P2.namePlayer, P1.namePlayer);
         }
         else
-            printInfo(P1.remainShip, P1.namePlayer, P2.namePlayer);
+            printInfo(P1.remainShip, P2.remainRepair, P1.namePlayer, P2.namePlayer);
         printMaps(map);
         Green(1);
         printf("\n  You hit the ship!");
@@ -180,10 +217,10 @@ int bombing(int map[][12], int *ship, int playerNum)
         clearScreen();
         if (playerTurn == 1)
         {
-            printInfo(P2.remainShip, P2.namePlayer, P1.namePlayer);
+            printInfo(P2.remainShip, P1.remainRepair, P2.namePlayer, P1.namePlayer);
         }
         else
-            printInfo(P1.remainShip, P1.namePlayer, P2.namePlayer);
+            printInfo(P1.remainShip, P2.remainRepair, P1.namePlayer, P2.namePlayer);
         printMaps(map);
         Red(1);
         printf("\n  You missed!");
@@ -715,7 +752,7 @@ int singlePlayer()
     resetSaveHits();
     shipPlayer1 = nship;
     shipPlayer2 = nship;
-    resetShipsSW();
+    //resetShipsSW();
     gameType = 1;
     while (1)
     {
@@ -772,30 +809,172 @@ int startNewGame()
     }
 }
 //----------------------------------------------------------------
-int repair(int playerNum, int x, int y)
+int repair(int playerNum, int map[][12])
 {
-    int k, i;
     if (playerNum == 1)
     {
-        for (k = 0; k < P1.nship; ++k)
+        if (P1.remainRepair == 0)
         {
-            for (i = 0; i < P1.ships[k].ncell; ++i)
+            return 0;
+        }
+    }
+    else
+    {
+        if (P2.remainRepair == 0)
+        {
+            return 0;
+        }
+    }
+    int x, i = 1, j = 1, k, f, save, midMenu;
+    do
+    {
+        i = random();
+        j = random();
+    } while (passShip(playerNum, j, i) == 1);
+    clearScreen();
+    save = map[i][j];
+    map[i][j] = -1;
+    if (playerTurn == 1)
+    {
+        printInfo(P1.remainShip, P1.remainRepair, P1.namePlayer, P1.namePlayer);
+    }
+    else
+        printInfo(P2.remainShip, P2.remainRepair, P2.namePlayer, P2.namePlayer);
+    printf("  Repair Mode\n\n");
+    printMaps(map);
+    x = _getch();
+    while (x != 13 || save != -4)
+    {
+        while (x != 224 && x != 13 && x != 27 && x != 8)
+        {
+            x = _getch();
+        }
+        if (x == 224)
+        {
+            x = _getch();
+        }
+        if (x == 8)  // backspace for return to bombing
+        {
+            map[i][j] = save;
+            return 0;
+        }
+        if (x == 27)
+        {
+            midMenu = midGameMenu();
+            if (midMenu == 1)
             {
-                if (P1.ships[k].shipPosition[i][0] == x && P1.ships[k].shipPosition[i][1] == y)
+                map[i][j] = save;
+                saveGame();
+                map[i][j] = -1;
+            }
+            while (midMenu == 2)
+            {
+                setting();
+                midMenu = midGameMenu();
+            }
+            if (midMenu == 3)
+                return 0;
+            x = 0;
+        }
+
+        map[i][j] = save;
+        if (x == 77)
+        {
+            if (j < n)
+            {
+                j++;
+            }
+        }
+        else if (x == 75)
+        {
+            if (j > 1)
+            {
+                j--;
+            }
+        }
+        else if (x == 72)
+        {
+            if (i < n)
+            {
+                i++;
+            }
+        }
+        else if (x == 80)
+        {
+            if (i > 1)
+            {
+                i--;
+            }
+        }
+        save = map[i][j];
+        map[i][j] = -1;
+        clearScreen();
+        if (playerTurn == 1)
+        {
+            printInfo(P1.remainShip, P1.remainRepair, P1.namePlayer, P1.namePlayer);
+        }
+        else
+            printInfo(P2.remainShip, P2.remainRepair, P2.namePlayer, P2.namePlayer);
+        printf("  Repair Mode\n\n");
+        printMaps(map);
+    }
+    if (save == -4)
+    {
+        if (playerNum == 1)
+        {
+            P1.remainRepair--;
+            for (k = 0; k < P1.nship; ++k)
+            {
+                for (f = 0; f < P1.ships[k].ncell; ++f)
                 {
-                    P1.remainRepair--;
-                    P1.ships[k].remainCell++;
-                    if (P1.ships[k].remainCell == P1.ships[k].ncell)
+                    if (P1.ships[k].shipPosition[f][0] == j && P1.ships[k].shipPosition[f][1] == i)
                     {
-                        P1.nship++;
-                    }
-                    if (P1.ships[k].stats == 1)
-                    {
-                        P1.ships[k].stats == 0;
+                        // now we found the ship
+                        if (P1.ships[k].stats == 1)
+                        {
+                            P1.remainShip++;
+                            P1.ships[k].stats = 0;
+                            P1.ships[k].remainCell++;
+                        }
                     }
                 }
             }
         }
+        else if (playerNum == 2)
+        {
+            P2.remainRepair--;
+            for (k = 0; k < P2.nship; ++k)
+            {
+                for (f = 0; f < P2.ships[k].ncell; ++f)
+                {
+                    if (P2.ships[k].shipPosition[f][0] == j && P2.ships[k].shipPosition[f][1] == i)
+                    {
+                        // now we found the ship
+                        if (P2.ships[k].stats == 1)
+                        {
+                            P2.remainShip++;
+                            P2.ships[k].stats = 0;
+                            P2.ships[k].remainCell++;
+                        }
+                    }
+                }
+            }
+        }
+        map[i][j] = -2;
+        clearScreen();
+        if (playerTurn == 1)
+        {
+            printInfo(P1.remainShip, P1.remainRepair, P1.namePlayer, P1.namePlayer);
+        }
+        else
+            printInfo(P2.remainShip, P2.remainRepair, P2.namePlayer, P2.namePlayer);
+        printf("  Repair Mode\n\n");
+        printMaps(map);
+        Green(1);
+        printf("\n  You repaired a ship");
+        Reset();
+        sleep(4000);
+        return 1;
     }
 }
 #endif

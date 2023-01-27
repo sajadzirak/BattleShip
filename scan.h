@@ -101,7 +101,6 @@ int scanSign()
 
 void scanMultiPlayerByFile() {
     int i, j, k;
-    //char direction[2];
     char sign[4];
     input = fopen("input.txt", "rt");
     if (!input) {
@@ -112,40 +111,10 @@ void scanMultiPlayerByFile() {
     initializeMap(mapPlayer1);
     initializeMap(mapPlayer2);
     fscanf(input, "%s", P1.namePlayer);
-    // we have a story from this line :)*******************************************************
+    P1.ncell = 0;
+    P1.nship = 0;
+    P1.remainShip = 0;
     scanShipByFile(input, 1);
-    //for ( k = 0; k < nship; k++)
-    //{
-    //    fscanf(input, "%d%d%s", &j, &i, &direction);
-    //    if (checkOverlap(i, j, direction[0], mapPlayer1) == 1 && checkRange(i, j, direction[0]) == 1)
-    //    {
-    //        putShips(mapPlayer1, i, j, direction[0]);
-    //        if (direction[0] == 'v')
-    //        {
-    //            shipP1[k].shipPosition[0][0] = j;
-    //            shipP1[k].shipPosition[0][1] = i;
-
-    //            shipP1[k].shipPosition[1][0] = j;
-    //            shipP1[k].shipPosition[1][1] = i + 1;
-
-    //            shipP1[k].shipPosition[2][0] = j;
-    //            shipP1[k].shipPosition[2][1] = i + 2;
-    //        }
-    //        else
-    //        {
-    //            shipP1[k].shipPosition[0][0] = j;
-    //            shipP1[k].shipPosition[0][1] = i;
-
-    //            shipP1[k].shipPosition[1][0] = j + 1;
-    //            shipP1[k].shipPosition[1][1] = i;
-
-    //            shipP1[k].shipPosition[2][0] = j + 2;
-    //            shipP1[k].shipPosition[2][1] = i;
-    //        }
-    //    }
-    //    else
-    //        k--;
-    //}
     fscanf(input, "%s", sign);
     while (strcmp(sign, "$$$") == 0)
     {
@@ -153,6 +122,9 @@ void scanMultiPlayerByFile() {
         fscanf(input, "%s", sign);
     }
     fscanf(input, "%s", P2.namePlayer);
+    P2.ncell = 0;
+    P2.nship = 0;
+    P2.remainShip = 0;
     scanShipByFile(input, 2);
     fscanf(input, "%s", sign);
     while (strcmp(sign, "$$$") == 0)
@@ -224,6 +196,7 @@ void scanShipByFile(FILE* input, int playerNum)
             a = 0;
             fscanf(input, "%d %d %s", &j, &i, &direction);
             holdj = j;
+            P1.ships[P1.nship].stats = 0;
             P1.ships[P1.nship].width = width;
             P1.ships[P1.nship].lengh = lengh;
             P1.ships[P1.nship].direction = direction[0];
@@ -275,6 +248,7 @@ void scanShipByFile(FILE* input, int playerNum)
             a = 0;
             fscanf(input, "%d%d%s", &j, &i, &direction);
             holdj = j;
+            P2.ships[P2.nship].stats = 0;
             P2.ships[P2.nship].width = width;
             P2.ships[P2.nship].lengh = lengh;
             P2.ships[P2.nship].direction = direction[0];
