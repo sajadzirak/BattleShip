@@ -53,51 +53,134 @@ int putShips(int map[][12], int i, int j, char direction, int width, int lengh)
 }
 //------------------------------------------------------------
 
-//void initializeComputerInfo()     // temporary
-//{
-//    int i, j, k;
-//    char direction;
-//    strcpy(namePlayer2, "Player2");
-//    randomSeed();
-//    for (k = 0; k < nship; ++k)
-//    {
-//        i = random();
-//        j = random();
-//        direction = random();
-//        if (direction % 2 == 1)
-//            direction = 'v';
-//        else
-//            direction = 'h';
-//        if (checkComputerOverlap(i, j, direction, mapPlayer2) == 1 && checkComputerRange(i, j, direction) == 1)
-//        {
-//            putShips(mapPlayer2, i, j, direction);
-//            if (direction == 'v')
-//            {
-//                shipP2[k].shipPosition[0][0] = j;
-//                shipP2[k].shipPosition[0][1] = i;
-//
-//                shipP2[k].shipPosition[1][0] = j;
-//                shipP2[k].shipPosition[1][1] = i + 1;
-//
-//                shipP2[k].shipPosition[2][0] = j;
-//                shipP2[k].shipPosition[2][1] = i + 2;
-//            }
-//            else
-//            {
-//                shipP2[k].shipPosition[0][0] = j;
-//                shipP2[k].shipPosition[0][1] = i;
-//
-//                shipP2[k].shipPosition[1][0] = j + 1;
-//                shipP2[k].shipPosition[1][1] = i;
-//
-//                shipP2[k].shipPosition[2][0] = j + 2;
-//                shipP2[k].shipPosition[2][1] = i;
-//            }
-//        }
-//        else
-//            --k;
-//    }
-//}
+void initializeComputerInfo()     // temporary
+{
+    int width, lengh, temp, i, j, a, holdj, control;
+    char direction;
+    randomSeed();
+    strcpy(P2.namePlayer, "Player2");
+    initializeMap(mapPlayer2);
+    do
+    {
+        P2.ncell = random();
+    } while (P2.ncell == 0 || P2.ncell > ncell);
+    //printf("P2.ncell = %d\n", P2.ncell);
+    //sleep(2000);
+    P2.nship = 0;
+    P2.remainShip = 0;
+    P2.remainRepair = nrepair;
+    control = P2.ncell;
+    while (control != 0)
+    {
+        //printf("control = %d\n", control);
+        do
+        {
+            width = random();
+            lengh = random();
+            temp = random();
+            //printf("zarb = %d\n", (width * lengh * temp));
+        } while ( (width*lengh*temp) > control);
+        control -= (width * lengh * temp);
+        for (int f = 0; f < temp; ++f)
+        {
+            a = 0;
+            j = random();
+            i = random();
+            direction = random();
+            if (direction % 2 == 1)
+                direction = 'v';
+            else
+                direction = 'h';
+            holdj = j;
+            P2.ships[P2.nship].stats = 0;
+            P2.ships[P2.nship].width = width;
+            P2.ships[P2.nship].lengh = lengh;
+            P2.ships[P2.nship].direction = direction;
+            P2.ships[P2.nship].ncell = lengh * width;
+            P2.ships[P2.nship].remainCell = lengh * width;
+            //printf("width = %d  len = %d  temp = %d\n", width, lengh, temp);
+            //printf("j = %d  i = %d  dir = %c\n", j, i, direction);
+            //sleep(10000);
+            if (checkOverlap(i, j, direction, mapPlayer2, width, lengh) == 1 && checkRange(i, j, direction, width, lengh) == 1)
+            {
+                putShips(mapPlayer2, i, j, direction, width, lengh);
+                if (direction == 'v')
+                {
+                    for (int p = 0; p < lengh; ++p, ++i)
+                    {
+                        j = holdj;
+                        for (int k = 0; k < width; ++k, ++j)
+                        {
+                            P2.ships[P2.nship].shipPosition[a][0] = j;
+                            P2.ships[P2.nship].shipPosition[a][1] = i;
+                            ++a;
+                        }
+                    }
+                }
+                else if (direction == 'h')
+                {
+                    for (int p = 0; p < width; ++p, ++i)
+                    {
+                        j = holdj;
+                        for (int k = 0; k < lengh; ++k, ++j)
+                        {
+                            P2.ships[P2.nship].shipPosition[a][0] = j;
+                            P2.ships[P2.nship].shipPosition[a][1] = i;
+                            ++a;
+                        }
+                    }
+                }
+                P2.nship++;
+                P2.remainShip++;
+            }
+            else
+            {
+                --f;
+            }
+        }
+    }
+
+
+    //randomSeed();
+    //for (k = 0; k < nship; ++k)
+    //{
+    //    i = random();
+    //    j = random();
+    //    direction = random();
+    //    if (direction % 2 == 1)
+    //        direction = 'v';
+    //    else
+    //        direction = 'h';
+    //    if (checkComputerOverlap(i, j, direction, mapPlayer2) == 1 && checkComputerRange(i, j, direction) == 1)
+    //    {
+    //        putShips(mapPlayer2, i, j, direction);
+    //        if (direction == 'v')
+    //        {
+    //            shipP2[k].shipPosition[0][0] = j;
+    //            shipP2[k].shipPosition[0][1] = i;
+
+    //            shipP2[k].shipPosition[1][0] = j;
+    //            shipP2[k].shipPosition[1][1] = i + 1;
+
+    //            shipP2[k].shipPosition[2][0] = j;
+    //            shipP2[k].shipPosition[2][1] = i + 2;
+    //        }
+    //        else
+    //        {
+    //            shipP2[k].shipPosition[0][0] = j;
+    //            shipP2[k].shipPosition[0][1] = i;
+
+    //            shipP2[k].shipPosition[1][0] = j + 1;
+    //            shipP2[k].shipPosition[1][1] = i;
+
+    //            shipP2[k].shipPosition[2][0] = j + 2;
+    //            shipP2[k].shipPosition[2][1] = i;
+    //        }
+    //    }
+    //    else
+    //        --k;
+    //}
+}
 //-----------------------------------------------------------------
 
 //void resetShipsSW(){

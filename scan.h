@@ -138,51 +138,32 @@ void scanMultiPlayerByFile() {
     fclose(input);
 }
 //---------------------------------------------------------------------
-//void scanSinglePlayerByFile() {    // temporary
-//    int i, j, k;
-//    char direction[2];
-//    input = fopen("input2.txt", "rt");
-//    if (!input) {
-//        printf("File don't open");
-//        exit(1);
-//    }
-//    fscanf(input, "%d%d", &n, &nship);
-//    initializeMap(mapPlayer1);
-//    initializeMap(mapPlayer2);
-//    fscanf(input, "%s", namePlayer1);
-//    for (k = 0; k < nship; k++)
-//    {
-//        fscanf(input, "%d%d%s", &j, &i, &direction);
-//        if (checkOverlap(i, j, direction[0], mapPlayer1) == 1 && checkRange(i, j, direction[0]) == 1)
-//        {
-//            putShips(mapPlayer1, i, j, direction[0]);
-//            if (direction[0] == 'v')
-//            {
-//                shipP1[k].shipPosition[0][0] = j;
-//                shipP1[k].shipPosition[0][1] = i;
-//
-//                shipP1[k].shipPosition[1][0] = j;
-//                shipP1[k].shipPosition[1][1] = i + 1;
-//
-//                shipP1[k].shipPosition[2][0] = j;
-//                shipP1[k].shipPosition[2][1] = i + 2;
-//            }
-//            else
-//            {
-//                shipP1[k].shipPosition[0][0] = j;
-//                shipP1[k].shipPosition[0][1] = i;
-//
-//                shipP1[k].shipPosition[1][0] = j + 1;
-//                shipP1[k].shipPosition[1][1] = i;
-//
-//                shipP1[k].shipPosition[2][0] = j + 2;
-//                shipP1[k].shipPosition[2][1] = i;
-//            }
-//        }
-//        else
-//            k--;
-//    }
-//}
+void scanSinglePlayerByFile() {    // temporary
+    int i, j, k;
+    char sign[4];
+    FILE* input;
+    input = fopen("input2.txt", "rt");
+    if (!input) {
+        printf("File don't open");
+        exit(1);
+    }
+    fscanf(input, "%d%d", &n, &ncell);
+    initializeMap(mapPlayer1);
+    fscanf(input, "%s", P1.namePlayer);
+    P1.ncell = 0;
+    P1.nship = 0;
+    P1.remainShip = 0;
+    scanShipByFile(input, 1);
+    fscanf(input, "%s", sign);
+    while (strcmp(sign, "$$$") == 0)
+    {
+        scanShipByFile(input, 1);
+        fscanf(input, "%s", sign);
+    }
+    fscanf(input, "%d", &nrepair);
+    P1.remainRepair = nrepair;
+    fclose(input);
+}
 //---------------------------------------------------------------------
 void scanShipByFile(FILE* input, int playerNum)
 {

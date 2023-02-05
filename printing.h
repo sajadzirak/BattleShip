@@ -141,21 +141,21 @@ void printEnd2()
 }
 //---------------------------------------------------------------------------------------
 
-//void printComputerStats(int x)
-//{
-//    printInfo(shipPlayer1, namePlayer1, namePlayer2);
-//    printMaps(mapPlayer1);
-//    if (x == 1)
-//    {
-//        Green(1);
-//        printf("\n  player 2 hit the ship!");
-//        Reset();
-//    }
-//    else if (x == -1)
-//    {
-//        Red(1);
-//        printf("\n  Player2 missed!");
-//        Reset();
-//    }
-//}
+void printComputerStats(int x)
+{
+    printInfo(P1.remainShip, P2.remainRepair, P1.namePlayer, P2.namePlayer);
+    printMaps(mapPlayer1);
+    if (x == 1)
+    {
+        Green(1);
+        printf("\n  player 2 hit the ship!");
+        Reset();
+    }
+    else if (x == -1)
+    {
+        Red(1);
+        printf("\n  Player2 missed!");
+        Reset();
+    }
+}
 #endif

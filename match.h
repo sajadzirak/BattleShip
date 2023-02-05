@@ -7,6 +7,7 @@
 #include "music.h"
 
 int repair(int, int map[][12]);
+int computerRepair();
 //-------------------------------------------------------------------
 
 int bombing(int map[][12], int *ship, int playerNum)
@@ -342,8 +343,54 @@ void findCleanArea(int *firstX,int *firstY,int *lastX,int *lastY) {
     }
 }
 //------------------------------------------------------------
-//void computerBombing()
-//{
+int computerBombing()
+{
+    int i, j, save, x;
+    randomSeed();
+    clearScreen();
+    x = random();
+    if (P2.remainShip == 1 && P2.remainRepair != 0)
+    {
+        if (computerRepair() == 1)
+        {
+            return 0;
+        }
+    }
+    if (x % 2 == 1 && P2.remainRepair != 0)
+    {
+        if (computerRepair() == 1)
+        {
+            return 0;
+        }
+    }
+    do
+    {
+        j = random();
+        i = random();
+    } while (saveHits[i][j] != 0);
+    save = mapPlayer1[i][j];
+    saveHits[i][j] = 1;
+    if (save == -2)
+    {
+        hitShip(1, j, i);
+        if (checkShip(1) == 1)
+        {
+            P1.remainShip--;
+        }
+        mapPlayer1[i][j] = -4;
+        printComputerStats(1);
+        if (soundEffectSw == 1)
+            playFire();
+    }
+    else
+    {
+        mapPlayer1[i][j] = -3;
+        printComputerStats(-1);
+        mapPlayer1[i][j] = save;
+        if (soundEffectSw == 1)
+            playWater();
+    }
+    sleep(4000);
 //    int firstX = 0, firstY = 0;
 //    int lastX = 0, lastY = 0;
 //    int i, j, k, save, loopsw = 1;
@@ -618,7 +665,8 @@ void findCleanArea(int *firstX,int *firstY,int *lastX,int *lastY) {
 //        }
 //    }
 //    sleep(4000);
-//}
+}
+
 //------------------------------------------------------------
 int rematch(int winner)
 {
@@ -747,30 +795,29 @@ int singlePlayer()
     //initializeMap(mapPlayer1);
     //initializeMap(mapPlayer2);
     //scanPlayerInfo(mapPlayer1, namePlayer1, 1, shipP1);
-    //scanSinglePlayerByFile();    // temporary
-    //initializeComputerInfo();    // temporary
+    scanSinglePlayerByFile();
+    initializeComputerInfo();    
     resetSaveHits();
     shipPlayer1 = nship;
     shipPlayer2 = nship;
-    //resetShipsSW();
     gameType = 1;
     while (1)
     {
         playerTurn = 1;
-        if (bombing(mapPlayer2, &shipPlayer2, 2)==0)
+        if (bombing(mapPlayer2, &shipPlayer2, 2) == 0)
             return 0;
-        if (shipPlayer2 == 0)
+        if (P2.remainShip == 0)
         {
             break;
         }
-        //computerBombing(); //*****     // temporary
-        if (shipPlayer1 == 0)
+        computerBombing(); //*****    
+        if (P1.remainShip == 0)
         {
             break;
         }
     }
     clearScreen();
-    if (shipPlayer1 == 0)
+    if (P1.remainShip == 0)
     {
         printEnd2();
         if (rematch(2) == 0)
@@ -923,6 +970,7 @@ int repair(int playerNum, int map[][12])
         if (playerNum == 1)
         {
             P1.remainRepair--;
+            saveHits[i][j] = 0;
             for (k = 0; k < P1.nship; ++k)
             {
                 for (f = 0; f < P1.ships[k].ncell; ++f)
@@ -930,11 +978,11 @@ int repair(int playerNum, int map[][12])
                     if (P1.ships[k].shipPosition[f][0] == j && P1.ships[k].shipPosition[f][1] == i)
                     {
                         // now we found the ship
+                        P1.ships[k].remainCell++;
                         if (P1.ships[k].stats == 1)
                         {
                             P1.remainShip++;
                             P1.ships[k].stats = 0;
-                            P1.ships[k].remainCell++;
                         }
                     }
                 }
@@ -950,11 +998,11 @@ int repair(int playerNum, int map[][12])
                     if (P2.ships[k].shipPosition[f][0] == j && P2.ships[k].shipPosition[f][1] == i)
                     {
                         // now we found the ship
+                        P2.ships[k].remainCell++;
                         if (P2.ships[k].stats == 1)
                         {
                             P2.remainShip++;
                             P2.ships[k].stats = 0;
-                            P2.ships[k].remainCell++;
                         }
                     }
                 }
@@ -977,4 +1025,44 @@ int repair(int playerNum, int map[][12])
         return 1;
     }
 }
+//----------------------------------------------------------------
+int computerRepair()
+{
+    int i, j, a, k;
+
+    for (a = 0; a < P2.nship; ++a)
+    {
+        if (P2.ships[a].remainCell != P2.ships[a].ncell)
+        {
+            for (k = 0; k < P2.ships[a].ncell; ++k)
+            {
+                j = P2.ships[a].shipPosition[k][0];
+                i = P2.ships[a].shipPosition[k][1];
+                if (mapPlayer2[i][j] == -4)
+                {
+                    mapPlayer2[i][j] = -2;
+                    P2.remainRepair--;
+                    P2.ships[a].remainCell++;
+                    if (P2.ships[a].stats == 1)
+                    {
+                        P2.ships[a].stats = 0;
+                        P2.remainShip++;
+                    }
+                    clearScreen();
+                    printInfo(P2.remainShip, P2.remainRepair, P2.namePlayer, P2.namePlayer);
+                    printf("  Repair Mode\n\n");
+                    printMaps(mapPlayer2);
+                    Green(1);
+                    printf("\n  player 2 repaired a ship");
+                    Reset();
+                    sleep(4000);
+                    return 1;
+                }
+            }
+            
+        }
+    }
+    return 0;
+}
+
 #endif
