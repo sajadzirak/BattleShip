@@ -3,18 +3,17 @@
 
 #include "gameColor.h"
 #include "gameData.h"
-#include "general.h"
 
-int checkOverlap(int i, int j, char direction, int map[][12], int width, int lengh)
+int checkOverlap(int i, int j, char direction, int map[][12], int width, int length)
 {
     int sw = 1, p, k;
     int holdj = j;
     if (direction == 'v')
     {
-        for (p = 0; p < lengh && sw == 1; ++p, ++i)
+        for (p = 0; p < length && sw == 1; p++, i++)
         {
             j = holdj;
-            for (k = 0; k < width && sw == 1; ++k, ++j)
+            for (k = 0; k < width && sw == 1; k++)
             {
                 if (map[i][j] == -2)
                 {
@@ -28,10 +27,10 @@ int checkOverlap(int i, int j, char direction, int map[][12], int width, int len
     }
     else if (direction == 'h')
     {
-        for (p = 0; p < width && sw == 1; ++p, ++i)
+        for (int p = 0; p < 3 && sw == 1; ++p, j++)
         {
             j = holdj;
-            for (k = 0; k < lengh && sw == 1; ++k, ++j)
+            for ( k = 0; k < width; k++)
             {
                 if (map[i][j] == -2)
                 {
@@ -55,12 +54,12 @@ int checkOverlap(int i, int j, char direction, int map[][12], int width, int len
 
 //---------------------------------------------------------
 
-int checkRange(int i, int j, char direction, int width, int lengh)
+int checkRange(int i, int j, char direction, int width, int length)
 {
     int sw = 1;
     if (direction == 'v')
     {
-        if ((i + (lengh - 1) > n) || (j + (width - 1) > n))
+        if ((i + (length - 1) > n) || (j + (width - 1) > n))
         {
             White(1);
             printf("Ships are out of range. Please input another location.\n");
@@ -70,7 +69,7 @@ int checkRange(int i, int j, char direction, int width, int lengh)
     }
     if (direction == 'h')
     {
-        if ((i + (width - 1) > n) || (j + (lengh - 1) > n))
+        if ((i + (width - 1) > n) || (j + (length - 1) > n))
         {
             White(1);
             printf("Ships are out of range. Please input another location.\n");
@@ -89,15 +88,15 @@ void hitShip(int playerNum, int x, int y)
     {
         for (k = 0; k < P1.nship && contsw == 1; k++)
         {
-           for (i = 0; i < P1.ships[k].ncell && contsw == 1; ++i)
-           {
+            for (i = 0; i < P1.ships[k].ncell && contsw == 1; ++i)
+            {
                 if (P1.ships[k].shipPosition[i][0] == x && P1.ships[k].shipPosition[i][1] == y)
                 {
                     P1.ships[k].remainCell = P1.ships[k].remainCell - 1;
                     contsw = 0;
                 }
-                
-           }
+
+            }
         }
     }
     else if (playerNum == 2)
@@ -116,6 +115,7 @@ void hitShip(int playerNum, int x, int y)
         }
     }
 }
+
 //---------------------------------------------------------------
 int checkShip(int playerNum)
 {
@@ -142,6 +142,7 @@ int checkShip(int playerNum)
             }
         }
     }
+    return 0;
 }
 //--------------------------------------------------------------------
 int passShip(int playerNum, int x, int y)

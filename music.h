@@ -29,6 +29,7 @@ void initializeMusic() {
 void destroyMusic() {
     al_destroy_sample(fire);
     al_destroy_sample(water);
+    al_destroy_sample(repairSound);
 }
 //-----------------------------------------------------------------
 
@@ -47,6 +48,8 @@ int playFire()
 
     return 0;
 }
+//----------------------------------------------------------------------------
+
 int playWater() {
 
     water = al_load_sample("water.mp3");
@@ -57,7 +60,16 @@ int playWater() {
     return 0;
 }
 //----------------------------------------------------------------------------
+int playRepairSound() {
 
+    repairSound = al_load_sample("repair.mp3");
+    must_init(repairSound, "repair");
+
+    al_play_sample(repairSound, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
+
+    return 0;
+}
+//----------------------------------------------------------------------------
 int playbackgroundMusic() {
 
     backgroundMusic = al_load_sample("backgroundMusic.mp3");

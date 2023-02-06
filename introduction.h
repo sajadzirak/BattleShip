@@ -67,11 +67,11 @@ void intro()
 void printShip1()
 {
     printf("         ,|                                          \n");
-    printf("     -#=(  )=#-               \33[47m\033[1;30mcontinue\033[0m               \n");
-    printf("       _:||_                  start new game         \n");
-    printf("     /       \\                setting                \n");
-    printf("     \\=======/                exit                   \n");
-    printf("      |     |                                        \n");
+    printf("     -#=(  )=#-               \33[47m\033[1;30mContinue\033[0m               \n");
+    printf("       _:||_                  Start New Game         \n");
+    printf("     /       \\                Setting                \n");
+    printf("     \\=======/                Replay                   \n");
+    printf("      |     |                 Exit                       \n");
     printf("      |     |                                        \n");
     printf("      |_____|_________________________________      \n");
     printf("     |__                                    __|     \n");
@@ -86,11 +86,11 @@ void printShip1()
 void printShip2()
 {
     printf("         ,|                                          \n");
-    printf("     -#=(  )=#-               \033[1;30mcontinue\033[0m               \n");
-    printf("       _:||_                  \33[47m\033[1;30mstart new game\033[0m         \n");
-    printf("     /       \\                setting                \n");
-    printf("     \\=======/                exit                   \n");
-    printf("      |     |                                        \n");
+    printf("     -#=(  )=#-               \033[1;30mContinue\033[0m               \n");
+    printf("       _:||_                  \33[47m\033[1;30mStart New Game\033[0m         \n");
+    printf("     /       \\                Setting                \n");
+    printf("     \\=======/                Replay                   \n");
+    printf("      |     |                 Exit                       \n");
     printf("      |     |                                        \n");
     printf("      |_____|_________________________________      \n");
     printf("     |__                                    __|     \n");
@@ -105,11 +105,11 @@ void printShip2()
 void printShip3()
 {
     printf("         ,|                                          \n");
-    printf("     -#=(  )=#-               \033[1;30mcontinue\033[0m               \n");
-    printf("       _:||_                  start new game         \n");
-    printf("     /       \\                \33[47m\033[1;30msetting\033[0m                \n");
-    printf("     \\=======/                exit                   \n");
-    printf("      |     |                                        \n");
+    printf("     -#=(  )=#-               \033[1;30mContinue\033[0m               \n");
+    printf("       _:||_                  Start New Game         \n");
+    printf("     /       \\                \33[47m\033[1;30mSetting\033[0m                \n");
+    printf("     \\=======/                Replay                   \n");
+    printf("      |     |                 Exit                      \n");
     printf("      |     |                                        \n");
     printf("      |_____|_________________________________      \n");
     printf("     |__                                    __|     \n");
@@ -124,11 +124,11 @@ void printShip3()
 void printShip4()
 {
     printf("         ,|                                          \n");
-    printf("     -#=(  )=#-               \033[1;30mcontinue\033[0m               \n");
-    printf("       _:||_                  start new game         \n");
-    printf("     /       \\                setting                \n");
-    printf("     \\=======/                \33[47m\033[1;30mexit\033[0m                   \n");
-    printf("      |     |                                        \n");
+    printf("     -#=(  )=#-               \033[1;30mContinue\033[0m               \n");
+    printf("       _:||_                  Start New Game         \n");
+    printf("     /       \\                Setting                \n");
+    printf("     \\=======/                \33[47m\033[1;30mReplay\033[0m                   \n");
+    printf("      |     |                 Exit                      \n");
     printf("      |     |                                        \n");
     printf("      |_____|_________________________________      \n");
     printf("     |__                                    __|     \n");
@@ -140,6 +140,24 @@ void printShip4()
 }
 //-------------------------------------------------------------------
 
+void printShip5()
+{
+    printf("         ,|                                          \n");
+    printf("     -#=(  )=#-               \033[1;30mContinue\033[0m               \n");
+    printf("       _:||_                  Start New Game         \n");
+    printf("     /       \\                Setting                \n");
+    printf("     \\=======/                Replay                   \n");
+    printf("      |     |                 \33[47m\033[1;30mExit\033[0m                      \n");
+    printf("      |     |                                        \n");
+    printf("      |_____|_________________________________      \n");
+    printf("     |__                                    __|     \n");
+    printf("        \\                                  /       \n");
+    printf("         \\                                /        \n");
+    printf("          \\__                          __/         \n");
+    printf("             \\                        /            \n");
+    Reset();
+}
+//-------------------------------------------------------------------
 void printShipStartNewGame1()
 {
     printf("         ,|                                          \n");
@@ -236,7 +254,7 @@ void wave3()
 
 int printMenu()
 {
-    int i = 1, min, max=3;
+    int i = 1, min, max=4;
     if (fileCheck()==1)
     {
         min = 0;
@@ -262,6 +280,9 @@ int printMenu()
         case 3:
             printShip4();
             break;
+        case 4:
+            printShip5();
+            break;
         }
         printf("\n");
         wave1();
@@ -283,6 +304,9 @@ int printMenu()
         case 3:
             printShip4();
             break;
+        case 4:
+            printShip5();
+            break;
         }
         printf("\n");
         wave2();
@@ -303,6 +327,9 @@ int printMenu()
             break;
         case 3:
             printShip4();
+            break;
+        case 4:
+            printShip5();
             break;
         }
         printf("\n");
@@ -516,50 +543,5 @@ int midGameMenu()
 }
 //-------------------------------------------------------------------
 
-void saveGame() {
-    FILE* saveGameData = fopen("gameData.dat", "wb");
-    fwrite(&n, sizeof(int), 1, saveGameData);
-    fwrite(&nship, sizeof(int), 1, saveGameData);
-    fwrite(&gameType, sizeof(int), 1, saveGameData);
-    fwrite(&playerTurn, sizeof(int), 1, saveGameData);
-    fwrite(mapPlayer1, sizeof(int), 144, saveGameData);
-    fwrite(mapPlayer2, sizeof(int), 144, saveGameData);
-    fwrite(namePlayer1, sizeof(char), 20, saveGameData);
-    fwrite(namePlayer2, sizeof(char), 20, saveGameData);
-    fwrite(&shipPlayer1, sizeof(int), 1, saveGameData);
-    fwrite(&shipPlayer2, sizeof(int), 1, saveGameData);
-    fwrite(saveHits, sizeof(int), 169, saveGameData);
-    fwrite(around, sizeof(int), 4, saveGameData);
-    fwrite(&hitsw, sizeof(int), 1, saveGameData);
-    fwrite(hitPos, sizeof(int), 2, saveGameData);
-    fwrite(prevHit, sizeof(int), 2, saveGameData);
-    fwrite(&soundEffectSw, sizeof(int), 1, saveGameData);
-    fwrite(shipP1, sizeof(ships), 15, saveGameData);
-    fwrite(shipP2, sizeof(ships), 15, saveGameData);
-    fclose(saveGameData);
-}
-//-------------------------------------------------------------------
 
-void loadGameData() {
-    FILE* saveGameData = fopen("gameData.dat", "rb");
-    fread(&n, sizeof(int), 1, saveGameData);
-    fread(&nship, sizeof(int), 1, saveGameData);
-    fread(&gameType, sizeof(int), 1, saveGameData);
-    fread(&playerTurn, sizeof(int), 1, saveGameData);
-    fread(mapPlayer1, sizeof(int), 144, saveGameData);
-    fread(mapPlayer2, sizeof(int), 144, saveGameData);
-    fread(namePlayer1, sizeof(char), 20, saveGameData);
-    fread(namePlayer2, sizeof(char), 20, saveGameData);
-    fread(&shipPlayer1, sizeof(int), 1, saveGameData);
-    fread(&shipPlayer2, sizeof(int), 1, saveGameData);
-    fread(saveHits, sizeof(int), 169, saveGameData);
-    fread(around, sizeof(int), 4, saveGameData);
-    fread(&hitsw, sizeof(int), 1, saveGameData);
-    fread(hitPos, sizeof(int), 2, saveGameData);
-    fread(prevHit, sizeof(int), 2, saveGameData);
-    fread(&soundEffectSw, sizeof(int), 1, saveGameData);
-    fread(shipP1, sizeof(ships), 15, saveGameData);
-    fread(shipP2, sizeof(ships), 15, saveGameData);
-    fclose(saveGameData);
-}
 #endif

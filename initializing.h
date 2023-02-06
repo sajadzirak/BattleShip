@@ -23,13 +23,13 @@ int initializeMap(int map[][12])
 }
 //--------------------------------------------------------------
 
-int putShips(int map[][12], int i, int j, char direction, int width, int lengh)
+int putShips(int map[][12], int i, int j, char direction, int width, int length)
 {
     int k, p;
     int holdj = j;
     if (direction == 'v')
     {
-        for (p = 0; p < lengh; ++p, ++i)
+        for (p = 0; p < length; ++p, ++i)
         {
             j = holdj;
             for (k = 0; k < width; ++k, ++j)
@@ -43,7 +43,7 @@ int putShips(int map[][12], int i, int j, char direction, int width, int lengh)
         for (p = 0; p < width; ++p, ++i)
         {
             j = holdj;
-            for (k = 0; k < lengh; ++k, ++j)
+            for (k = 0; k < length; ++k, ++j)
             {
                 map[i][j] = -2;
             }
@@ -53,7 +53,7 @@ int putShips(int map[][12], int i, int j, char direction, int width, int lengh)
 }
 //------------------------------------------------------------
 
-void initializeComputerInfo()     // temporary
+void initializeComputerInfo()
 {
     int width, lengh, temp, i, j, a, holdj, control;
     char direction;
@@ -79,7 +79,7 @@ void initializeComputerInfo()     // temporary
             lengh = random();
             temp = random();
             //printf("zarb = %d\n", (width * lengh * temp));
-        } while ( (width*lengh*temp) > control);
+        } while ((width * lengh * temp) > control);
         control -= (width * lengh * temp);
         for (int f = 0; f < temp; ++f)
         {
@@ -94,7 +94,7 @@ void initializeComputerInfo()     // temporary
             holdj = j;
             P2.ships[P2.nship].stats = 0;
             P2.ships[P2.nship].width = width;
-            P2.ships[P2.nship].lengh = lengh;
+            P2.ships[P2.nship].length = lengh;
             P2.ships[P2.nship].direction = direction;
             P2.ships[P2.nship].ncell = lengh * width;
             P2.ships[P2.nship].remainCell = lengh * width;
@@ -139,58 +139,18 @@ void initializeComputerInfo()     // temporary
             }
         }
     }
-
-
-    //randomSeed();
-    //for (k = 0; k < nship; ++k)
-    //{
-    //    i = random();
-    //    j = random();
-    //    direction = random();
-    //    if (direction % 2 == 1)
-    //        direction = 'v';
-    //    else
-    //        direction = 'h';
-    //    if (checkComputerOverlap(i, j, direction, mapPlayer2) == 1 && checkComputerRange(i, j, direction) == 1)
-    //    {
-    //        putShips(mapPlayer2, i, j, direction);
-    //        if (direction == 'v')
-    //        {
-    //            shipP2[k].shipPosition[0][0] = j;
-    //            shipP2[k].shipPosition[0][1] = i;
-
-    //            shipP2[k].shipPosition[1][0] = j;
-    //            shipP2[k].shipPosition[1][1] = i + 1;
-
-    //            shipP2[k].shipPosition[2][0] = j;
-    //            shipP2[k].shipPosition[2][1] = i + 2;
-    //        }
-    //        else
-    //        {
-    //            shipP2[k].shipPosition[0][0] = j;
-    //            shipP2[k].shipPosition[0][1] = i;
-
-    //            shipP2[k].shipPosition[1][0] = j + 1;
-    //            shipP2[k].shipPosition[1][1] = i;
-
-    //            shipP2[k].shipPosition[2][0] = j + 2;
-    //            shipP2[k].shipPosition[2][1] = i;
-    //        }
-    //    }
-    //    else
-    //        --k;
-    //}
 }
 //-----------------------------------------------------------------
-
-//void resetShipsSW(){
-//    int k;
-//    for (k = 0; k < nship; k++)
-//    {
-//        shipP1[k].sw[0] = shipP1[k].sw[1] = shipP1[k].sw[2] = 1;
-//        shipP2[k].sw[0] = shipP2[k].sw[1] = shipP2[k].sw[2] = 1;
-//    }
-//}
+/*
+void resetShipsSW(){
+    int k;
+    for (k = 0; k < nship; k++)
+    {
+        shipP1[k].sw[0] = shipP1[k].sw[1] = shipP1[k].sw[2] = 1;
+        shipP2[k].sw[0] = shipP2[k].sw[1] = shipP2[k].sw[2] = 1;
+    }
+}
+*/
 //-----------------------------------------------------------------------
 
 void resetSaveHits() {
@@ -203,6 +163,7 @@ void resetSaveHits() {
     }
 }
 //-----------------------------------------------------------------------
+
 void resetAround(int i, int j)
 {
     for (int k = 0; k < 4; ++k)
@@ -212,6 +173,7 @@ void resetAround(int i, int j)
     if (i == n) around[1] = 1;
     if (j == n) around[0] = 1;
 }
+
 //------------------------------------------------------------
 
 void resetPrevHit()

@@ -3,11 +3,12 @@
 
 #include "gameColor.h"
 #include "gameData.h"
+
 //-------------------------------------------------------------------
 
-int printInfo(int remainingShips, int remainingRepair, char namePlayer[], char namePlayer2[])
+int printInfo(int remainingShips, int remainingRepair , char namePlayer[], char namePlayer2[])
 {
-    int i;
+
     printf(" %s's turn", namePlayer2);
     printf("\n\n");
     Blue(1);
@@ -157,5 +158,6 @@ void printComputerStats(int x)
         printf("\n  Player2 missed!");
         Reset();
     }
+    
 }
 #endif
